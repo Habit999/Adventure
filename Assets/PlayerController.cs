@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
 	}
 	public LockedMovementVariables lockedMovementVariables = new LockedMovementVariables();
 	
-	public MovePoint _currentMovePoint;
+	[HideInInspector] public MovePoint _currentMovePoint;
 	
 	Vector3 moveTargetPosition;
 	Quaternion moveTargetRotation;
@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
 	
 	#region Movement & Rotation
 	
-	void RotateRight()
+	public void RotateRight()
 	{
 		distanceFromTarget = 0;
 		
@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour
 		PlayerState = PLAYERSTATE.LockedMove;
 	}
 	
-	void RotateLeft()
+	public void RotateLeft()
 	{
 		distanceFromTarget = 0;
 		

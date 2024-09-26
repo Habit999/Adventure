@@ -39,6 +39,7 @@ public class UserInterfaceController : MonoBehaviour
 	}
 	
 	#region Navigation
+	// Action Keys
 	public void ActionKeysUp()
 	{
 		if(actionKeyPage - 1 > 0)
@@ -54,6 +55,18 @@ public class UserInterfaceController : MonoBehaviour
 			actionKeyPage++;
 		}
 	}
+	
+	// Rotation
+	public void TurnRightButton()
+	{
+		PlayerController.Instance.RotateRight();
+	}
+	
+	public void TurnLeftButton()
+	{
+		PlayerController.Instance.RotateLeft();
+	}
+	
 	#endregion
 	
 	

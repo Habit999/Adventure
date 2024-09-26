@@ -16,46 +16,43 @@ public class Grideditor : Editor
 		
 		grid = EditorGUILayout.ObjectField("TargetGrid", grid, typeof(MovementGrid), true) as MovementGrid;
 		
-		if(GUILayout.Button("View Grid"))
+		/*if(grid != null)
 		{
-			isGridVisible = !isGridVisible;
-			Debug.Log($"View Grid = {isGridVisible}");
-		}
-	}
-	
-	void OnDrawGizmos()
-	{
-		// DRAW GRID WITH GIZMOS
-		if(isGridVisible)
-		{
-			Vector3 lastPositionX = Vector3.zero;
-			Vector3 lastPositionZ = Vector3.zero;
-			for(int x = 0; x < grid._gridLengthX; x++)
+			if(GUILayout.Button("View Grid"))
 			{
-				if(x == 0)
-				{
-					Gizmos.color = Color.green;
-					Gizmos.DrawWireCube(grid.transform.position + new Vector3(grid._gridOffsetX, 0, grid._gridOffsetZ), grid._gridCellPrefab.transform.localScale);
-				}
-				else
-				{
-					Gizmos.color = Color.green;
-					Gizmos.DrawWireCube(lastPositionX + new Vector3(grid._gridOffsetX + grid._gridCellSpacing, 0, grid._gridOffsetZ + grid._gridCellSpacing), grid._gridCellPrefab.transform.localScale);
-				}
-				
-				for(int y = 0; y < grid._gridLengthZ; y++)
-				{
-					if(y == 0)
-					{
-						lastPositionZ = lastPositionX;
-					}
-					else
-					{
-						Gizmos.color = Color.green;
-						Gizmos.DrawWireCube(lastPositionZ + new Vector3(grid._gridOffsetX + grid._gridCellSpacing, 0, grid._gridOffsetZ + grid._gridCellSpacing), grid._gridCellPrefab.transform.localScale);
-					}
-				}
+				isGridVisible = !isGridVisible;
+				Debug.Log($"View Grid = {isGridVisible}");
 			}
-		}
+			
+			if(isGridVisible)
+			{
+				GUILayout.BeginVertical();
+				for(int x = 0; x < grid._gridLengthX; x++)
+				{
+					if(GUILayout.Button(grid._gridCells[x, 0]._inUse.ToString()))
+					{
+						grid._gridCells[x, 0]._inUse = !grid._gridCells[x, 0]._inUse;
+					}
+					
+					GUILayout.BeginHorizontal();
+					for(int y = 1; y < grid._gridLengthZ; y++)
+					{
+						if(GUILayout.Button(grid._gridCells[x, y]._inUse.ToString()))
+						{
+							grid._gridCells[x, y]._inUse = !grid._gridCells[x, y]._inUse;
+						}
+					}
+					GUILayout.EndHorizontal();
+					
+				}
+				GUILayout.EndVertical();
+			}
+		}*/
+		
+		/*if(grid != null)
+		{
+			MonoBehaviour monBev = (MonoBehaviour)grid;
+			MovementGrid moveGrid = monBev.GetComponent<MovementGrid>();
+		}*/
 	}
 }

@@ -59,7 +59,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gridLengthX: 5
   _gridLengthZ: 5
-  _gridCellSpacing: 0
-  _gridOffsetX: 2.5
-  _gridOffsetZ: 2.5
+  _gridCellSpacing: 9
+  _gridOffsetX: 1
+  _gridOffsetZ: 1
   _gridCellPrefab: {fileID: 73309007946182657, guid: 0b8306448a251d84da82ff8dbcefeaa5, type: 3}
