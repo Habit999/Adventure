@@ -5,7 +5,8 @@ public class GridEditor : EditorWindow
 {
 	[HideInInspector] public CustomGrid _grid;
 	
-	public bool[,] _cellCullingMap;
+	public bool[,] _tempCullingData;
+	public GameObject[,] _cellResidentData;
 	
 	bool isNewGrid = true;
 	
@@ -34,25 +35,59 @@ public class GridEditor : EditorWindow
 		{
 			if(GUILayout.Button("Save Grid Data"))
 			{
-				localData._gridCulling = _cellCullingMap;
-				_grid.SaveGridData(localData);
+				_grid._gridCulling = _tempCullingData;
+				_grid.SaveGridData();
 				
 				Debug.Log($"CustomGrid {'"' + _grid.gameObject.name + '"'} >> Grid Data Saved");
 			}
+			
+			GUILayout.Space(10);
+			
+			if(GUILayout.Button("Set All True"))
+			{
+				for(int x = 0; x < _grid._gridLengthX; x++)
+				{
+					for(int y = 0; y < _grid._gridLengthZ; y++)
+					{
+						_tempCullingData[x, y] = true;
+					}
+				}
+			}
+			
+			if(GUILayout.Button("Set All False"))
+			{
+				for(int x = 0; x < _grid._gridLengthX; x++)
+				{
+					for(int y = 0; y < _grid._gridLengthZ; y++)
+					{
+						_tempCullingData[x, y] = false;
+					}
+				}
+			}
+			
+			GUILayout.Space(25);
 			
 			try
 			{
 				if(isNewGrid)
 				{
-					_cellCullingMap = new bool[_grid._gridLengthX, _grid._gridLengthZ];
+					_tempCullingData = new bool[_grid._gridLengthX, _grid._gridLengthZ];
+					_cellResidentData = new GameObject[_grid._gridLengthX, _grid._gridLengthZ];
+					
 					for(int x = 0; x < _grid._gridLengthX; x++)
 					{
-						_cellCullingMap[x, 0] = true;
+						_tempCullingData[x, 0] = true;
 						for(int z = 1; z < _grid._gridLengthZ; z++)
 						{
-							_cellCullingMap[x, z] = true;
+							_tempCullingData[x, z] = true;
 						}
 					}
+					
+					if(_grid._initialGenerationComplete)
+					{
+						_tempCullingData = _grid._gridCulling;
+					}
+					
 					isNewGrid = false;
 				}
 				
@@ -62,10 +97,15 @@ public class GridEditor : EditorWindow
 					GUILayout.BeginHorizontal();
 					for(int y = 0; y < _grid._gridLengthZ; y++)
 					{
-						if(GUILayout.Button(_cellCullingMap[x, y].ToString()))
+						GUILayout.BeginVertical();
+						if(GUILayout.Button(_tempCullingData[x, y].ToString()))
 						{
-							_cellCullingMap[x, y] = !_cellCullingMap[x, y];
+							_tempCullingData[x, y] = !_tempCullingData[x, y];
 						}
+						
+						_cellResidentData[x, y] = (GameObject) EditorGUILayout.ObjectField("Spawn Object", _cellResidentData[x, y], typeof(GameObject), false);
+						
+						GUILayout.EndVertical();
 					}
 					GUILayout.EndHorizontal();
 				}

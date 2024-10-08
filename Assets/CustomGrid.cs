@@ -7,16 +7,19 @@ using System.Text;
 
 public class CustomGrid : MonoBehaviour
 {
-	public static CustomGrid Instance;
-		
+	public static List<CustomGrid> ActiveGrids = new List<CustomGrid>();
+	
 	// Grid Data Variables
-	protected static string GridDataPath { get { return Application.dataPath + $"/CustomGridData.json"; } }
+	string GridDataPath { get { return Application.dataPath + $"/{_gridName}_CustomGridData.json"; } }
 	
 	[HideInInspector] public Vector2[,] _gridPositions;
 	[HideInInspector] public GridCell[,] _gridCells;
+	[HideInInspector] public bool[,] _gridCulling;
 	
-	[SerializeField] public GridData gridData;
-		
+	[HideInInspector] public GridData gridData;
+	
+	public string _gridName;
+	[Space(3)]
 	public int _gridLengthX;
 	public int _gridLengthZ;
 	public float _gridCellSpacing;
@@ -33,10 +36,18 @@ public class CustomGrid : MonoBehaviour
 	[HideInInspector] public bool _initialGenerationComplete = false;
 	[HideInInspector] public bool _isGridVisible = false;
 	
-	void Awake()
+	[Space(10)]
+	
+	public bool _enableEditorTools = false;
+	
+	void OnEnable()
 	{
-		if(Instance == null) Instance = this;
-		else Destroy(this.gameObject);
+		ActiveGrids.Add(this);
+	}
+	
+	void OnDisable()
+	{
+		ActiveGrids.Remove(this);
 	}
 	
 	void Start()
@@ -55,11 +66,14 @@ public class CustomGrid : MonoBehaviour
 			}
 		}
 		
+		gridData = new GridData();
+		gridData._cellCullingData = new bool[_gridLengthX * _gridLengthZ];
+		
 		_gridPositions = new Vector2[_gridLengthX, _gridLengthZ];
 		_gridCells = new GridCell[_gridLengthX, _gridLengthZ];
+		_gridCulling = new bool[_gridLengthX, _gridLengthZ];
 		
-		//Replace this line with load gridData
-		gridData._gridCulling = new bool[_gridLengthX, _gridLengthZ];
+		LoadGridData();
 		
 		float xAxis;
 		float zAxis;
@@ -106,7 +120,7 @@ public class CustomGrid : MonoBehaviour
 			Vector3 spawnPosition = gridPos;
 			spawnPosition.z = spawnPosition.y;
 			spawnPosition.y = 0;
-			if(gridData._gridCulling[xPos, yPos])
+			if(_gridCulling[xPos, yPos])
 				_gridCells[xPos, yPos] = Instantiate(_gridCellPrefab, spawnPosition, Quaternion.identity, transform).GetComponent<GridCell>();
 			if(xPos < _gridLengthX) xPos++;
 			else break;
@@ -117,10 +131,56 @@ public class CustomGrid : MonoBehaviour
 	
 	#region Saving & Loading Grid Data
 	
-	public void SaveGridData(GridData gData)
+	// Use the public ones to store data in the correct format
+	public void SaveGridData()
 	{
-		gridData = gData;
+		gridData = new GridData();
+		gridData._cellCullingData = new bool[_gridLengthX * _gridLengthZ];
 		
+		// Converting Data:
+		// grid culling (bool[,] => bool[])
+		int dataIndex = 0;
+		for(int x = 0; x < _gridLengthX; x++)
+		{
+			for(int y = 0; y < _gridLengthZ; y++)
+			{
+				gridData._cellCullingData[dataIndex] = _gridCulling[x, y];
+				
+				dataIndex++;
+			}
+		}
+		
+		SaveData(gridData);
+	}
+	
+	public bool LoadGridData()
+	{
+		var loadedData = LoadData();
+		
+		if(loadedData == null) return false;
+		else
+		{
+			gridData = loadedData;
+			
+			// Converting Data:
+			// grid culling (bool[] => bool[,])
+			int dataIndex = 0;
+			for(int x = 0; x < _gridLengthX; x++)
+			{
+				for(int y = 0; y < _gridLengthZ; y++)
+				{
+					_gridCulling[x, y] = gridData._cellCullingData[dataIndex];
+					
+					dataIndex++;
+				}
+			}
+			
+			return true;
+		}
+	}
+	
+	void SaveData(GridData gData)
+	{
 		if(File.Exists(GridDataPath))
 		{
 			File.Delete(GridDataPath);
@@ -130,30 +190,20 @@ public class CustomGrid : MonoBehaviour
 		System.IO.File.WriteAllText(GridDataPath, jsonData);
 	}
 	
-	public GridData LoadGridData()
+	GridData LoadData()
 	{
 		if(File.Exists(GridDataPath))
 		{
 			string jsonData = File.ReadAllText(GridDataPath);
 			return gridData = JsonUtility.FromJson<GridData>(jsonData);
 		}
-		else return new GridData();
+		else return null;
 	}
 	
 	public bool CheckStoredGridData()
 	{
-		/*if(!File.Exists(GridDataPath)) return false;
-		
-		GridData loadedData = LoadGridData();
-		foreach(bool loadedCell in loadedData._gridCulling)
-		{
-			foreach(bool gridCell in gridData._gridCulling)
-			{
-				if(gridCell != loadedCell) return false;
-			}
-		}*/
-		
-		return true;
+		if(gridData._cellCullingData.Length == _gridLengthX * _gridLengthZ) return true;
+		else return false;
 	}
 	
 	#endregion
@@ -162,21 +212,35 @@ public class CustomGrid : MonoBehaviour
 	void OnDrawGizmos()
 	{
 		// DRAW GRID WITH GIZMOS
-		if(_isGridVisible)
+		if(_enableEditorTools && _isGridVisible && CheckStoredGridData())
 		{
-			if(_initialGenerationComplete) GenerateGrid();
-			
-			for(int x = 0; x < _gridLengthX; x++)
+			try
 			{
-				for(int y = 0; y < _gridLengthZ; y++)
+				if(!_initialGenerationComplete) GenerateGrid();
+			
+				if(_initialGenerationComplete)
 				{
-					if(gridData._gridCulling[x, y]) Gizmos.color = Color.green;
-					else Gizmos.color = Color.red;
-					Vector3 drawPosition = _gridPositions[x, y];
-					drawPosition.z = drawPosition.y;
-					drawPosition.y = 0;
-					Gizmos.DrawWireCube(drawPosition, _gridCellPrefab.transform.localScale);
+					for(int x = 0; x < _gridLengthX; x++)
+					{
+						for(int y = 0; y < _gridLengthZ; y++)
+						{
+							if(_gridCulling[x, y] != null)
+							{
+								if(_gridCulling[x, y]) Gizmos.color = Color.green;
+								else Gizmos.color = Color.red;
+							}
+							else Gizmos.color = Color.yellow;
+							Vector3 drawPosition = _gridPositions[x, y];
+							drawPosition.z = drawPosition.y;
+							drawPosition.y = 0;
+							Gizmos.DrawWireCube(drawPosition, _gridCellPrefab.transform.localScale);
+						}
+					}
 				}
+			}
+			catch(System.Exception e)
+			{
+				Debug.Log("Grid Not Generated OR No Custom Grid Assigned In Inspector \r\n" + e.Message);
 			}
 		}
 	}
@@ -186,5 +250,5 @@ public class CustomGrid : MonoBehaviour
 [System.Serializable]
 public class GridData
 {
-	public bool[,] _gridCulling;
+	public bool[] _cellCullingData;
 }

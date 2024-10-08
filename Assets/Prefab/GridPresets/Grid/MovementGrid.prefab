@@ -57,9 +57,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f4d09bbd309c1544a64cda23d9ca33a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridData:
+    _cellCullingData: 
+  _gridName: Grid1
   _gridLengthX: 5
   _gridLengthZ: 5
   _gridCellSpacing: 9
   _gridOffsetX: 1
   _gridOffsetZ: 1
   _gridCellPrefab: {fileID: 73309007946182657, guid: 0b8306448a251d84da82ff8dbcefeaa5, type: 3}
+  _initialGenerationComplete: 0
+  _isGridVisible: 0
+  _enableEditorTools: 0

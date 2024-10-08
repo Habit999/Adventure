@@ -17,7 +17,7 @@ public class GridCell : MonoBehaviour
 	
 	void Start()
 	{
-		if(_inUse && cellOccupantPrefab != null)
+		if(_inUse && _cellOccupant == null && cellOccupantPrefab != null)
 		{
 			SpawnOccupant();
 		}
@@ -42,6 +42,7 @@ public class GridCell : MonoBehaviour
 	
 	void SpawnOccupant()
 	{
+		if(_cellOccupant != null) Destroy(_cellOccupant);
 		_cellOccupant = Instantiate(cellOccupantPrefab, cellOccupantPrefab.transform.position, cellOccupantPrefab.transform.rotation, transform);
 	}
 }
