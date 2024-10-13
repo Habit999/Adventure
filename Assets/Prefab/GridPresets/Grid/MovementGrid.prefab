@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 300847835467031761}
-  - component: {fileID: 5867319321423532296}
   - component: {fileID: 4858872069082368375}
   m_Layer: 0
   m_Name: MovementGrid
@@ -33,18 +32,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!156049354 &5867319321423532296
-Grid:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5959944746347783279}
-  m_Enabled: 0
-  m_CellSize: {x: 2, y: 2, z: 2}
-  m_CellGap: {x: 1, y: 1, z: 1}
-  m_CellLayout: 0
-  m_CellSwizzle: 0
 --- !u!114 &4858872069082368375
 MonoBehaviour:
   m_ObjectHideFlags: 0
