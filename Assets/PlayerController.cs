@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
 	public static Transform PlayerCamera { get { return Instance.playerCamera; } private set { Instance.playerCamera = value; } }
 	[SerializeField] Transform playerCamera;
 	
+	public float _health = 100;
+	
 	[System.Serializable]
 	public struct LockedMovementVariables
 	{
@@ -32,17 +34,6 @@ public class PlayerController : MonoBehaviour
 	Quaternion currentLockedRotation;
 	
 	float distanceFromTarget;
-	
-	public void ClickMoveToPoint(Transform targetLocation, Transform orientation)
-	{
-		distanceFromTarget = 0;
-		
-		currentLockedPosition = transform.position;
-		currentLockedRotation = transform.rotation;
-		moveTargetPosition = targetLocation.position;
-		moveTargetRotation = orientation.rotation;
-		PlayerState = PLAYERSTATE.LockedMove;
-	}
 	
 	void Awake()
 	{
@@ -70,6 +61,24 @@ public class PlayerController : MonoBehaviour
 			default:
 				break;
 		}
+	}
+	
+	public void DamagePlayer(float damage)
+	{
+		_health -= damage;
+		
+		if(_health <= 0) Destroy(this.gameObject);
+	}
+	
+	public void ClickMoveToPoint(Transform targetLocation, Transform orientation)
+	{
+		distanceFromTarget = 0;
+		
+		currentLockedPosition = transform.position;
+		currentLockedRotation = transform.rotation;
+		moveTargetPosition = targetLocation.position;
+		moveTargetRotation = orientation.rotation;
+		PlayerState = PLAYERSTATE.LockedMove;
 	}
 	
 	#region Player State Machine

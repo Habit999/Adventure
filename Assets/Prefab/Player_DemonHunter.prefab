@@ -242,7 +242,7 @@ GameObject:
   - component: {fileID: 444083623181405205}
   - component: {fileID: 8864631752314530080}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Player_DemonHunter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

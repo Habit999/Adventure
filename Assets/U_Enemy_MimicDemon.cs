@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class U_Enemy_MimicDemon : A_Enemy
 {
+	public static int MaxEnemyTypeInScene = 3;
+	
 	public ENEMYSTATE EnemyState = ENEMYSTATE.Idle;
 	
-	public EnemyData _currentEnemyData = new EnemyData(100, 30, 0, 20);
+	public EnemyData _currentEnemyData = new EnemyData(100, 30, 0, 0);
 	
 	public struct MimicData
 	{
@@ -17,12 +19,14 @@ public class U_Enemy_MimicDemon : A_Enemy
 		
 		public float timeTillBlink;
 	}
-	public MimicData _currentMimicData = new MimicData(40);
+	public MimicData _currentMimicData = new MimicData(20);
 	
-	public int MaxEnemyTypeInScene { get { return maxEnemyTypeInScene; } }
-	[SerializeField] int maxEnemyTypeInScene = 3;
+	void Update()
+	{
+		EnemyBehaviour();
+	}
 	
-	public override void EnemyBehaviour()
+	protected override void EnemyBehaviour()
 	{
 		switch(EnemyState)
 		{
@@ -36,19 +40,11 @@ public class U_Enemy_MimicDemon : A_Enemy
 		}
 	}
 	
-	public override void DamagePlayer()
+	public override void DamageEnemy(float incomingDamage)
 	{
+		_currentEnemyData.health -= incomingDamage;
 		
-	}
-	
-	public override void DamageEnemy()
-	{
-		
-	}
-	
-	public override bool TriggerAbility()
-	{
-		return false;
+		if(_currentEnemyData.health <= 0) Destroy(this.gameObject);
 	}
 	
 	#region Behaviour States

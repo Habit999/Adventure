@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridData:
-    _cellCullingData: 
+    cellCullingData: 
+    cellOccupantData: []
   _gridName: Grid1
   _gridLengthX: 5
   _gridLengthZ: 5
@@ -55,4 +56,5 @@ MonoBehaviour:
   _gridCellPrefab: {fileID: 73309007946182657, guid: 0b8306448a251d84da82ff8dbcefeaa5, type: 3}
   _initialGenerationComplete: 0
   _isGridVisible: 0
+  _activeGridPreview: 0
   _enableEditorTools: 0

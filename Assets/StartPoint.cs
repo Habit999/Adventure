@@ -4,9 +4,21 @@ using UnityEngine;
 
 public class StartPoint : MonoBehaviour
 {
+	public static StartPoint Instance;
+	
 	[SerializeField] GameObject playerPrefab;
 	[Space(5)]
 	[SerializeField] GameObject preGameCam;
+	
+	void Awake()
+	{
+		if(Instance == null) Instance = this;
+		else
+		{
+			print("More than one StartPoint detected - Destroying Extra");
+			Destroy(this);
+		}
+	}
 	
 	void Start()
 	{

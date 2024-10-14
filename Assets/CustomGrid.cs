@@ -15,6 +15,7 @@ public class CustomGrid : MonoBehaviour
 	[HideInInspector] public Vector2[,] _gridPositions;
 	[HideInInspector] public GridCell[,] _gridCells;
 	[HideInInspector] public bool[,] _gridCulling;
+	[HideInInspector] public GameObject[,] _gridCellOccupants;
 	
 	[HideInInspector] public GridData gridData;
 	
@@ -34,7 +35,8 @@ public class CustomGrid : MonoBehaviour
 	public GameObject _gridCellPrefab;
 	
 	[HideInInspector] public bool _initialGenerationComplete = false;
-	[HideInInspector] public bool _isGridVisible = false;
+	[HideInInspector] public bool _isGridVisible = true;
+	[HideInInspector] public bool _activeGridPreview = false;
 	
 	[Space(10)]
 	
@@ -67,7 +69,7 @@ public class CustomGrid : MonoBehaviour
 		}
 		
 		gridData = new GridData();
-		gridData._cellCullingData = new bool[_gridLengthX * _gridLengthZ];
+		gridData.cellCullingData = new bool[_gridLengthX * _gridLengthZ];
 		
 		_gridPositions = new Vector2[_gridLengthX, _gridLengthZ];
 		_gridCells = new GridCell[_gridLengthX, _gridLengthZ];
@@ -121,7 +123,12 @@ public class CustomGrid : MonoBehaviour
 			spawnPosition.z = spawnPosition.y;
 			spawnPosition.y = 0;
 			if(_gridCulling[xPos, yPos])
+			{
 				_gridCells[xPos, yPos] = Instantiate(_gridCellPrefab, spawnPosition, Quaternion.identity, transform).GetComponent<GridCell>();
+				_gridCells[xPos, yPos]._cellIndex = new Vector2(xPos, yPos);
+				_gridCells[xPos, yPos]._connectedGrid = this;
+			}
+				
 			if(xPos < _gridLengthX) xPos++;
 			else break;
 			if(yPos < _gridLengthZ) yPos++;
@@ -135,7 +142,8 @@ public class CustomGrid : MonoBehaviour
 	public void SaveGridData()
 	{
 		gridData = new GridData();
-		gridData._cellCullingData = new bool[_gridLengthX * _gridLengthZ];
+		gridData.cellCullingData = new bool[_gridLengthX * _gridLengthZ];
+		gridData.cellOccupantData = new GameObject[_gridLengthX * _gridLengthZ];
 		
 		// Converting Data:
 		// grid culling (bool[,] => bool[])
@@ -144,7 +152,8 @@ public class CustomGrid : MonoBehaviour
 		{
 			for(int y = 0; y < _gridLengthZ; y++)
 			{
-				gridData._cellCullingData[dataIndex] = _gridCulling[x, y];
+				gridData.cellCullingData[dataIndex] = _gridCulling[x, y];
+				gridData.cellOccupantData[dataIndex] = _gridCellOccupants[x, y];
 				
 				dataIndex++;
 			}
@@ -169,7 +178,8 @@ public class CustomGrid : MonoBehaviour
 			{
 				for(int y = 0; y < _gridLengthZ; y++)
 				{
-					_gridCulling[x, y] = gridData._cellCullingData[dataIndex];
+					_gridCulling[x, y] = gridData.cellCullingData[dataIndex];
+					_gridCellOccupants[x, y] = gridData.cellOccupantData[dataIndex];
 					
 					dataIndex++;
 				}
@@ -200,9 +210,9 @@ public class CustomGrid : MonoBehaviour
 		else return null;
 	}
 	
-	public bool CheckStoredGridData()
+	public bool CheckStoredGridDataCompatibility()
 	{
-		if(gridData._cellCullingData.Length == _gridLengthX * _gridLengthZ) return true;
+		if(gridData.cellCullingData.Length == _gridLengthX * _gridLengthZ) return true;
 		else return false;
 	}
 	
@@ -212,7 +222,7 @@ public class CustomGrid : MonoBehaviour
 	void OnDrawGizmos()
 	{
 		// DRAW GRID WITH GIZMOS
-		if(_enableEditorTools && _isGridVisible && CheckStoredGridData())
+		if(_enableEditorTools && _isGridVisible)
 		{
 			try
 			{
@@ -224,12 +234,8 @@ public class CustomGrid : MonoBehaviour
 					{
 						for(int y = 0; y < _gridLengthZ; y++)
 						{
-							if(_gridCulling[x, y] != null)
-							{
-								if(_gridCulling[x, y]) Gizmos.color = Color.green;
-								else Gizmos.color = Color.red;
-							}
-							else Gizmos.color = Color.yellow;
+							if(_gridCulling[x, y]) Gizmos.color = Color.green;
+							else Gizmos.color = Color.red;
 							Vector3 drawPosition = _gridPositions[x, y];
 							drawPosition.z = drawPosition.y;
 							drawPosition.y = 0;
@@ -250,5 +256,6 @@ public class CustomGrid : MonoBehaviour
 [System.Serializable]
 public class GridData
 {
-	public bool[] _cellCullingData;
+	public bool[] cellCullingData;
+	public GameObject[] cellOccupantData;
 }

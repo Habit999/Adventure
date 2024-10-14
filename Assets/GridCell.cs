@@ -4,45 +4,22 @@ using UnityEngine;
 
 public class GridCell : MonoBehaviour
 {
-	[Tooltip("If checked the cell will be added to the grid for use in project")]
-	public bool _inUse = true;
+	[HideInInspector] public GameObject _activeCellOccupant;
+	public GameObject _cellOccupantPrefab;
 	
-	public GameObject _cellOccupant;
-	[SerializeField] GameObject cellOccupantPrefab;
+	[Space(3)]
 	
-	void Awake()
-	{
-		gameObject.SetActive(_inUse);
-	}
+	public Vector3 _occupantPositionOffset;
+	public Vector3 _occupantRotationOffset;
+	
+	[HideInInspector] public Vector2 _cellIndex;
+	[HideInInspector] public CustomGrid _connectedGrid;
 	
 	void Start()
 	{
-		if(_inUse && _cellOccupant == null && cellOccupantPrefab != null)
+		if(_cellOccupantPrefab != null)
 		{
-			SpawnOccupant();
+			_activeCellOccupant = Instantiate(_cellOccupantPrefab, _cellOccupantPrefab.transform.position + _occupantPositionOffset, _cellOccupantPrefab.transform.rotation * Quaternion.Euler(_occupantRotationOffset), transform);
 		}
-	}
-	
-	void OnEnable()
-	{
-		if(_inUse && cellOccupantPrefab != null)
-		{
-			if(_cellOccupant == null)
-			{
-				SpawnOccupant();
-			}
-			_cellOccupant.SetActive(true);
-		}
-	}
-	
-	void OnDisable()
-	{
-		if(_cellOccupant != null) _cellOccupant.SetActive(false);
-	}
-	
-	void SpawnOccupant()
-	{
-		if(_cellOccupant != null) Destroy(_cellOccupant);
-		_cellOccupant = Instantiate(cellOccupantPrefab, cellOccupantPrefab.transform.position, cellOccupantPrefab.transform.rotation, transform);
 	}
 }

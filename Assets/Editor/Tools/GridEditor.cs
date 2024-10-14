@@ -6,11 +6,13 @@ public class GridEditor : EditorWindow
 	[HideInInspector] public CustomGrid _grid;
 	
 	public bool[,] _tempCullingData;
-	public GameObject[,] _cellResidentData;
+	public GameObject[,] _tempOccupantData;
 	
 	bool isNewGrid = true;
 	
 	GridData localData = new GridData();
+	
+	Vector2 scrollPosition;
 	
 	[MenuItem("Tools/GridEditor")]
 	public static void ShowWindow() // Runs when opening window
@@ -36,7 +38,9 @@ public class GridEditor : EditorWindow
 			if(GUILayout.Button("Save Grid Data"))
 			{
 				_grid._gridCulling = _tempCullingData;
+				_grid._gridCellOccupants = _tempOccupantData;
 				_grid.SaveGridData();
+				_grid.GenerateGrid();
 				
 				Debug.Log($"CustomGrid {'"' + _grid.gameObject.name + '"'} >> Grid Data Saved");
 			}
@@ -67,12 +71,14 @@ public class GridEditor : EditorWindow
 			
 			GUILayout.Space(25);
 			
+			scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+			
 			try
 			{
 				if(isNewGrid)
 				{
 					_tempCullingData = new bool[_grid._gridLengthX, _grid._gridLengthZ];
-					_cellResidentData = new GameObject[_grid._gridLengthX, _grid._gridLengthZ];
+					_tempOccupantData = new GameObject[_grid._gridLengthX, _grid._gridLengthZ];
 					
 					for(int x = 0; x < _grid._gridLengthX; x++)
 					{
@@ -103,7 +109,7 @@ public class GridEditor : EditorWindow
 							_tempCullingData[x, y] = !_tempCullingData[x, y];
 						}
 						
-						_cellResidentData[x, y] = (GameObject) EditorGUILayout.ObjectField("Spawn Object", _cellResidentData[x, y], typeof(GameObject), false);
+						_tempOccupantData[x, y] = (GameObject) EditorGUILayout.ObjectField("Spawn Object", _tempOccupantData[x, y], typeof(GameObject), false);
 						
 						GUILayout.EndVertical();
 					}
@@ -115,6 +121,8 @@ public class GridEditor : EditorWindow
 			{
 				Debug.Log("GridEditor ERROR >> " + e.ToString());
 			}
+			
+			GUILayout.EndScrollView();
 		}
 	}
 }

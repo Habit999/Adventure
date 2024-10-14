@@ -130,7 +130,7 @@ Transform:
   m_GameObject: {fileID: 4848487975303482403}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.09, z: 5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -154,6 +154,7 @@ MonoBehaviour:
   _cameraTarget: {fileID: 7508517966564443461}
   _orientation: {fileID: 3143350588726781070}
   movePointIcon: {fileID: 4512122770341649238}
+  interactableObjects: []
 --- !u!135 &7961228575713673081
 SphereCollider:
   m_ObjectHideFlags: 0
