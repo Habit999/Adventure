@@ -15,7 +15,7 @@ public class GridEditor : EditorWindow
 	Vector2 scrollPosition;
 	
 	[MenuItem("Tools/GridEditor")]
-	public static void ShowWindow() // Runs when opening window
+	public static void ShowWindow() // Runs when opening window from tool bar
 	{
 		GetWindow(typeof(GridEditor), false, "GridEditor", true);
 	}

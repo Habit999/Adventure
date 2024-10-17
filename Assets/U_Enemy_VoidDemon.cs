@@ -54,6 +54,10 @@ public class U_Enemy_VoidDemon : A_Enemy
 				IdleState();
 				break;
 				
+			case ENEMYSTATE.Roaming:
+				RoamingState();
+				break;
+				
 			default:
 				EnemyState = ENEMYSTATE.Idle;
 				break;
@@ -86,87 +90,15 @@ public class U_Enemy_VoidDemon : A_Enemy
 		{
 			isRoaming = true;
 			
-			transform.position += ((_currentLocalGridVriables.targetGridCell.transform.position - transform.position).normalized * _currentEnemyData.walkSpeed) * Time.deltaTime;
+			Vector3 moveTarget = _currentLocalGridVriables.targetGridCell.transform.position;
+			moveTarget.y += GetBodyHalfHeight;
+			transform.position += ((moveTarget - transform.position).normalized * _currentEnemyData.walkSpeed) * Time.deltaTime;
 		}
-		
-		/*int xOrY = Random.Range(0, 1);
-		bool directionFree1X = false;
-		bool directionFree2X = false;
-		bool directionFree1Y = false;
-		bool directionFree2Y = false;
-		
-		Vector2 currentCellPos = _currentLocalGridVriables.gridCellPosition;
-		
-		// Direction free?
-		if(currentCellPos.x + 1 < currentGrid._gridLengthX)
-		{
-			directionFree1 = currentGrid._gridCulling[currentCellPos.x + 1, currentCellPos.y];
-		}
-		if(currentCellPos.x - 1 >= 0)
-		{
-			directionFree1 = currentGrid._gridCulling[currentCellPos.x - 1, currentCellPos.y];
-		}
-		if(currentCellPos.y + 1 < currentGrid._gridLengthY)
-		{
-			directionFree1 = currentGrid._gridCulling[currentCellPos.y + 1, currentCellPos.y];
-		}
-		if(currentCellPos.y - 1 >= 0)
-		{
-			directionFree1 = currentGrid._gridCulling[currentCellPos.y - 1, currentCellPos.y];
-		}
-		
-		// Trapped?
-		if(!directionFree1X && !directionFree2X && !directionFree1Y && !directionFree2Y)
-		{
-			EnemyState = EnemyState.Idle;
-			return;
-		}
-		
-		// Switch?
-		if(xOrY == 1 && (!directionFree1X && !directionFree2X))
-		{
-			
-		}
-		
-		// Decide
-		if(xOrY == 1)
-		{
-			if(directionFree1X && directionFree2X)
-			{
-				int direction = Random.Range(0, 1);
-			}
-			else if(!directionFree1X && !directionFree2X)
-			{
-				
-			}
-			else
-			{
-				
-			}
-			
-			if(directionFree1X)
-			{
-				
-			}
-			else if(directionFree2X)
-			{
-				
-			}
-		}
-		else
-		{
-			if(directionFree1Y)
-			{
-				
-			}
-			else if(directionFree2Y)
-			{
-				
-			}
-		}*/
 	}
 	
 	#endregion
+	
+	#region Checks & Routines
 	
 	void CheckClosestCell()
 	{
@@ -246,6 +178,82 @@ public class U_Enemy_VoidDemon : A_Enemy
 		}
 		
 		_currentLocalGridVriables.targetGridCell = availableSpaces[Random.Range(0, spacesFree)];
+		
+		/*int xOrY = Random.Range(0, 1);
+		bool directionFree1X = false;
+		bool directionFree2X = false;
+		bool directionFree1Y = false;
+		bool directionFree2Y = false;
+		
+		Vector2 currentCellPos = _currentLocalGridVriables.gridCellPosition;
+		
+		// Direction free?
+		if(currentCellPos.x + 1 < currentGrid._gridLengthX)
+		{
+			directionFree1 = currentGrid._gridCulling[currentCellPos.x + 1, currentCellPos.y];
+		}
+		if(currentCellPos.x - 1 >= 0)
+		{
+			directionFree1 = currentGrid._gridCulling[currentCellPos.x - 1, currentCellPos.y];
+		}
+		if(currentCellPos.y + 1 < currentGrid._gridLengthY)
+		{
+			directionFree1 = currentGrid._gridCulling[currentCellPos.y + 1, currentCellPos.y];
+		}
+		if(currentCellPos.y - 1 >= 0)
+		{
+			directionFree1 = currentGrid._gridCulling[currentCellPos.y - 1, currentCellPos.y];
+		}
+		
+		// Trapped?
+		if(!directionFree1X && !directionFree2X && !directionFree1Y && !directionFree2Y)
+		{
+			EnemyState = EnemyState.Idle;
+			return;
+		}
+		
+		// Switch?
+		if(xOrY == 1 && (!directionFree1X && !directionFree2X))
+		{
+			
+		}
+		
+		// Decide
+		if(xOrY == 1)
+		{
+			if(directionFree1X && directionFree2X)
+			{
+				int direction = Random.Range(0, 1);
+			}
+			else if(!directionFree1X && !directionFree2X)
+			{
+				
+			}
+			else
+			{
+				
+			}
+			
+			if(directionFree1X)
+			{
+				
+			}
+			else if(directionFree2X)
+			{
+				
+			}
+		}
+		else
+		{
+			if(directionFree1Y)
+			{
+				
+			}
+			else if(directionFree2Y)
+			{
+				
+			}
+		}*/
 	}
 	
 	IEnumerator IdleToRoamTime(float incomingWaitTime)
@@ -254,4 +262,6 @@ public class U_Enemy_VoidDemon : A_Enemy
 		isIdling = false;
 		EnemyState = ENEMYSTATE.Roaming;
 	}
+	
+	#endregion
 }

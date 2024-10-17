@@ -61,6 +61,17 @@ public class I_GridMovement : Editor
 				{
 					GridEditor gridEditor = (GridEditor) EditorWindow.GetWindow(typeof(GridEditor), false, "GridEditor", true);
 					gridEditor._grid = targetGrid;
+					if(targetGrid.LoadGridData())
+					{
+						gridEditor._tempCullingData = targetGrid._gridCulling;
+						gridEditor._tempOccupantData = targetGrid._gridCellOccupants;
+					}
+					else
+					{
+						gridEditor._tempCullingData = new bool[targetGrid._gridLengthX, targetGrid._gridLengthZ];
+						gridEditor._tempOccupantData = new GameObject[targetGrid._gridLengthX, targetGrid._gridLengthZ];
+					}
+					
 					gridEditor.Show();
 				}
 				

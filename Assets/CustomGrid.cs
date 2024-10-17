@@ -42,14 +42,9 @@ public class CustomGrid : MonoBehaviour
 	
 	public bool _enableEditorTools = false;
 	
-	void OnEnable()
+	void Awake()
 	{
 		ActiveGrids.Add(this);
-	}
-	
-	void OnDisable()
-	{
-		ActiveGrids.Remove(this);
 	}
 	
 	void Start()
@@ -143,9 +138,10 @@ public class CustomGrid : MonoBehaviour
 	{
 		gridData = new GridData();
 		gridData.cellCullingData = new bool[_gridLengthX * _gridLengthZ];
-		gridData.cellOccupantData = new GameObject[_gridLengthX * _gridLengthZ];
+		gridData.cellOccupantIDData = new int[_gridLengthX * _gridLengthZ];
 		
 		// Converting Data:
+		
 		// grid culling (bool[,] => bool[])
 		int dataIndex = 0;
 		for(int x = 0; x < _gridLengthX; x++)
@@ -153,10 +149,25 @@ public class CustomGrid : MonoBehaviour
 			for(int y = 0; y < _gridLengthZ; y++)
 			{
 				gridData.cellCullingData[dataIndex] = _gridCulling[x, y];
-				gridData.cellOccupantData[dataIndex] = _gridCellOccupants[x, y];
-				
 				dataIndex++;
 			}
+		}
+		
+		// Cell Occupant ID
+		dataIndex = 0;
+		foreach(GameObject occupant in _gridCellOccupants)
+		{
+			int id = 1;
+			foreach(GameObject prefab in PrefabLibrary.PrefabID.Values)
+			{
+				if(occupant == prefab)
+				{
+					gridData.cellOccupantIDData[dataIndex] = id;
+					break;
+				}
+				id++;
+			}
+			dataIndex++;
 		}
 		
 		SaveData(gridData);
@@ -164,6 +175,10 @@ public class CustomGrid : MonoBehaviour
 	
 	public bool LoadGridData()
 	{
+		gridData = new GridData();
+		gridData.cellCullingData = new bool[_gridLengthX * _gridLengthZ];
+		gridData.cellOccupantIDData = new int[_gridLengthX * _gridLengthZ];
+		
 		var loadedData = LoadData();
 		
 		if(loadedData == null) return false;
@@ -172,6 +187,7 @@ public class CustomGrid : MonoBehaviour
 			gridData = loadedData;
 			
 			// Converting Data:
+			
 			// grid culling (bool[] => bool[,])
 			int dataIndex = 0;
 			for(int x = 0; x < _gridLengthX; x++)
@@ -179,7 +195,9 @@ public class CustomGrid : MonoBehaviour
 				for(int y = 0; y < _gridLengthZ; y++)
 				{
 					_gridCulling[x, y] = gridData.cellCullingData[dataIndex];
-					_gridCellOccupants[x, y] = gridData.cellOccupantData[dataIndex];
+					if(gridData.cellOccupantIDData[dataIndex] != 0)
+						_gridCellOccupants[x, y] = PrefabLibrary.PrefabID[gridData.cellOccupantIDData[dataIndex]];
+					else _gridCellOccupants[x, y] = null;
 					
 					dataIndex++;
 				}
@@ -257,5 +275,5 @@ public class CustomGrid : MonoBehaviour
 public class GridData
 {
 	public bool[] cellCullingData;
-	public GameObject[] cellOccupantData;
+	public int[] cellOccupantIDData;
 }
