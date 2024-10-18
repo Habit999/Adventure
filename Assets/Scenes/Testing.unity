@@ -2754,6 +2754,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1265257723}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1391823203 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4858872069082368375, guid: 1f8719ceacccb8144b30468b572e3aa6, type: 3}
+  m_PrefabInstance: {fileID: 8120956541156662977}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f4d09bbd309c1544a64cda23d9ca33a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1463947143
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4275,6 +4286,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_VoidDemon
       objectReference: {fileID: 0}
+    - target: {fileID: 5834126501016801818, guid: 82aed33adce50284496f8837c24b15f1, type: 3}
+      propertyPath: _currentGrid
+      value: 
+      objectReference: {fileID: 1391823203}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4539,6 +4554,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4858872069082368375, guid: 1f8719ceacccb8144b30468b572e3aa6, type: 3}
       propertyPath: _activeGridPreview
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4858872069082368375, guid: 1f8719ceacccb8144b30468b572e3aa6, type: 3}
+      propertyPath: _enableEditorTools
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4858872069082368375, guid: 1f8719ceacccb8144b30468b572e3aa6, type: 3}

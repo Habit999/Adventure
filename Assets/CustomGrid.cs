@@ -63,12 +63,8 @@ public class CustomGrid : MonoBehaviour
 			}
 		}
 		
-		gridData = new GridData();
-		gridData.cellCullingData = new bool[_gridLengthX * _gridLengthZ];
-		
 		_gridPositions = new Vector2[_gridLengthX, _gridLengthZ];
 		_gridCells = new GridCell[_gridLengthX, _gridLengthZ];
-		_gridCulling = new bool[_gridLengthX, _gridLengthZ];
 		
 		LoadGridData();
 		
@@ -110,24 +106,24 @@ public class CustomGrid : MonoBehaviour
 	
 	void SpawnGrid()
 	{
-		int xPos = 0;
-		int yPos = 0;
 		foreach(Vector3 gridPos in _gridPositions)
 		{
 			Vector3 spawnPosition = gridPos;
 			spawnPosition.z = spawnPosition.y;
 			spawnPosition.y = 0;
-			if(_gridCulling[xPos, yPos])
+			
+			for(int x = 0; x < _gridLengthX; x++)
 			{
-				_gridCells[xPos, yPos] = Instantiate(_gridCellPrefab, spawnPosition, Quaternion.identity, transform).GetComponent<GridCell>();
-				_gridCells[xPos, yPos]._cellIndex = new Vector2(xPos, yPos);
-				_gridCells[xPos, yPos]._connectedGrid = this;
+				for(int z = 0; z < _gridLengthZ; z++)
+				{
+					if(_gridCulling[x, z])
+					{
+						_gridCells[x, z] = Instantiate(_gridCellPrefab, spawnPosition, Quaternion.identity, transform).GetComponent<GridCell>();
+						_gridCells[x, z]._cellIndex = new Vector2(x, z);
+						_gridCells[x, z]._connectedGrid = this;
+					}
+				}
 			}
-				
-			if(xPos < _gridLengthX) xPos++;
-			else break;
-			if(yPos < _gridLengthZ) yPos++;
-			else yPos = 0;
 		}
 	}
 	
@@ -175,15 +171,23 @@ public class CustomGrid : MonoBehaviour
 	
 	public bool LoadGridData()
 	{
-		gridData = new GridData();
-		gridData.cellCullingData = new bool[_gridLengthX * _gridLengthZ];
-		gridData.cellOccupantIDData = new int[_gridLengthX * _gridLengthZ];
-		
 		var loadedData = LoadData();
 		
-		if(loadedData == null) return false;
+		if(loadedData == null)
+		{
+			gridData = new GridData();
+			gridData.cellCullingData = new bool[_gridLengthX * _gridLengthZ];
+			gridData.cellOccupantIDData = new int[_gridLengthX * _gridLengthZ];
+			_gridCulling = new bool[_gridLengthX, _gridLengthZ];
+			_gridCellOccupants = new GameObject[_gridLengthX, _gridLengthZ];
+			
+			return false;
+		}
 		else
 		{
+			_gridCulling = new bool[_gridLengthX, _gridLengthZ];
+			_gridCellOccupants = new GameObject[_gridLengthX, _gridLengthZ];
+			
 			gridData = loadedData;
 			
 			// Converting Data:

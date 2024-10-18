@@ -26,6 +26,8 @@ public class U_Enemy_VoidDemon : A_Enemy
 	public VoidData _currentVoidData = new VoidData(3, 40, 30);
 	
 	public float GetBodyHalfHeight { get { return body.localScale.y / 2; } }
+		
+	[Space(3)]
 	
 	[SerializeField] Transform body;
 	
@@ -33,7 +35,7 @@ public class U_Enemy_VoidDemon : A_Enemy
 	bool isIdling;
 	bool isRoaming;
 	
-	void Awake()
+	void Start()
 	{
 		isIdling = false;
 		isRoaming = false;
@@ -48,6 +50,8 @@ public class U_Enemy_VoidDemon : A_Enemy
 	
 	protected override void EnemyBehaviour()
 	{
+		BehaviourCheck();
+		
 		switch(EnemyState)
 		{
 			case ENEMYSTATE.Idle:
@@ -79,26 +83,39 @@ public class U_Enemy_VoidDemon : A_Enemy
 		{
 			isIdling = true;
 			idleRoutine = IdleToRoamTime(_currentVoidData.idleTime);
+			StartCoroutine(idleRoutine);
 		}
 	}
 	
 	void RoamingState()
 	{
-		if(!isRoaming) GetRoamingTarget();
-		
-		if(_currentLocalGridVriables.gridCellPosition != _currentLocalGridVriables.targetGridCell._cellIndex)
+		if(_currentLocalGridVriables.targetGridCell._connectedGrid._initialGenerationComplete)
 		{
-			isRoaming = true;
-			
-			Vector3 moveTarget = _currentLocalGridVriables.targetGridCell.transform.position;
-			moveTarget.y += GetBodyHalfHeight;
-			transform.position += ((moveTarget - transform.position).normalized * _currentEnemyData.walkSpeed) * Time.deltaTime;
+			if(!isRoaming && _currentLocalGridVriables.targetGridCell._connectedGrid._gridCells != null) GetRoamingTarget();
+		
+			if(_currentLocalGridVriables.gridCellPosition != _currentLocalGridVriables.targetGridCell._cellIndex)
+			{
+				isRoaming = true;
+				
+				Vector3 moveTarget = _currentLocalGridVriables.targetGridCell.transform.position;
+				moveTarget.y += GetBodyHalfHeight;
+				transform.position += ((moveTarget - transform.position).normalized * _currentEnemyData.walkSpeed) * Time.deltaTime;
+			}
 		}
 	}
 	
 	#endregion
 	
 	#region Checks & Routines
+	
+	void BehaviourCheck()
+	{
+		if(EnemyState != ENEMYSTATE.Idle)
+		{
+			StopCoroutine(idleRoutine);
+			isIdling = false;
+		}
+	}
 	
 	void CheckClosestCell()
 	{
@@ -107,9 +124,10 @@ public class U_Enemy_VoidDemon : A_Enemy
 		{
 			foreach(GridCell cell in grid._gridCells)
 			{
-				if(closestCell == null) closestCell = cell;
-				else
+				if(cell != null)
 				{
+					if(closestCell == null) closestCell = cell;
+				
 					if(Vector3.Distance(cell.transform.position, transform.position) < Vector3.Distance(closestCell.transform.position, transform.position))
 					{
 						closestCell = cell;
@@ -132,7 +150,7 @@ public class U_Enemy_VoidDemon : A_Enemy
 		
 		// Check Spaces
 		int spacesFree = 0;
-		if(currentCellPos.x + 1 < currentGrid._gridLengthX)
+		if(currentCellPos.x + 1 < currentGrid._gridCells.GetLength(0) && currentCellPos.x + 1 < currentGrid._gridLengthX)
 		{
 			checkSpaces[0] = currentGrid._gridCells[(int) currentCellPos.x + 1, (int) currentCellPos.y];
 			if(currentGrid._gridCulling[(int) checkSpaces[0]._cellIndex.x, (int) checkSpaces[0]._cellIndex.y])
@@ -148,7 +166,7 @@ public class U_Enemy_VoidDemon : A_Enemy
 				spacesFree++;
 			}
 		}
-		if(currentCellPos.y + 1 < currentGrid._gridLengthZ)
+		if(currentCellPos.y + 1 < currentGrid._gridCells.GetLength(1) && currentCellPos.y + 1 < currentGrid._gridLengthZ)
 		{
 			checkSpaces[2] = currentGrid._gridCells[(int) currentCellPos.x, (int) currentCellPos.y + 1];
 			if(currentGrid._gridCulling[(int) checkSpaces[2]._cellIndex.x, (int) checkSpaces[2]._cellIndex.y])
