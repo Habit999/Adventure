@@ -26,7 +26,11 @@ public class U_Enemy_VoidDemon : A_Enemy
 	public VoidData _currentVoidData = new VoidData(3, 40, 30);
 	
 	public float GetBodyHalfHeight { get { return body.localScale.y / 2; } }
-		
+	
+	[Space(3)]
+	
+	public CustomGrid _startGrid;
+	
 	[Space(3)]
 	
 	[SerializeField] Transform body;
@@ -35,12 +39,16 @@ public class U_Enemy_VoidDemon : A_Enemy
 	bool isIdling;
 	bool isRoaming;
 	
+	bool gridFound;
+	
 	void Start()
 	{
 		isIdling = false;
 		isRoaming = false;
 		
-		CheckClosestCell();
+		gridFound = (_startGrid != null)? true : false;
+		
+		StartCoroutine(CheckClosestCell());
 	}
 	
 	void Update()
@@ -79,7 +87,7 @@ public class U_Enemy_VoidDemon : A_Enemy
 	
 	void IdleState()
 	{
-		if(!isIdling)
+		if(!isIdling && gridFound)
 		{
 			isIdling = true;
 			idleRoutine = IdleToRoamTime(_currentVoidData.idleTime);
@@ -89,17 +97,20 @@ public class U_Enemy_VoidDemon : A_Enemy
 	
 	void RoamingState()
 	{
-		if(_currentLocalGridVriables.targetGridCell._connectedGrid._initialGenerationComplete)
+		if(gridFound)
 		{
-			if(!isRoaming && _currentLocalGridVriables.targetGridCell._connectedGrid._gridCells != null) GetRoamingTarget();
-		
-			if(_currentLocalGridVriables.gridCellPosition != _currentLocalGridVriables.targetGridCell._cellIndex)
+			if(!isRoaming) GetRoamingTarget();
+			
+			if(isRoaming && _currentLocalGridVriables.targetGridCell != null)
 			{
-				isRoaming = true;
-				
-				Vector3 moveTarget = _currentLocalGridVriables.targetGridCell.transform.position;
-				moveTarget.y += GetBodyHalfHeight;
-				transform.position += ((moveTarget - transform.position).normalized * _currentEnemyData.walkSpeed) * Time.deltaTime;
+				if(_currentLocalGridVriables.gridCellPosition != _currentLocalGridVriables.targetGridCell._cellIndex)
+				{
+					isRoaming = true;
+					
+					Vector3 moveTarget = _currentLocalGridVriables.targetGridCell.transform.position;
+					moveTarget.y += GetBodyHalfHeight;
+					transform.position += ((moveTarget - transform.position).normalized * _currentEnemyData.walkSpeed) * Time.deltaTime;
+				}
 			}
 		}
 	}
@@ -110,19 +121,39 @@ public class U_Enemy_VoidDemon : A_Enemy
 	
 	void BehaviourCheck()
 	{
-		if(EnemyState != ENEMYSTATE.Idle)
+		if(EnemyState != ENEMYSTATE.Idle && isIdling)
 		{
 			StopCoroutine(idleRoutine);
 			isIdling = false;
 		}
 	}
 	
-	void CheckClosestCell()
+	IEnumerator CheckClosestCell()
 	{
 		GridCell closestCell = null;
-		foreach(CustomGrid grid in CustomGrid.ActiveGrids)
+		
+		if(_startGrid == null)
 		{
-			foreach(GridCell cell in grid._gridCells)
+			foreach(CustomGrid grid in CustomGrid.ActiveGrids)
+			{
+				yield return new WaitWhile(() => grid._gridCells == null);
+				foreach(GridCell cell in grid._gridCells)
+				{
+					if(cell != null)
+					{
+						if(closestCell == null) closestCell = cell;
+					
+						if(Vector3.Distance(cell.transform.position, transform.position) < Vector3.Distance(closestCell.transform.position, transform.position))
+						{
+							closestCell = cell;
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			foreach(GridCell cell in _startGrid._gridCells)
 			{
 				if(cell != null)
 				{
@@ -138,19 +169,72 @@ public class U_Enemy_VoidDemon : A_Enemy
 		
 		_currentLocalGridVriables.gridCellPosition = closestCell._cellIndex;
 		_currentLocalGridVriables.targetGridCell = closestCell;
+		gridFound = true;
 	}
 	
 	void GetRoamingTarget()
 	{
-		CustomGrid currentGrid = _currentLocalGridVriables.targetGridCell._connectedGrid;
+		CustomGrid currentGrid = (_startGrid == null)? _currentLocalGridVriables.targetGridCell._connectedGrid : _startGrid;
 		Vector2 currentCellPos = _currentLocalGridVriables.gridCellPosition;
 		
-		GridCell[] checkSpaces = new GridCell[4];
+		Vector2[] checkSpaces = new Vector2[4];
 		GridCell[] availableSpaces;
 		
 		// Check Spaces
 		int spacesFree = 0;
-		if(currentCellPos.x + 1 < currentGrid._gridCells.GetLength(0) && currentCellPos.x + 1 < currentGrid._gridLengthX)
+		
+		if(currentCellPos.x + 1 < currentGrid._gridLengthX)
+		{
+			Vector2 assignVector = currentCellPos;
+			assignVector.x += 1;
+			if(currentGrid._gridCulling[(int) assignVector.x, (int) assignVector.y])
+			{
+				checkSpaces[0] = currentCellPos;
+				spacesFree++;
+			}
+		}
+		if(currentCellPos.x - 1 >= 0)
+		{
+			Vector2 assignVector = currentCellPos;
+			assignVector.x -= 1;
+			if(currentGrid._gridCulling[(int) assignVector.x, (int) assignVector.y])
+			{
+				checkSpaces[1] = currentCellPos;
+				spacesFree++;
+			}
+		}
+		if(currentCellPos.y + 1 < currentGrid._gridLengthZ)
+		{
+			Vector2 assignVector = currentCellPos;
+			assignVector.y += 1;
+			if(currentGrid._gridCulling[(int) assignVector.x, (int) assignVector.y])
+			{
+				checkSpaces[2] = currentCellPos;
+				spacesFree++;
+			}
+		}
+		if(currentCellPos.y - 1 >= 0)
+		{
+			Vector2 assignVector = currentCellPos;
+			assignVector.y -= 1;
+			if(currentGrid._gridCulling[(int) assignVector.x, (int) assignVector.y])
+			{
+				checkSpaces[3] = currentCellPos;
+				spacesFree++;
+			}
+		}
+		
+		// Decide From Free Spaces
+		availableSpaces = new GridCell[spacesFree];
+		int availableIndex = 0;
+		foreach(Vector2 checkCell in checkSpaces)
+		{
+			availableSpaces[availableIndex] = currentGrid._gridCells[(int) checkCell.x, (int) checkCell.y];
+		}
+		
+		_currentLocalGridVriables.targetGridCell = availableSpaces[Random.Range(0, spacesFree)];
+		
+		/*if(currentCellPos.x + 1 < currentGrid._gridCells.GetLength(0) && currentCellPos.x + 1 < currentGrid._gridLengthX)
 		{
 			checkSpaces[0] = currentGrid._gridCells[(int) currentCellPos.x + 1, (int) currentCellPos.y];
 			if(currentGrid._gridCulling[(int) checkSpaces[0]._cellIndex.x, (int) checkSpaces[0]._cellIndex.y])
@@ -193,9 +277,7 @@ public class U_Enemy_VoidDemon : A_Enemy
 				availableSpaces[spaceIndex] = checkCell;
 				spaceIndex++;
 			}
-		}
-		
-		_currentLocalGridVriables.targetGridCell = availableSpaces[Random.Range(0, spacesFree)];
+		}*/
 		
 		/*int xOrY = Random.Range(0, 1);
 		bool directionFree1X = false;

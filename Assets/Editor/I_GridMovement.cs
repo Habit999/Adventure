@@ -86,7 +86,7 @@ public class I_GridMovement : Editor
 						{
 							if(targetGrid._gridCellOccupants[x, y] != null && tempPreviewOccupants[x, y] == null)
 							{
-								Vector3 occupantPosition = targetGrid._gridPositions[x, y];
+								Vector3 occupantPosition = targetGrid._cellPositions[x, y];
 								occupantPosition.z = occupantPosition.y;
 								occupantPosition.y = 0;
 								tempPreviewOccupants[x, y] = Instantiate(targetGrid._gridCellOccupants[x, y], occupantPosition, Quaternion.identity, targetGrid.transform);

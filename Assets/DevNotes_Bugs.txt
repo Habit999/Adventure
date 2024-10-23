@@ -1,0 +1,2 @@
+Void Demon:
+- grid pathfinding is yet to work

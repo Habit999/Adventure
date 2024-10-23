@@ -12,7 +12,7 @@ public class CustomGrid : MonoBehaviour
 	// Grid Data Variables
 	string GridDataPath { get { return Application.dataPath + $"/{_gridName}_CustomGridData.json"; } }
 	
-	[HideInInspector] public Vector2[,] _gridPositions;
+	[HideInInspector] public Vector2[,] _cellPositions;
 	[HideInInspector] public GridCell[,] _gridCells;
 	[HideInInspector] public bool[,] _gridCulling;
 	[HideInInspector] public GameObject[,] _gridCellOccupants;
@@ -34,6 +34,7 @@ public class CustomGrid : MonoBehaviour
 	
 	public GameObject _gridCellPrefab;
 	
+	// Editor Booleans
 	[HideInInspector] public bool _initialGenerationComplete = false;
 	[HideInInspector] public bool _isGridVisible = true;
 	[HideInInspector] public bool _activeGridPreview = false;
@@ -49,6 +50,9 @@ public class CustomGrid : MonoBehaviour
 	
 	void Start()
 	{
+		_enableEditorTools = false;
+		_activeGridPreview = false;
+		
 		GenerateGrid();
 		SpawnGrid();
 	}
@@ -63,7 +67,7 @@ public class CustomGrid : MonoBehaviour
 			}
 		}
 		
-		_gridPositions = new Vector2[_gridLengthX, _gridLengthZ];
+		_cellPositions = new Vector2[_gridLengthX, _gridLengthZ];
 		_gridCells = new GridCell[_gridLengthX, _gridLengthZ];
 		
 		LoadGridData();
@@ -78,50 +82,47 @@ public class CustomGrid : MonoBehaviour
 			if(x == 0)
 			{
 				Vector3 lastCellPosition = new Vector3(_gridOffsetX, 0, _gridOffsetZ);
-				_gridPositions[x, 0] = new Vector2(lastCellPosition.x, lastCellPosition.z);
+				_cellPositions[x, 0] = new Vector2(lastCellPosition.x, lastCellPosition.z);
 			}
 			else
 			{
-				xAxis = _gridPositions[x - 1, 0].x + _gridOffsetX + _gridCellSpacing;
+				xAxis = _cellPositions[x - 1, 0].x + _gridOffsetX + _gridCellSpacing;
 				
 				Vector3 lastCellPosition = new Vector3(xAxis, 0, _gridOffsetZ);
-				_gridPositions[x, 0] = new Vector2(lastCellPosition.x, lastCellPosition.z);
+				_cellPositions[x, 0] = new Vector2(lastCellPosition.x, lastCellPosition.z);
 			}
 			
 			// Grid Z Axis
 			for(int z = 1; z < _gridLengthZ; z++)
 			{
-				xAxis = _gridPositions[x, z - 1].x;
-				zAxis = _gridPositions[x, z - 1].y + _gridOffsetZ + _gridCellSpacing;
+				xAxis = _cellPositions[x, z - 1].x;
+				zAxis = _cellPositions[x, z - 1].y + _gridOffsetZ + _gridCellSpacing;
 				
 				Vector3 lastCellPosition = new Vector3(xAxis, 0, zAxis);
-				_gridPositions[x, z] = new Vector2(lastCellPosition.x, lastCellPosition.z);
+				_cellPositions[x, z] = new Vector2(lastCellPosition.x, lastCellPosition.z);
 			}
-			
-			_initialGenerationComplete = true;
-			
-			Debug.Log("Grid Generation Complete");
 		}
+		
+		_initialGenerationComplete = true;
+			
+		Debug.Log("Grid Generation Complete");
 	}
 	
 	void SpawnGrid()
 	{
-		foreach(Vector3 gridPos in _gridPositions)
+		for(int x = 0; x < _gridLengthX; x++)
 		{
-			Vector3 spawnPosition = gridPos;
-			spawnPosition.z = spawnPosition.y;
-			spawnPosition.y = 0;
-			
-			for(int x = 0; x < _gridLengthX; x++)
+			for(int z = 0; z < _gridLengthZ; z++)
 			{
-				for(int z = 0; z < _gridLengthZ; z++)
+				if(_gridCulling[x, z])
 				{
-					if(_gridCulling[x, z])
-					{
-						_gridCells[x, z] = Instantiate(_gridCellPrefab, spawnPosition, Quaternion.identity, transform).GetComponent<GridCell>();
-						_gridCells[x, z]._cellIndex = new Vector2(x, z);
-						_gridCells[x, z]._connectedGrid = this;
-					}
+					Vector3 spawnPosition = _cellPositions[x, z];
+					spawnPosition.z = spawnPosition.y;
+					spawnPosition.y = 0;
+					
+					_gridCells[x, z] = Instantiate(_gridCellPrefab, spawnPosition, Quaternion.identity, transform).GetComponent<GridCell>();
+					_gridCells[x, z]._cellIndex = new Vector2(x, z);
+					_gridCells[x, z]._connectedGrid = this;
 				}
 			}
 		}
@@ -258,7 +259,7 @@ public class CustomGrid : MonoBehaviour
 						{
 							if(_gridCulling[x, y]) Gizmos.color = Color.green;
 							else Gizmos.color = Color.red;
-							Vector3 drawPosition = _gridPositions[x, y];
+							Vector3 drawPosition = _cellPositions[x, y];
 							drawPosition.z = drawPosition.y;
 							drawPosition.y = 0;
 							Gizmos.DrawWireCube(drawPosition, _gridCellPrefab.transform.localScale);
