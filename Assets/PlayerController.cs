@@ -10,28 +10,66 @@ public class PlayerController : MonoBehaviour
 {
 	public static PlayerController Instance;
 	
-	public enum PLAYERSTATE { LockedInteract, LockedMove, FreeMove };
-	public static PLAYERSTATE PlayerState = PLAYERSTATE.LockedInteract;
-	
-	public static Transform PlayerCamera { get { return Instance.playerCamera; } private set { Instance.playerCamera = value; } }
-	[SerializeField] Transform playerCamera;
+	public enum PLAYERSTATE { LockedInteract, LockedMove, FreeMove, FreezePlayer };
+	public PLAYERSTATE PlayerState = PLAYERSTATE.LockedInteract;
 	
 	public float _health = 100;
 	
+	public Rigidbody PlayerRB {
+		get {
+			Rigidbody rb;
+			if(gameObject.GetComponent<Rigidbody>() == null)
+			{
+				rb = gameObject.AddComponent<Rigidbody>();
+				rb.constraints = RigidbodyConstraints.FreezeRotation;
+				return rb;
+			}
+			else return gameObject.GetComponent<Rigidbody>(); 
+		} 
+	}
+	
+	public InteractionManager InteractionMngr { get { return gameObject.GetComponent<InteractionManager>(); } }
+	
+	[Space(10)]
+	
+	public Transform _camera;
+	public Transform _body;
+	
 	[System.Serializable]
 	public struct LockedMovementVariables
-	{
+	{	
 		public float lockedMovementSpeed;
 		public float lockedRotationSpeed;
 	}
-	public LockedMovementVariables lockedMovementVariables = new LockedMovementVariables();
+	[Space(20)]
+	[SerializeField] LockedMovementVariables lockedMovementVariables = new LockedMovementVariables();
+	
+	[System.Serializable]
+	public struct FreeMoveVariables
+	{
+		public float mouseSensitivity;
+		[Space(5)]
+		public ForceMode forceMode;
+		public float walkMoveSpeed;
+		public float sprintMoveSpeed;
+	}
+	[Space(10)]
+	[SerializeField] FreeMoveVariables freeMoveVariables = new FreeMoveVariables();
 	
 	[HideInInspector] public MovePoint _currentMovePoint;
 	
+	float mouseX;
+	float mouseY;
+	
+	// Locked movement dependant
 	Vector3 moveTargetPosition;
 	Quaternion moveTargetRotation;
 	Vector3 currentLockedPosition;
 	Quaternion currentLockedRotation;
+	
+	// Free movement dependant
+	Vector3 forceDirection;
+	[HideInInspector] public bool _isSprinting;
 	
 	float distanceFromTarget;
 	
@@ -46,8 +84,18 @@ public class PlayerController : MonoBehaviour
 		PlayerBehaviour();
 	}
 	
+	void FixedUpdate()
+	{
+		PlayerRB.AddForce(forceDirection, freeMoveVariables.forceMode);
+	}
+	
 	void PlayerBehaviour()
 	{
+		CheckMouse();
+		
+		// Resetting variables
+		forceDirection = Vector3.zero;
+		
 		switch(PlayerState)
 		{
 			case PLAYERSTATE.LockedInteract:
@@ -58,9 +106,49 @@ public class PlayerController : MonoBehaviour
 				LockedMovement();
 				break;
 				
+			case PLAYERSTATE.FreeMove:
+				FreeMovement();
+				break;
+				
+			case PLAYERSTATE.FreezePlayer:
+				FrozenPlayer();
+				break;
+				
 			default:
 				break;
 		}
+	}
+	
+	void CheckMouse()
+	{
+		// Stores mouse rotation so it's not limited to mouse axis
+		mouseX += Controls.MouseX * freeMoveVariables.mouseSensitivity;
+		mouseY += Controls.MouseY * freeMoveVariables.mouseSensitivity;
+		mouseY = Mathf.Clamp(mouseY, -80, 80);
+		
+		// Checks mouse visibility and if locked
+		if(PlayerState == PLAYERSTATE.LockedInteract || PlayerState == PLAYERSTATE.LockedMove)
+		{
+			if(Cursor.lockState != CursorLockMode.None) Cursor.lockState = CursorLockMode.None;
+			if(!Cursor.visible) Cursor.visible = true;
+		}
+		else if(PlayerState == PLAYERSTATE.FreeMove)
+		{
+			if(Cursor.lockState != CursorLockMode.Locked) Cursor.lockState = CursorLockMode.Locked;
+			if(Cursor.visible) Cursor.visible = false;
+		}
+	}
+	
+	#region Public Functions
+	
+	public void FreezePlayer()
+	{
+		PlayerState = PLAYERSTATE.FreezePlayer;
+	}
+	
+	public void UnFreezePlayer(PLAYERSTATE targetState)
+	{
+		PlayerState = targetState;
 	}
 	
 	public void DamagePlayer(float damage)
@@ -81,12 +169,14 @@ public class PlayerController : MonoBehaviour
 		PlayerState = PLAYERSTATE.LockedMove;
 	}
 	
-	#region Player State Machine
+	#endregion
+	
+	#region Player State Functions
 	
 	void LockedInteraction()
 	{
-		if(Input.GetKeyDown(KeyCode.D)) RotateRight();
-		else if(Input.GetKeyDown(InputManager.MoveLeft)) RotateLeft();
+		if(Input.GetKeyDown(Controls.Right)) RotateRight();
+		else if(Input.GetKeyDown(Controls.Left)) RotateLeft();
 	}
 	
 	void LockedMovement()
@@ -105,6 +195,47 @@ public class PlayerController : MonoBehaviour
 			distanceFromTarget = 0;
 			return;
 		}
+	}
+	
+	void FreeMovement()
+	{
+		// Mouse
+		_body.rotation = Quaternion.Euler(0, mouseX, 0);
+		_camera.rotation = Quaternion.Euler(-mouseY, mouseX, 0);
+		
+		// W A S D
+		if(Input.GetKey(Controls.Sprint)) _isSprinting = true;
+		else _isSprinting = false;
+		
+		float speed = _isSprinting? freeMoveVariables.sprintMoveSpeed : freeMoveVariables.walkMoveSpeed;
+		if(Input.GetKey(Controls.Forward))
+		{
+			forceDirection += _body.forward * speed;
+		}
+		if(Input.GetKey(Controls.Backward))
+		{
+			forceDirection += -_body.forward * speed;
+		}
+		if(Input.GetKey(Controls.Left))
+		{
+			forceDirection += -_body.right * speed;
+		}
+		if(Input.GetKey(Controls.Right))
+		{
+			forceDirection += _body.right * speed;
+		}
+		
+		// Interaction
+		if(Input.GetKey(Controls.Interact))
+		{
+			InteractionManager.INTERACTIONOUTCOMES outcome = InteractionMngr.Interact();
+			print(outcome);
+		}
+	}
+	
+	void FrozenPlayer()
+	{
+		// If empty by end of development: delete and remove from state machine
 	}
 	
 	#endregion

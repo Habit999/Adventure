@@ -31,7 +31,7 @@ public class MovePoint : MonoBehaviour
 	{
 		movePointIcon.SetActive(true);
 		
-		movePointIcon.transform.LookAt(PlayerController.PlayerCamera.transform, Vector3.up);
+		movePointIcon.transform.LookAt(PlayerController.Instance._camera.transform, Vector3.up);
 	}
 	
 	void OnMouseExit()

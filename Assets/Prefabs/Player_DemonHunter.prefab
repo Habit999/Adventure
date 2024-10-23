@@ -101,7 +101,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 2
@@ -241,6 +241,8 @@ GameObject:
   m_Component:
   - component: {fileID: 444083623181405205}
   - component: {fileID: 8864631752314530080}
+  - component: {fileID: 6705436349346823103}
+  - component: {fileID: 3262189669786413659}
   m_Layer: 0
   m_Name: Player_DemonHunter
   m_TagString: Untagged
@@ -277,7 +279,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b44722e0b05943e49a063e7774b25b42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 2624188408872534697}
+  PlayerState: 0
+  _health: 100
+  _camera: {fileID: 1272739564960542880}
+  _body: {fileID: 6984754148921075596}
   lockedMovementVariables:
     lockedMovementSpeed: 100
     lockedRotationSpeed: 100
+  freeMoveVariables:
+    mouseSensitivity: 5
+    forceMode: 0
+    walkMoveSpeed: 10
+    sprintMoveSpeed: 13
+  _currentMovePoint: {fileID: 0}
+  _isSprinting: 0
+--- !u!114 &6705436349346823103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7343080708152209228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4ae108078624c4585210a3def78d75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _objectInView: {fileID: 0}
+  _interactionDistance: 3
+--- !u!54 &3262189669786413659
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7343080708152209228}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 1
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
