@@ -10,25 +10,40 @@ public class PlayerController : MonoBehaviour
 {
 	public static PlayerController Instance;
 	
-	public enum PLAYERSTATE { LockedInteract, LockedMove, FreeMove, FreezePlayer };
+	public enum PLAYERSTATE { LockedInteract, LockedMove, FreeMove, Frozen, Dead };
 	public PLAYERSTATE PlayerState = PLAYERSTATE.LockedInteract;
+	
+	[Space(10)]
+	
+	public CustomGrid.ORIENTAION PlayerOrientation;
 	
 	public float _health = 100;
 	
 	public Rigidbody PlayerRB {
 		get {
-			Rigidbody rb;
-			if(gameObject.GetComponent<Rigidbody>() == null)
+			if(playerRB != null) return playerRB;
+			else
 			{
-				rb = gameObject.AddComponent<Rigidbody>();
-				rb.constraints = RigidbodyConstraints.FreezeRotation;
-				return rb;
+				if(gameObject.GetComponent<Rigidbody>() == null)
+				{
+					playerRB = gameObject.AddComponent<Rigidbody>();
+					playerRB.constraints = RigidbodyConstraints.FreezeRotation;
+				}
+				else
+				{
+					playerRB = gameObject.GetComponent<Rigidbody>(); 
+				}
+				return playerRB;
 			}
-			else return gameObject.GetComponent<Rigidbody>(); 
 		} 
 	}
+	Rigidbody playerRB;
 	
 	public InteractionManager InteractionMngr { get { return gameObject.GetComponent<InteractionManager>(); } }
+	
+	public InventoryManager InventoryMngr { get { return gameObject.GetComponent<InventoryManager>(); } }
+	
+	public SkillsManager SkillsMngr { get { return gameObject.GetComponent<SkillsManager>(); } }
 	
 	[Space(10)]
 	
@@ -40,6 +55,17 @@ public class PlayerController : MonoBehaviour
 	{	
 		public float lockedMovementSpeed;
 		public float lockedRotationSpeed;
+		
+		[HideInInspector] public Vector3 rotationDirection;
+		
+		[HideInInspector] public CustomGrid.ORIENTAION targetOrientation;
+		
+		[HideInInspector] public Vector3 moveTargetPosition;
+		[HideInInspector] public Vector3 moveTargetRotation;
+		[HideInInspector] public Vector3 currentLockedPosition;
+		[HideInInspector] public Vector3 currentLockedRotation;
+		
+		[HideInInspector] public float distanceFromTarget;
 	}
 	[Space(20)]
 	[SerializeField] LockedMovementVariables lockedMovementVariables = new LockedMovementVariables();
@@ -52,31 +78,40 @@ public class PlayerController : MonoBehaviour
 		public ForceMode forceMode;
 		public float walkMoveSpeed;
 		public float sprintMoveSpeed;
+		[Space(5)]
+		public float strafeDampening;
+		public float movingDrag;
+		
+		[HideInInspector] public Vector3 forceDirection;
+		[HideInInspector] public bool isToggledUI;
+		
+		[HideInInspector] public float startingDrag;
 	}
 	[Space(10)]
 	[SerializeField] FreeMoveVariables freeMoveVariables = new FreeMoveVariables();
 	
 	[HideInInspector] public MovePoint _currentMovePoint;
 	
-	float mouseX;
-	float mouseY;
-	
-	// Locked movement dependant
-	Vector3 moveTargetPosition;
-	Quaternion moveTargetRotation;
-	Vector3 currentLockedPosition;
-	Quaternion currentLockedRotation;
-	
-	// Free movement dependant
-	Vector3 forceDirection;
 	[HideInInspector] public bool _isSprinting;
 	
-	float distanceFromTarget;
+	[HideInInspector] public bool _canLook;
+	[HideInInspector] public bool _canMove;
+	
+	float mouseX;
+	float mouseY;
 	
 	void Awake()
 	{
 		if(Instance == null) Instance = this;
 		else Destroy(this.gameObject);
+	}
+	
+	void Start()
+	{
+		freeMoveVariables.startingDrag = PlayerRB.drag;
+		
+		_canLook = true;
+		_canMove = true;
 	}
 	
 	void Update()
@@ -86,15 +121,17 @@ public class PlayerController : MonoBehaviour
 	
 	void FixedUpdate()
 	{
-		PlayerRB.AddForce(forceDirection, freeMoveVariables.forceMode);
+		PlayerRB.AddForce(freeMoveVariables.forceDirection);
 	}
 	
 	void PlayerBehaviour()
 	{
+		CheckOrientation();
 		CheckMouse();
+		CheckRigidbody();
 		
 		// Resetting variables
-		forceDirection = Vector3.zero;
+		freeMoveVariables.forceDirection = Vector3.zero;
 		
 		switch(PlayerState)
 		{
@@ -110,7 +147,7 @@ public class PlayerController : MonoBehaviour
 				FreeMovement();
 				break;
 				
-			case PLAYERSTATE.FreezePlayer:
+			case PLAYERSTATE.Frozen:
 				FrozenPlayer();
 				break;
 				
@@ -119,36 +156,108 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 	
+	#region Routine Checks
+	
+	void CheckOrientation()
+	{
+		Vector3 playerForwardDirection = transform.TransformDirection(transform.forward);
+		Vector3 worldNorth = transform.TransformDirection(Vector3.forward);
+		Vector3 worldEast = transform.TransformDirection(Vector3.right);
+		
+		float dotProduct = Vector3.Dot(playerForwardDirection, worldNorth);
+		
+		if(dotProduct > 0.9f) PlayerOrientation = CustomGrid.ORIENTAION.North;
+		else if(dotProduct < 0.1 && dotProduct > -0.1)
+		{
+			dotProduct = Vector3.Dot(playerForwardDirection, worldEast);
+		
+			if(dotProduct > 0.9f) PlayerOrientation = CustomGrid.ORIENTAION.East;
+			else if(dotProduct < -0.9f) PlayerOrientation = CustomGrid.ORIENTAION.West;
+		}
+		else if(dotProduct < -0.9f) PlayerOrientation = CustomGrid.ORIENTAION.South;
+	}
+	
 	void CheckMouse()
 	{
-		// Stores mouse rotation so it's not limited to mouse axis
-		mouseX += Controls.MouseX * freeMoveVariables.mouseSensitivity;
-		mouseY += Controls.MouseY * freeMoveVariables.mouseSensitivity;
-		mouseY = Mathf.Clamp(mouseY, -80, 80);
-		
 		// Checks mouse visibility and if locked
 		if(PlayerState == PLAYERSTATE.LockedInteract || PlayerState == PLAYERSTATE.LockedMove)
 		{
-			if(Cursor.lockState != CursorLockMode.None) Cursor.lockState = CursorLockMode.None;
-			if(!Cursor.visible) Cursor.visible = true;
+			Cursor.lockState = CursorLockMode.None;
+			Cursor.visible = true;
 		}
 		else if(PlayerState == PLAYERSTATE.FreeMove)
 		{
-			if(Cursor.lockState != CursorLockMode.Locked) Cursor.lockState = CursorLockMode.Locked;
-			if(Cursor.visible) Cursor.visible = false;
+			if(freeMoveVariables.isToggledUI)
+			{
+				Cursor.lockState = CursorLockMode.None;
+				Cursor.visible = true;
+				
+				_canLook = false;
+			}
+			else
+			{
+				Cursor.lockState = CursorLockMode.Locked;
+				Cursor.visible = false;
+				
+				_canLook = true;
+			}
+		}
+		
+		// Stores mouse rotation so it's not limited to mouse axis
+		if(_canLook)
+		{
+			mouseX += Controls.MouseX * freeMoveVariables.mouseSensitivity;
+			mouseY += Controls.MouseY * freeMoveVariables.mouseSensitivity;
+			mouseY = Mathf.Clamp(mouseY, -80, 80);
 		}
 	}
 	
+	void CheckRigidbody()
+	{
+		if(PlayerState == PLAYERSTATE.Dead)
+		{
+			PlayerRB.constraints = RigidbodyConstraints.None;
+		}
+		else if(PlayerState == PLAYERSTATE.LockedInteract || PlayerState == PLAYERSTATE.LockedMove || PlayerState == PLAYERSTATE.Frozen)
+		{
+			PlayerRB.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
+		}
+		else if(PlayerState == PLAYERSTATE.FreeMove)
+		{
+			PlayerRB.constraints = RigidbodyConstraints.FreezeRotation;
+			
+			if(Input.GetKey(Controls.Forward) || Input.GetKey(Controls.Backward) || Input.GetKey(Controls.Left) || Input.GetKey(Controls.Right))
+			{
+				PlayerRB.drag = freeMoveVariables.movingDrag;
+			}
+			else
+			{
+				PlayerRB.drag = freeMoveVariables.startingDrag;
+			}
+		}
+	}
+	
+	#endregion
+	
 	#region Public Functions
 	
-	public void FreezePlayer()
+	public void FreezePlayer(bool hideBody, bool disableCamera)
 	{
-		PlayerState = PLAYERSTATE.FreezePlayer;
+		PlayerState = PLAYERSTATE.Frozen;
+		
+		if(hideBody) _body.gameObject.SetActive(false);
+		else _body.gameObject.SetActive(true);
+		
+		if(disableCamera) _camera.gameObject.SetActive(false);
+		else _camera.gameObject.SetActive(true);
 	}
 	
 	public void UnFreezePlayer(PLAYERSTATE targetState)
 	{
 		PlayerState = targetState;
+		
+		_body.gameObject.SetActive(true);
+		_camera.gameObject.SetActive(true);
 	}
 	
 	public void DamagePlayer(float damage)
@@ -160,12 +269,12 @@ public class PlayerController : MonoBehaviour
 	
 	public void ClickMoveToPoint(Transform targetLocation, Transform orientation)
 	{
-		distanceFromTarget = 0;
+		lockedMovementVariables.distanceFromTarget = 0;
 		
-		currentLockedPosition = transform.position;
-		currentLockedRotation = transform.rotation;
-		moveTargetPosition = targetLocation.position;
-		moveTargetRotation = orientation.rotation;
+		lockedMovementVariables.currentLockedPosition = transform.position;
+		lockedMovementVariables.currentLockedRotation = transform.eulerAngles;
+		lockedMovementVariables.moveTargetPosition = targetLocation.position;
+		lockedMovementVariables.moveTargetRotation = orientation.eulerAngles;
 		PlayerState = PLAYERSTATE.LockedMove;
 	}
 	
@@ -181,18 +290,22 @@ public class PlayerController : MonoBehaviour
 	
 	void LockedMovement()
 	{
-		distanceFromTarget += (lockedMovementVariables.lockedMovementSpeed / 100) * Time.deltaTime;
-		distanceFromTarget = Mathf.Clamp(distanceFromTarget, 0, 1);
+		/*(lockedMovementVariables.distanceFromTarget += (lockedMovementVariables.lockedMovementSpeed / 100) * Time.deltaTime;
+		lockedMovementVariables.distanceFromTarget = Mathf.Clamp(lockedMovementVariables.distanceFromTarget, 0, 1);
 		
-		transform.position = Vector3.Lerp(currentLockedPosition, moveTargetPosition, distanceFromTarget);
-		transform.rotation = Quaternion.Lerp(currentLockedRotation, moveTargetRotation, distanceFromTarget);
+		transform.position = Vector3.Lerp(lockedMovementVariables.currentLockedPosition, lockedMovementVariables.moveTargetPosition, lockedMovementVariables.distanceFromTarget);
+		transform.rotation = Quaternion.Lerp(lockedMovementVariables.currentLockedRotation, lockedMovementVariables.moveTargetRotation, lockedMovementVariables.distanceFromTarget);*/
+		
+		lockedMovementVariables.rotationDirection = (lockedMovementVariables.moveTargetRotation) * Time.deltaTime;
+		transform.rotation = Quaternion.AngleAxis(lockedMovementVariables.rotationDirection.y, Vector3.up);
+		
 		print("Locked Movement MOVING");
-		if(transform.position == moveTargetPosition && Quaternion.Angle(transform.rotation, moveTargetRotation) < 0.1f)
+		if(transform.position == lockedMovementVariables.moveTargetPosition && Quaternion.Angle(transform.rotation, Quaternion.Euler(lockedMovementVariables.moveTargetRotation)) < 0.1f)
 		{
-			_currentMovePoint._orientation.transform.rotation = transform.rotation;
+			//_currentMovePoint._orientation.transform.rotation = transform.rotation;
 			print("Locked Movement COMPLETE");
 			PlayerState = PLAYERSTATE.LockedInteract;
-			distanceFromTarget = 0;
+			lockedMovementVariables.distanceFromTarget = 0;
 			return;
 		}
 	}
@@ -200,36 +313,57 @@ public class PlayerController : MonoBehaviour
 	void FreeMovement()
 	{
 		// Mouse
-		_body.rotation = Quaternion.Euler(0, mouseX, 0);
-		_camera.rotation = Quaternion.Euler(-mouseY, mouseX, 0);
+		if(_canLook)
+		{
+			_body.rotation = Quaternion.Euler(0, mouseX, 0);
+			_camera.rotation = Quaternion.Euler(-mouseY, mouseX, 0);
+		}
 		
 		// W A S D
-		if(Input.GetKey(Controls.Sprint)) _isSprinting = true;
-		else _isSprinting = false;
+		if(_canMove)
+		{
+			if(Input.GetKey(Controls.Sprint)) _isSprinting = true;
+			else _isSprinting = false;
+			
+			float speed = _isSprinting? freeMoveVariables.sprintMoveSpeed : freeMoveVariables.walkMoveSpeed;
+			
+			bool dampenStrafe = false;
+			if(Input.GetKey(Controls.Forward))
+			{
+				freeMoveVariables.forceDirection += _body.forward * speed;
+				dampenStrafe = true;
+			}
+			if(Input.GetKey(Controls.Backward))
+			{
+				freeMoveVariables.forceDirection += -_body.forward * speed;
+				dampenStrafe = true;
+			}
+			if(Input.GetKey(Controls.Left))
+			{
+				if(dampenStrafe) freeMoveVariables.forceDirection += (-_body.right * speed) / freeMoveVariables.strafeDampening;
+				else freeMoveVariables.forceDirection += -_body.right * speed;
+			}
+			if(Input.GetKey(Controls.Right))
+			{
+				if(dampenStrafe) freeMoveVariables.forceDirection += (_body.right * speed) / freeMoveVariables.strafeDampening;
+				else freeMoveVariables.forceDirection += _body.right * speed;
+			}
+			
+			// Interaction
+			if(Input.GetKey(Controls.Interact))
+			{
+				InteractionMngr.Interact();
+			}
+		}
 		
-		float speed = _isSprinting? freeMoveVariables.sprintMoveSpeed : freeMoveVariables.walkMoveSpeed;
-		if(Input.GetKey(Controls.Forward))
+		//Toggle UI Interaction
+		if(Input.GetKey(Controls.ToggleUI))
 		{
-			forceDirection += _body.forward * speed;
+			freeMoveVariables.isToggledUI = true;
 		}
-		if(Input.GetKey(Controls.Backward))
+		else
 		{
-			forceDirection += -_body.forward * speed;
-		}
-		if(Input.GetKey(Controls.Left))
-		{
-			forceDirection += -_body.right * speed;
-		}
-		if(Input.GetKey(Controls.Right))
-		{
-			forceDirection += _body.right * speed;
-		}
-		
-		// Interaction
-		if(Input.GetKey(Controls.Interact))
-		{
-			InteractionManager.INTERACTIONOUTCOMES outcome = InteractionMngr.Interact();
-			print(outcome);
+			freeMoveVariables.isToggledUI = false;
 		}
 	}
 	
@@ -244,25 +378,25 @@ public class PlayerController : MonoBehaviour
 	
 	public void RotateRight()
 	{
-		distanceFromTarget = 0;
+		lockedMovementVariables.rotationDirection = Vector3.zero;
 		
-		currentLockedPosition = transform.position;
-		currentLockedRotation = transform.rotation;
-		moveTargetPosition = transform.position;
-		Quaternion tempRotation = Quaternion.Euler(0, _currentMovePoint._orientation.transform.eulerAngles.y + 90, 0);
-		moveTargetRotation = tempRotation;
+		lockedMovementVariables.currentLockedPosition = transform.position;
+		lockedMovementVariables.currentLockedRotation = transform.eulerAngles;
+		lockedMovementVariables.moveTargetPosition = transform.position;
+		lockedMovementVariables.moveTargetRotation = transform.eulerAngles;
+		lockedMovementVariables.moveTargetRotation.y += 90;
 		PlayerState = PLAYERSTATE.LockedMove;
 	}
 	
 	public void RotateLeft()
 	{
-		distanceFromTarget = 0;
+		lockedMovementVariables.rotationDirection = Vector3.zero;
 		
-		currentLockedPosition = transform.position;
-		currentLockedRotation = transform.rotation;
-		moveTargetPosition = transform.position;
-		Quaternion tempRotation = Quaternion.Euler(0, _currentMovePoint._orientation.transform.eulerAngles.y - 90, 0);
-		moveTargetRotation = tempRotation;
+		lockedMovementVariables.currentLockedPosition = transform.position;
+		lockedMovementVariables.currentLockedRotation = transform.eulerAngles;
+		lockedMovementVariables.moveTargetPosition = transform.position;
+		lockedMovementVariables.moveTargetRotation = transform.eulerAngles;
+		lockedMovementVariables.moveTargetRotation.y += -90;
 		PlayerState = PLAYERSTATE.LockedMove;
 	}
 	

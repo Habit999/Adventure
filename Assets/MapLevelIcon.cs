@@ -21,7 +21,7 @@ public class MapLevelIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 		if(description != null)
 		{
 			description.SetActive(false);
-			description.GetComponent<TextMeshProUGUI>().SetText($"{levelDetails.levelName}\n\n{levelDetails.levelBrief}\n\nIncomplete");
+			description.GetComponent<TextMeshProUGUI>().SetText($"{levelDetails.LevelName}\n\n{levelDetails.LevelBrief}\n\nIncomplete");
 		}
 	}
 
@@ -37,6 +37,6 @@ public class MapLevelIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 	
 	public void OnPointerDown(PointerEventData downEventData)
 	{
-		SceneManager.LoadScene(levelDetails.levelBuildIndex);
+		SceneManager.LoadScene(levelDetails.LevelBuildIndex);
 	}
 }

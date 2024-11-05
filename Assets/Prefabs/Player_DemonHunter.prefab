@@ -91,7 +91,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 368680410135729701}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 207ba6993084a8341ba224bf79fc7840, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -242,6 +242,8 @@ GameObject:
   - component: {fileID: 444083623181405205}
   - component: {fileID: 8864631752314530080}
   - component: {fileID: 6705436349346823103}
+  - component: {fileID: 4055824760635202867}
+  - component: {fileID: 3296375011072242749}
   - component: {fileID: 3262189669786413659}
   m_Layer: 0
   m_Name: Player_DemonHunter
@@ -280,19 +282,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerState: 0
+  PlayerOrientation: 0
   _health: 100
   _camera: {fileID: 1272739564960542880}
   _body: {fileID: 6984754148921075596}
   lockedMovementVariables:
-    lockedMovementSpeed: 100
-    lockedRotationSpeed: 100
+    lockedMovementSpeed: 1
+    lockedRotationSpeed: 1
+    rotationDirection: {x: 0, y: 0, z: 0}
+    targetOrientation: 0
+    moveTargetPosition: {x: 0, y: 0, z: 0}
+    moveTargetRotation: {x: 0, y: 0, z: 0}
+    currentLockedPosition: {x: 0, y: 0, z: 0}
+    currentLockedRotation: {x: 0, y: 0, z: 0}
+    distanceFromTarget: 0
   freeMoveVariables:
     mouseSensitivity: 5
-    forceMode: 0
-    walkMoveSpeed: 10
-    sprintMoveSpeed: 13
+    forceMode: 1
+    walkMoveSpeed: 15
+    sprintMoveSpeed: 20
+    strafeDampening: 2
+    movingDrag: 2
+    forceDirection: {x: 0, y: 0, z: 0}
+    isToggledUI: 0
+    startingDrag: 0
   _currentMovePoint: {fileID: 0}
   _isSprinting: 0
+  _canLook: 0
+  _canMove: 0
 --- !u!114 &6705436349346823103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306,7 +323,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _objectInView: {fileID: 0}
-  _interactionDistance: 3
+  _interactionDistance: 2
+--- !u!114 &4055824760635202867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7343080708152209228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2f832467db207f4d992be2153f846fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemSlotCount: 4
+--- !u!114 &3296375011072242749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7343080708152209228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2158a3a32059c6c469ef0eab1e7c8cac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _experienceGained: 52
+  _playerLevel: 1
+  _skillPoints: 0
 --- !u!54 &3262189669786413659
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -316,7 +361,7 @@ Rigidbody:
   m_GameObject: {fileID: 7343080708152209228}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 1
+  m_Drag: 3
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}

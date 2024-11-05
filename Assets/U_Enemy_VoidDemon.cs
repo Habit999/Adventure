@@ -153,6 +153,8 @@ public class U_Enemy_VoidDemon : A_Enemy
 		}
 		else
 		{
+			yield return new WaitWhile(() => _startGrid._gridCells == null);
+			yield return new WaitWhile(() => _startGrid._gridCells.GetLength(0) != _startGrid._gridLengthX && _startGrid._gridCells.GetLength(1) != _startGrid._gridLengthZ);
 			foreach(GridCell cell in _startGrid._gridCells)
 			{
 				if(cell != null)

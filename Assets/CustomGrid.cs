@@ -9,15 +9,38 @@ public class CustomGrid : MonoBehaviour
 {
 	public static List<CustomGrid> ActiveGrids = new List<CustomGrid>();
 	
+	public enum ORIENTAION { North, East, South, West };
+	
+	public static IDictionary<ORIENTAION, Vector2> OrientationDirection = new Dictionary<ORIENTAION, Vector2>()
+	{
+		{ ORIENTAION.North, new Vector2(0, 1) },
+		{ ORIENTAION.East, new Vector2(1, 0) },
+		{ ORIENTAION.South, new Vector2(0, -1) },
+		{ ORIENTAION.West, new Vector2(-1, 0) }
+	};
+	
+	public static IDictionary<ORIENTAION, Vector3> OrientationRotation = new Dictionary<ORIENTAION, Vector3>()
+	{
+		{ ORIENTAION.North, new Vector3(0, 0, 0) },
+		{ ORIENTAION.East, new Vector3(0, 90, 0) },
+		{ ORIENTAION.South, new Vector3(0,180, 0) },
+		{ ORIENTAION.West, new Vector3(0, 270, 0) }
+	};
+	
 	// Grid Data Variables
 	string GridDataPath { get { return Application.dataPath + $"/{_gridName}_CustomGridData.json"; } }
 	
-	[HideInInspector] public Vector2[,] _cellPositions;
+	[HideInInspector] public Vector2[,] _cellGenerationPositions;
 	[HideInInspector] public GridCell[,] _gridCells;
 	[HideInInspector] public bool[,] _gridCulling;
 	[HideInInspector] public GameObject[,] _gridCellOccupants;
 	
 	[HideInInspector] public GridData gridData;
+	
+	//Transform Data
+	[HideInInspector] public Vector3[,] _cellPositionOffsetData;
+	[HideInInspector] public Vector3[,] _occupantPositionOffsetData;
+	[HideInInspector] public Vector3[,] _occupantRotationOffsetData;
 	
 	public string _gridName;
 	[Space(3)]
@@ -38,6 +61,7 @@ public class CustomGrid : MonoBehaviour
 	[HideInInspector] public bool _initialGenerationComplete = false;
 	[HideInInspector] public bool _isGridVisible = true;
 	[HideInInspector] public bool _activeGridPreview = false;
+	[HideInInspector] public bool _cellsAreActive = false;
 	
 	[Space(10)]
 	
@@ -59,16 +83,11 @@ public class CustomGrid : MonoBehaviour
 	
 	public void GenerateGrid()
 	{
-		if(_initialGenerationComplete && _gridCells != null)
-		{
-			foreach(GridCell cell in _gridCells)
-			{
-				if(cell != null) Destroy(cell.gameObject);
-			}
-		}
+		_cellGenerationPositions = new Vector2[_gridLengthX, _gridLengthZ];
 		
-		_cellPositions = new Vector2[_gridLengthX, _gridLengthZ];
-		_gridCells = new GridCell[_gridLengthX, _gridLengthZ];
+		_cellPositionOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
+		_occupantPositionOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
+		_occupantRotationOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
 		
 		LoadGridData();
 		
@@ -81,48 +100,124 @@ public class CustomGrid : MonoBehaviour
 			// Grid X Axis			
 			if(x == 0)
 			{
-				Vector3 lastCellPosition = new Vector3(_gridOffsetX, 0, _gridOffsetZ);
-				_cellPositions[x, 0] = new Vector2(lastCellPosition.x, lastCellPosition.z);
+				Vector3 lastCellPosition = transform.position + new Vector3(_gridOffsetX, 0, _gridOffsetZ);
+				_cellGenerationPositions[x, 0] = new Vector2(lastCellPosition.x, lastCellPosition.z);
 			}
 			else
 			{
-				xAxis = _cellPositions[x - 1, 0].x + _gridOffsetX + _gridCellSpacing;
+				xAxis = _cellGenerationPositions[x - 1, 0].x + _gridOffsetX + _gridCellSpacing;
 				
-				Vector3 lastCellPosition = new Vector3(xAxis, 0, _gridOffsetZ);
-				_cellPositions[x, 0] = new Vector2(lastCellPosition.x, lastCellPosition.z);
+				Vector3 lastCellPosition = new Vector3(xAxis, 0, _gridOffsetZ + transform.position.z);
+				_cellGenerationPositions[x, 0] = new Vector2(lastCellPosition.x, lastCellPosition.z);
 			}
 			
 			// Grid Z Axis
 			for(int z = 1; z < _gridLengthZ; z++)
 			{
-				xAxis = _cellPositions[x, z - 1].x;
-				zAxis = _cellPositions[x, z - 1].y + _gridOffsetZ + _gridCellSpacing;
+				xAxis = _cellGenerationPositions[x, z - 1].x;
+				zAxis = _cellGenerationPositions[x, z - 1].y + _gridOffsetZ + _gridCellSpacing;
 				
 				Vector3 lastCellPosition = new Vector3(xAxis, 0, zAxis);
-				_cellPositions[x, z] = new Vector2(lastCellPosition.x, lastCellPosition.z);
+				_cellGenerationPositions[x, z] = new Vector2(lastCellPosition.x, lastCellPosition.z);
 			}
 		}
 		
+		_cellsAreActive = false;
 		_initialGenerationComplete = true;
 			
 		Debug.Log("Grid Generation Complete");
 	}
 	
-	void SpawnGrid()
+	public void SpawnGrid()
 	{
+		if(!_initialGenerationComplete) GenerateGrid();
+		if(_gridCells != null && _gridCells.Length > 0)
+		{
+			foreach(GridCell cell in _gridCells)
+			{
+				if(cell != null) Destroy(cell.gameObject);
+			}
+		}
+		
+		_gridCells = new GridCell[_gridLengthX, _gridLengthZ];
+		
 		for(int x = 0; x < _gridLengthX; x++)
 		{
 			for(int z = 0; z < _gridLengthZ; z++)
 			{
 				if(_gridCulling[x, z])
 				{
-					Vector3 spawnPosition = _cellPositions[x, z];
+					Vector3 spawnPosition = _cellGenerationPositions[x, z];
 					spawnPosition.z = spawnPosition.y;
 					spawnPosition.y = 0;
 					
 					_gridCells[x, z] = Instantiate(_gridCellPrefab, spawnPosition, Quaternion.identity, transform).GetComponent<GridCell>();
 					_gridCells[x, z]._cellIndex = new Vector2(x, z);
 					_gridCells[x, z]._connectedGrid = this;
+					_gridCells[x, z]._cellOccupantPrefab = _gridCellOccupants[x, z];
+				}
+			}
+		}
+		_cellsAreActive = true;
+	}
+	
+	public void TogglePreviewGrid()
+	{
+		if(_activeGridPreview)
+		{
+			if(!_initialGenerationComplete) GenerateGrid();
+			if(_gridCells != null && _gridCells.Length > 0)
+			{
+				foreach(GridCell cell in _gridCells)
+				{
+					if(cell != null) DestroyImmediate(cell.gameObject);
+				}
+			}
+			
+			_gridCells = new GridCell[_gridLengthX, _gridLengthZ];
+			
+			for(int x = 0; x < _gridLengthX; x++)
+			{
+				for(int z = 0; z < _gridLengthZ; z++)
+				{
+					Vector3 spawnPosition = _cellGenerationPositions[x, z];
+					spawnPosition.z = spawnPosition.y;
+					spawnPosition.y = 0;
+					
+					_gridCells[x, z] = Instantiate(_gridCellPrefab, spawnPosition, Quaternion.identity, transform).GetComponent<GridCell>();
+					_gridCells[x, z]._cellIndex = new Vector2(x, z);
+					_gridCells[x, z]._connectedGrid = this;
+					_gridCells[x, z]._cellOccupantPrefab = _gridCellOccupants[x, z];
+					_gridCells[x, z].SpawnOccupant();
+				}
+			}
+			_cellsAreActive = true;
+		}
+		else
+		{
+			if(_gridCells != null && _gridCells.Length > 0)
+			{
+				foreach(GridCell cell in _gridCells)
+				{
+					if(cell != null) DestroyImmediate(cell.gameObject);
+				}
+			}
+			_cellsAreActive = false;
+		}
+	}
+	
+	public void UpdateGridDataFromInstances()
+	{
+		if(_cellsAreActive)
+		{
+			for(int x = 0; x < _gridLengthX; x++)
+			{
+				for(int z = 0; z < _gridLengthZ; z++)
+				{
+					_gridCellOccupants[x, z] = _gridCells[x, z]._cellOccupantPrefab;
+					_cellPositionOffsetData[x, z] = _gridCells[x, z]._cellPositionOffset;
+					_occupantPositionOffsetData[x, z] = _gridCells[x, z]._occupantPositionOffset;
+					_occupantRotationOffsetData[x, z] = _gridCells[x, z]._occupantRotationOffset;
 				}
 			}
 		}
@@ -136,16 +231,24 @@ public class CustomGrid : MonoBehaviour
 		gridData = new GridData();
 		gridData.cellCullingData = new bool[_gridLengthX * _gridLengthZ];
 		gridData.cellOccupantIDData = new int[_gridLengthX * _gridLengthZ];
+		gridData.cellPositionData = new Vector3[_gridLengthX * _gridLengthZ];
+		gridData.occupantPositionData = new Vector3[_gridLengthX * _gridLengthZ];
+		gridData.occupantRotationData = new Vector3[_gridLengthX * _gridLengthZ];
 		
 		// Converting Data:
 		
-		// grid culling (bool[,] => bool[])
+		// Grid Cells
 		int dataIndex = 0;
 		for(int x = 0; x < _gridLengthX; x++)
 		{
 			for(int y = 0; y < _gridLengthZ; y++)
 			{
 				gridData.cellCullingData[dataIndex] = _gridCulling[x, y];
+				
+				gridData.cellPositionData[dataIndex] = _cellPositionOffsetData[x, y];
+				gridData.occupantPositionData[dataIndex] = _occupantPositionOffsetData[x, y];
+				gridData.occupantRotationData[dataIndex] = _occupantRotationOffsetData[x, y];
+				
 				dataIndex++;
 			}
 		}
@@ -174,20 +277,32 @@ public class CustomGrid : MonoBehaviour
 	{
 		var loadedData = LoadData();
 		
+		if(loadedData != null && loadedData.cellCullingData.Length != _gridLengthX * _gridLengthZ)
+		{
+			print("Loaded Data Doesnt Match");
+			loadedData = null;
+		}
+		
 		if(loadedData == null)
 		{
+			print("Generating Fresh Grid Data");
 			gridData = new GridData();
-			gridData.cellCullingData = new bool[_gridLengthX * _gridLengthZ];
-			gridData.cellOccupantIDData = new int[_gridLengthX * _gridLengthZ];
 			_gridCulling = new bool[_gridLengthX, _gridLengthZ];
 			_gridCellOccupants = new GameObject[_gridLengthX, _gridLengthZ];
+			_cellPositionOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
+			_occupantPositionOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
+			_occupantRotationOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
 			
 			return false;
 		}
 		else
 		{
+			print("Grid Data Loaded");
 			_gridCulling = new bool[_gridLengthX, _gridLengthZ];
 			_gridCellOccupants = new GameObject[_gridLengthX, _gridLengthZ];
+			_cellPositionOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
+			_occupantPositionOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
+			_occupantRotationOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
 			
 			gridData = loadedData;
 			
@@ -201,8 +316,14 @@ public class CustomGrid : MonoBehaviour
 				{
 					_gridCulling[x, y] = gridData.cellCullingData[dataIndex];
 					if(gridData.cellOccupantIDData[dataIndex] != 0)
+					{
 						_gridCellOccupants[x, y] = PrefabLibrary.PrefabID[gridData.cellOccupantIDData[dataIndex]];
+					}
 					else _gridCellOccupants[x, y] = null;
+					
+					_cellPositionOffsetData[x, y] = gridData.cellPositionData[dataIndex];
+					_occupantPositionOffsetData[x, y] = gridData.occupantPositionData[dataIndex];
+					_occupantRotationOffsetData[x, y] = gridData.occupantRotationData[dataIndex];
 					
 					dataIndex++;
 				}
@@ -233,11 +354,11 @@ public class CustomGrid : MonoBehaviour
 		else return null;
 	}
 	
-	public bool CheckStoredGridDataCompatibility()
+	/*public bool CheckStoredGridDataCompatibility() - May or may not be needed
 	{
 		if(gridData.cellCullingData.Length == _gridLengthX * _gridLengthZ) return true;
 		else return false;
-	}
+	}*/
 	
 	#endregion
 	
@@ -259,7 +380,7 @@ public class CustomGrid : MonoBehaviour
 						{
 							if(_gridCulling[x, y]) Gizmos.color = Color.green;
 							else Gizmos.color = Color.red;
-							Vector3 drawPosition = _cellPositions[x, y];
+							Vector3 drawPosition = _cellGenerationPositions[x, y];
 							drawPosition.z = drawPosition.y;
 							drawPosition.y = 0;
 							Gizmos.DrawWireCube(drawPosition, _gridCellPrefab.transform.localScale);
@@ -281,4 +402,8 @@ public class GridData
 {
 	public bool[] cellCullingData;
 	public int[] cellOccupantIDData;
+	
+	public Vector3[] cellPositionData;
+	public Vector3[] occupantPositionData;
+	public Vector3[] occupantRotationData;
 }

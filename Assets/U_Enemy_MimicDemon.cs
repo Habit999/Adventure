@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class U_Enemy_MimicDemon : A_Enemy
 {
-	public static int MaxEnemyTypeInScene = 3;
-	
 	public ENEMYSTATE EnemyState = ENEMYSTATE.Idle;
 	
 	public EnemyData _currentEnemyData = new EnemyData(100, 30, 0, 0);

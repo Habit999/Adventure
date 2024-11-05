@@ -28,8 +28,13 @@ public class InteractionManager : MonoBehaviour
 		{
 			if(playerCamHit.collider.gameObject.tag == "Map")
 			{
-				Controller.FreezePlayer();
+				Controller.FreezePlayer(true, true);
 				playerCamHit.collider.gameObject.GetComponent<LevelMap>().OpenMap();
+				return INTERACTIONOUTCOMES.Successful;
+			}
+			else if(playerCamHit.collider.gameObject.tag == "Chest")
+			{
+				playerCamHit.collider.gameObject.GetComponent<ChestSpawnPoint>().OpenChest();
 				return INTERACTIONOUTCOMES.Successful;
 			}
 			else return INTERACTIONOUTCOMES.None;

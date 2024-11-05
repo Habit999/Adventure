@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GridCell : MonoBehaviour
 {
-	private static float checkCellPositionBuffer = 3f;
+	private static float checkCellTransformBuffer = 3f;
 	
 	[HideInInspector] public Vector2 _cellIndex;
 	[HideInInspector] public CustomGrid _connectedGrid;
@@ -19,43 +19,48 @@ public class GridCell : MonoBehaviour
 	public Vector3 _occupantPositionOffset;
 	public Vector3 _occupantRotationOffset;
 	
-	IEnumerator positionCheckRoutine;
-	bool isCheckRoutineActive;
-	
-	void OnDisable()
-	{
-		if(isCheckRoutineActive) StopCoroutine(positionCheckRoutine);
-	}
+	IEnumerator transformCheckRoutine;
 	
 	void Start()
 	{
-		isCheckRoutineActive = false;
-		positionCheckRoutine = PositionCheckBuffer();
-		StartCoroutine(positionCheckRoutine);
+		transformCheckRoutine = TransformCheckBuffer();
+		StartCoroutine(transformCheckRoutine);
+		
+		SpawnOccupant();
+	}
+	
+	public void SpawnOccupant()
+	{
+		if(_activeCellOccupant != null) Destroy(_activeCellOccupant);
 		
 		if(_cellOccupantPrefab != null)
 		{
-			_activeCellOccupant = Instantiate(_cellOccupantPrefab, _cellOccupantPrefab.transform.position + _occupantPositionOffset, _cellOccupantPrefab.transform.rotation * Quaternion.Euler(_occupantRotationOffset), transform);
+			_activeCellOccupant = Instantiate(_cellOccupantPrefab, _occupantPositionOffset, _cellOccupantPrefab.transform.rotation * Quaternion.Euler(_occupantRotationOffset), transform);
+			_activeCellOccupant.transform.parent = transform;
 		}
 	}
 	
-	IEnumerator PositionCheckBuffer()
+	IEnumerator TransformCheckBuffer()
 	{
-		isCheckRoutineActive = true;
-		CheckPosition();
-		yield return new WaitForSeconds(checkCellPositionBuffer);
-		positionCheckRoutine = PositionCheckBuffer();
-		StartCoroutine(positionCheckRoutine);
+		CheckTransform();
+		yield return new WaitForSeconds(checkCellTransformBuffer);
+		transformCheckRoutine = TransformCheckBuffer();
+		StartCoroutine(transformCheckRoutine);
 	}
 		
-	void CheckPosition()
+	void CheckTransform()
 	{
-		Vector3 correctedCellPosition = _connectedGrid._cellPositions[(int) _cellIndex.x, (int) _cellIndex.y];
+		// Cell Position
+		Vector3 correctedCellPosition = _connectedGrid._cellGenerationPositions[(int) _cellIndex.x, (int) _cellIndex.y];
 		correctedCellPosition.z = correctedCellPosition.y;
 		correctedCellPosition.y = 0;
-		if(correctedCellPosition + _cellPositionOffset != transform.position)
+		transform.position = correctedCellPosition + _cellPositionOffset;
+		
+		//Occupant Position & Rotation
+		if(_activeCellOccupant != null)
 		{
-			transform.position = correctedCellPosition + _cellPositionOffset;
+			_activeCellOccupant.transform.position = _occupantPositionOffset;
+			_activeCellOccupant.transform.rotation = _cellOccupantPrefab.transform.rotation * Quaternion.Euler(_occupantRotationOffset);
 		}
 	}
 }

@@ -5,8 +5,19 @@ public class GridEditor : EditorWindow
 {
 	[HideInInspector] public CustomGrid _grid;
 	
+	//Cell Data
 	public bool[,] _tempCullingData;
-	public GameObject[,] _tempOccupantData;
+	public GameObject[,] _loadedOccupantData;
+	GameObject[,] tempOccupantData;
+	
+	public Vector3[,] _loadedCellPositionOffset;
+	Vector3[,] tempCellPositionOffset;
+	
+	//Occupant Data
+	public Vector3[,] _loadedOccupantPositionOffset;
+	Vector3[,] tempOccupantPositionOffset;
+	public Vector3[,] _loadedOccupantRotationOffset;
+	Vector3[,] tempOccupantRotationOffset;
 	
 	bool isNewGrid = true;
 	
@@ -38,7 +49,16 @@ public class GridEditor : EditorWindow
 			if(GUILayout.Button("Save Grid Data"))
 			{
 				_grid._gridCulling = _tempCullingData;
-				_grid._gridCellOccupants = _tempOccupantData;
+				_loadedOccupantData = tempOccupantData;
+				_grid._gridCellOccupants = _loadedOccupantData;
+				
+				_loadedCellPositionOffset = tempCellPositionOffset;
+				_loadedOccupantPositionOffset = tempOccupantPositionOffset;
+				_loadedOccupantRotationOffset = tempOccupantRotationOffset;
+				_grid._cellPositionOffsetData = _loadedCellPositionOffset;
+				_grid._occupantPositionOffsetData = _loadedOccupantPositionOffset;
+				_grid._occupantRotationOffsetData = _loadedOccupantRotationOffset;
+				
 				_grid.SaveGridData();
 				_grid.GenerateGrid();
 				
@@ -72,13 +92,15 @@ public class GridEditor : EditorWindow
 			GUILayout.Space(25);
 			
 			scrollPosition = GUILayout.BeginScrollView(scrollPosition);
-			
 			try
 			{
 				if(isNewGrid)
 				{
 					_tempCullingData = new bool[_grid._gridLengthX, _grid._gridLengthZ];
-					_tempOccupantData = new GameObject[_grid._gridLengthX, _grid._gridLengthZ];
+					tempOccupantData = new GameObject[_grid._gridLengthX, _grid._gridLengthZ];
+					tempCellPositionOffset = new Vector3[_grid._gridLengthX, _grid._gridLengthZ];
+					tempOccupantPositionOffset = new Vector3[_grid._gridLengthX, _grid._gridLengthZ];
+					tempOccupantRotationOffset = new Vector3[_grid._gridLengthX, _grid._gridLengthZ];
 					
 					for(int x = 0; x < _grid._gridLengthX; x++)
 					{
@@ -97,25 +119,64 @@ public class GridEditor : EditorWindow
 					isNewGrid = false;
 				}
 				
+				#region Dynamic Grid Cell Layout
+				
 				GUILayout.BeginVertical();
+				int cellIndex = 1;
 				for(int x = 0; x < _grid._gridLengthX; x++)
 				{
+					GUILayout.Space(10);
 					GUILayout.BeginHorizontal();
 					for(int y = 0; y < _grid._gridLengthZ; y++)
 					{
+						GUILayout.Space(10);
 						GUILayout.BeginVertical();
-						if(GUILayout.Button(_tempCullingData[x, y].ToString()))
+						
+						GUILayout.Label($"Cell {cellIndex}", EditorStyles.boldLabel);
+						
+						// Cell Culling
+						if(GUILayout.Button($"Active: {_tempCullingData[x, y].ToString()}"))
 						{
 							_tempCullingData[x, y] = !_tempCullingData[x, y];
 						}
 						
-						_tempOccupantData[x, y] = (GameObject) EditorGUILayout.ObjectField("Spawn Object", _tempOccupantData[x, y], typeof(GameObject), false);
+						if(GUILayout.Button("Reset Cell"))
+						{
+							_tempCullingData[x, y] = false;
+							_loadedOccupantData[x, y] = null;
+							_loadedCellPositionOffset[x, y] = Vector3.zero;
+							_loadedOccupantPositionOffset[x, y] = Vector3.zero;
+							_loadedOccupantRotationOffset[x, y] = Vector3.zero;
+						}
+						
+						GUILayout.Space(2);
+						
+						// Cell Occupant
+						if(tempOccupantData[x, y] != _loadedOccupantData[x, y]) tempOccupantData[x, y] = _loadedOccupantData[x, y];
+						tempOccupantData[x, y] = (GameObject) EditorGUILayout.ObjectField("Cell Occupant", tempOccupantData[x, y], typeof(GameObject), false);
+						_loadedOccupantData[x, y] = tempOccupantData[x, y];
+						
+						if(tempCellPositionOffset[x, y] != _loadedCellPositionOffset[x, y]) tempCellPositionOffset[x, y] = _loadedCellPositionOffset[x, y];
+						tempCellPositionOffset[x, y] = (Vector3) EditorGUILayout.Vector3Field("Cell Position Offset", tempCellPositionOffset[x, y]);
+						_loadedCellPositionOffset[x, y] = tempCellPositionOffset[x, y];
+						
+						if(tempOccupantPositionOffset[x, y] != _loadedOccupantPositionOffset[x, y]) tempOccupantPositionOffset[x, y] = _loadedOccupantPositionOffset[x, y];
+						tempOccupantPositionOffset[x, y] = (Vector3) EditorGUILayout.Vector3Field("Occupant Position Offset", tempOccupantPositionOffset[x, y]);
+						_loadedOccupantPositionOffset[x, y] = tempOccupantPositionOffset[x, y];
+						
+						if(tempOccupantRotationOffset[x, y] != _loadedOccupantRotationOffset[x, y]) tempOccupantRotationOffset[x, y] = _loadedOccupantRotationOffset[x, y];
+						tempOccupantRotationOffset[x, y] = (Vector3) EditorGUILayout.Vector3Field("Occupant Rotation Offset", tempOccupantRotationOffset[x, y]);
+						_loadedOccupantRotationOffset[x, y] = tempOccupantRotationOffset[x, y];
+						
+						cellIndex++;
 						
 						GUILayout.EndVertical();
 					}
 					GUILayout.EndHorizontal();
 				}
 				GUILayout.EndVertical();
+				
+				#endregion
 			}
 			catch(System.Exception e)
 			{

@@ -18,6 +18,8 @@ public static class Controls
 	
 	public static KeyCode Back;
 	
+	public static KeyCode ToggleUI;
+	
 	public static void LoadDefaults()
 	{
 		Forward = KeyCode.W;
@@ -30,5 +32,7 @@ public static class Controls
 		Interact = KeyCode.E;
 		
 		Back = KeyCode.Escape;
+		
+		ToggleUI = KeyCode.Space;
 	}
 }

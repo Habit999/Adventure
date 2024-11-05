@@ -1,0 +1,120 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class SpawnManager : MonoBehaviour
+{
+	public static SpawnManager Instance;
+	
+	public enum RANDOMLOOTTYPE { Any, Weapon, Healing };
+	
+	public SO_LevelSpawnData _levelSpawnData;
+	
+	public List<GameObject> lootPrefabs = new List<GameObject>();
+	
+	[Space(10)]
+	//Replace with grid system
+	public List<GameObject> _chestSpawnPoints = new List<GameObject>();
+	
+	int chestToSpawn;
+	
+	public GameObject GenerateRandomLoot(RANDOMLOOTTYPE lootType)
+	{
+		int countIndex = 0;
+		int randomIndex = 0;
+		switch(lootType)
+		{
+			case RANDOMLOOTTYPE.Any:
+				randomIndex = Random.Range(0, lootPrefabs.Count);
+				foreach(GameObject lootPrf in lootPrefabs)
+				{
+					if(countIndex == randomIndex)
+					{
+						GameObject lootInstance = Instantiate(lootPrf, Vector3.zero, Quaternion.identity);
+						lootInstance.SetActive(false);
+						return lootInstance;
+					}
+					else countIndex++;
+				}
+				return null;
+				
+			case RANDOMLOOTTYPE.Weapon:
+				List<GameObject> weaponTypes = new List<GameObject>();
+				foreach(GameObject lootPrf in lootPrefabs)
+				{
+					if(lootPrf.GetComponent<A_Item>()._itemData.Type == SE_ItemData.TYPE.Weapon)
+					{
+						weaponTypes.Add(lootPrf);
+					}
+				}
+				randomIndex = Random.Range(0, weaponTypes.Count);
+				foreach(GameObject weaponPrf in weaponTypes)
+				{
+					if(countIndex == randomIndex)
+					{
+						GameObject lootInstance = Instantiate(weaponPrf, Vector3.zero, Quaternion.identity);
+						lootInstance.SetActive(false);
+						return lootInstance;
+					}
+					else countIndex++;
+				}
+				return null;
+				
+			case RANDOMLOOTTYPE.Healing:
+				List<GameObject> healingTypes = new List<GameObject>();
+				foreach(GameObject lootPrf in lootPrefabs)
+				{
+					if(lootPrf.GetComponent<A_Item>()._itemData.Type == SE_ItemData.TYPE.Healing)
+					{
+						healingTypes.Add(lootPrf);
+					}
+				}
+				randomIndex = Random.Range(0, healingTypes.Count);
+				foreach(GameObject healingPrf in healingTypes)
+				{
+					if(countIndex == randomIndex)
+					{
+						GameObject lootInstance = Instantiate(healingPrf, Vector3.zero, Quaternion.identity);
+						lootInstance.SetActive(false);
+						return lootInstance;
+					}
+					else countIndex++;
+				}
+				return null;
+				
+			default:
+				return null;
+		}
+	}
+	
+	void Awake()
+	{
+		if(Instance == null) Instance = this;
+		else Destroy(this.gameObject);
+		
+		chestToSpawn = _levelSpawnData.MaxChestsInLevel;
+	}
+	
+	void Update()
+	{
+		if(chestToSpawn > 0) SpawnLevelChests();
+	}
+	
+	void SpawnLevelChests()
+	{
+		int randomSpawnPoint = Random.Range(0, _chestSpawnPoints.Count);
+		int countIndex = 0;
+		foreach(GameObject chestSpawn in _chestSpawnPoints)
+		{
+			if(countIndex == randomSpawnPoint)
+			{
+				if(!chestSpawn.GetComponent<ChestSpawnPoint>()._willSpawn)
+				{
+					chestSpawn.GetComponent<ChestSpawnPoint>()._willSpawn = true;
+					chestToSpawn -= 1;
+				}
+			}
+			else countIndex++;
+		}
+	}
+}

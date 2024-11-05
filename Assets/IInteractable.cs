@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class IInteractable : MonoBehaviour
 {
-	[HideInInspector] public bool _canInteract;
+	public bool _canInteract;
 	
 	void Awake()
 	{
-		_canInteract = false;
+		_canInteract = true;
 	}
 }

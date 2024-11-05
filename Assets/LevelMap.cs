@@ -13,6 +13,11 @@ public class LevelMap : MonoBehaviour
 		mapCamera.SetActive(false);
 	}
 	
+	void Update()
+	{
+		if(Input.GetKeyDown(Controls.Back)) CloseMap();
+	}
+	
 	public void OpenMap()
 	{
 		mapCamera.SetActive(true);
