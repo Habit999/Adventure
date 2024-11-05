@@ -25,11 +25,14 @@ public class SpawnManager : MonoBehaviour
 		switch(lootType)
 		{
 			case RANDOMLOOTTYPE.Any:
-				randomIndex = Random.Range(0, lootPrefabs.Count);
+			print(1);
+				randomIndex = Random.Range(0, lootPrefabs.Count - 1);
 				foreach(GameObject lootPrf in lootPrefabs)
 				{
+					print(2);
 					if(countIndex == randomIndex)
 					{
+						print(3);
 						GameObject lootInstance = Instantiate(lootPrf, Vector3.zero, Quaternion.identity);
 						lootInstance.SetActive(false);
 						return lootInstance;
@@ -47,7 +50,7 @@ public class SpawnManager : MonoBehaviour
 						weaponTypes.Add(lootPrf);
 					}
 				}
-				randomIndex = Random.Range(0, weaponTypes.Count);
+				randomIndex = Random.Range(0, weaponTypes.Count - 1);
 				foreach(GameObject weaponPrf in weaponTypes)
 				{
 					if(countIndex == randomIndex)
@@ -69,7 +72,7 @@ public class SpawnManager : MonoBehaviour
 						healingTypes.Add(lootPrf);
 					}
 				}
-				randomIndex = Random.Range(0, healingTypes.Count);
+				randomIndex = Random.Range(0, healingTypes.Count - 1);
 				foreach(GameObject healingPrf in healingTypes)
 				{
 					if(countIndex == randomIndex)
@@ -92,18 +95,15 @@ public class SpawnManager : MonoBehaviour
 		if(Instance == null) Instance = this;
 		else Destroy(this.gameObject);
 		
-		chestToSpawn = _levelSpawnData.MaxChestsInLevel;
+		StartCoroutine(SpawnLevelChests(_levelSpawnData.MaxChestsInLevel));
 	}
 	
-	void Update()
+	IEnumerator SpawnLevelChests(int chestsToSpawn)
 	{
-		if(chestToSpawn > 0) SpawnLevelChests();
-	}
-	
-	void SpawnLevelChests()
-	{
-		int randomSpawnPoint = Random.Range(0, _chestSpawnPoints.Count);
+		int chestCount = chestsToSpawn;
+		int randomSpawnPoint = Random.Range(0, _chestSpawnPoints.Count - 1);
 		int countIndex = 0;
+		
 		foreach(GameObject chestSpawn in _chestSpawnPoints)
 		{
 			if(countIndex == randomSpawnPoint)
@@ -111,10 +111,13 @@ public class SpawnManager : MonoBehaviour
 				if(!chestSpawn.GetComponent<ChestSpawnPoint>()._willSpawn)
 				{
 					chestSpawn.GetComponent<ChestSpawnPoint>()._willSpawn = true;
-					chestToSpawn -= 1;
+					chestCount -= 1
 				}
+				else break;
 			}
 			else countIndex++;
 		}
+		
+		yield return new WaitForSeconds(0.01f);
 	}
 }

@@ -6,7 +6,7 @@ public abstract class A_Item : MonoBehaviour
 {
 	public SE_ItemData _itemData = new SE_ItemData();
 	
-	public float GetRandomExperience { get { return Random.Range(5, 10.1f); } }
+	public float GetRandomExperience { get { return Random.Range(5, 10); } }
 	
 	[System.Serializable]
 	public struct SpecificData

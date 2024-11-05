@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ChestSpawnPoint : IInteractable
 {	
-	/*[HideInInspector] */public bool _willSpawn = false;
+	/*[HideInInspector] */public bool _willSpawn;
 	
 	public bool _isOpen;
 	
@@ -19,7 +19,7 @@ public class ChestSpawnPoint : IInteractable
 	public void OpenChest()
 	{
 		if(!_canInteract || itemInChest == null) return;
-		print("FuckThis");
+		print("Chest Opened");
 		bool collectedItem = itemInChest.GetComponent<U_Item>().CollectItem();
 		print(collectedItem);
 		if(collectedItem)
@@ -32,7 +32,7 @@ public class ChestSpawnPoint : IInteractable
 	
 	void Awake()
 	{
-		_willSpawn = false;
+		_willSpawn = true;
 		
 		chest = transform.GetChild(0).gameObject;
 		chest.SetActive(false);

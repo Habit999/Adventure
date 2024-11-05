@@ -10,7 +10,11 @@ public class U_Item : A_Item
 	{
 		switch(_itemData.Type)
 		{
-			case SE_ItemData.TYPE.Weapon | SE_ItemData.TYPE.Healing:
+			case SE_ItemData.TYPE.Weapon:
+				print("Item Collected");
+				return PlayerController.Instance.InventoryMngr.AddItem(this.gameObject, 1);
+				
+			case SE_ItemData.TYPE.Healing:
 				print("Item Collected");
 				return PlayerController.Instance.InventoryMngr.AddItem(this.gameObject, 1);
 				
@@ -19,6 +23,7 @@ public class U_Item : A_Item
 				return true;
 				
 			default:
+				print("Default Collection ItemStatus");
 				return false;
 		}
 	}
