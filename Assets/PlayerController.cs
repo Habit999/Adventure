@@ -17,7 +17,10 @@ public class PlayerController : MonoBehaviour
 	
 	public CustomGrid.ORIENTAION PlayerOrientation;
 	
+	public float _maxHealth = 100;
+	public float _maxMana = 100;
 	public float _health = 100;
+	public float _mana = 100;
 	
 	public Rigidbody PlayerRB {
 		get {

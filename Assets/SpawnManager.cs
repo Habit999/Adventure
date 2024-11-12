@@ -10,6 +10,9 @@ public class SpawnManager : MonoBehaviour
 	
 	public SO_LevelSpawnData _levelSpawnData;
 	
+	public delegate void SpawnLootDelegate();
+	public static event SpawnLootDelegate SpawnLevelLoot; 
+	
 	public List<GameObject> lootPrefabs = new List<GameObject>();
 	
 	[Space(10)]
@@ -25,14 +28,11 @@ public class SpawnManager : MonoBehaviour
 		switch(lootType)
 		{
 			case RANDOMLOOTTYPE.Any:
-			print(1);
 				randomIndex = Random.Range(0, lootPrefabs.Count - 1);
 				foreach(GameObject lootPrf in lootPrefabs)
 				{
-					print(2);
 					if(countIndex == randomIndex)
 					{
-						print(3);
 						GameObject lootInstance = Instantiate(lootPrf, Vector3.zero, Quaternion.identity);
 						lootInstance.SetActive(false);
 						return lootInstance;
@@ -95,13 +95,13 @@ public class SpawnManager : MonoBehaviour
 		if(Instance == null) Instance = this;
 		else Destroy(this.gameObject);
 		
-		StartCoroutine(SpawnLevelChests(_levelSpawnData.MaxChestsInLevel));
+		StartCoroutine(SpawnLootRoutine(_levelSpawnData.MaxChestsInLevel));
 	}
 	
-	IEnumerator SpawnLevelChests(int chestsToSpawn)
+	IEnumerator SpawnLootRoutine(int chestsToSpawn)
 	{
 		int chestCount = chestsToSpawn;
-		int randomSpawnPoint = Random.Range(0, _chestSpawnPoints.Count - 1);
+		int randomSpawnPoint = Random.Range(0, _chestSpawnPoints.Count);
 		int countIndex = 0;
 		
 		foreach(GameObject chestSpawn in _chestSpawnPoints)
@@ -111,13 +111,15 @@ public class SpawnManager : MonoBehaviour
 				if(!chestSpawn.GetComponent<ChestSpawnPoint>()._willSpawn)
 				{
 					chestSpawn.GetComponent<ChestSpawnPoint>()._willSpawn = true;
-					chestCount -= 1
+					chestCount -= 1;
+					break;
 				}
 				else break;
 			}
 			else countIndex++;
 		}
-		
 		yield return new WaitForSeconds(0.01f);
+		if(chestCount > 0) StartCoroutine(SpawnLootRoutine(chestCount));
+		else SpawnLevelLoot();
 	}
 }

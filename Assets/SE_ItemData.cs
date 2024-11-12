@@ -10,7 +10,7 @@ public class SE_ItemData
 	
 	public string Name;
 	
-	public Texture Image;
+	public Sprite Image;
 	
 	public int MaxItemStack;
 }

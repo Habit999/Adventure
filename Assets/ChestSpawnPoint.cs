@@ -4,24 +4,23 @@ using UnityEngine;
 
 public class ChestSpawnPoint : IInteractable
 {	
-	/*[HideInInspector] */public bool _willSpawn;
+	[Space(5)]
+	public bool _willSpawn;
 	
-	public bool _isOpen;
+	[HideInInspector] public bool _isOpen;
 	
 	GameObject chest;
 	
 	GameObject itemInChest;
 	
 	Animator chestAnimator;
+	BoxCollider chestCollider;
 	
-	public bool chestSpawned = false;
 	
 	public void OpenChest()
 	{
 		if(!_canInteract || itemInChest == null) return;
-		print("Chest Opened");
 		bool collectedItem = itemInChest.GetComponent<U_Item>().CollectItem();
-		print(collectedItem);
 		if(collectedItem)
 		{
 			_isOpen = true;
@@ -30,36 +29,41 @@ public class ChestSpawnPoint : IInteractable
 		_canInteract = false;
 	}
 	
+	void OnEnable()
+	{
+		SpawnManager.SpawnLevelLoot += SpawnChest;
+	}
+	
+	void OnDisable()
+	{
+		SpawnManager.SpawnLevelLoot -= SpawnChest;
+	}
+	
 	void Awake()
 	{
-		_willSpawn = true;
+		//_willSpawn = false;
 		
 		chest = transform.GetChild(0).gameObject;
 		chest.SetActive(false);
 		
 		chestAnimator = transform.GetChild(0).gameObject.GetComponent<Animator>();
+		chestCollider = gameObject.GetComponent<BoxCollider>();
+		chestCollider.enabled = false;
 		
-		chestSpawned = false;
 		_isOpen = false;
-	}
-	
-	void Update()
-	{
-		if(_willSpawn && !chestSpawned) SpawnChest();
 	}
 	
 	void SpawnChest()
 	{
-		print("Chest Spawned");
-		chestSpawned = true;
+		if(!_willSpawn) return;
 		chest.SetActive(true);
+		chestCollider.enabled = true;
 		itemInChest = SpawnManager.Instance.GenerateRandomLoot(SpawnManager.RANDOMLOOTTYPE.Any);
-		print(itemInChest);
 	}
 	
 	void OnMouseDown()
 	{
-		if(!_isOpen && _canInteract) OpenChest();
+		if(!_isOpen && _canInteract && PlayerController.Instance.PlayerState == PlayerController.PLAYERSTATE.LockedInteract) OpenChest();
 	}
 	
 	#if UNITY_EDITOR

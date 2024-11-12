@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class U_Item : A_Item
 {
+	[Space(5)]
 	public SpecificData _specificData = new SpecificData();
 	
 	public override bool CollectItem()

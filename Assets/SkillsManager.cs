@@ -6,34 +6,93 @@ public class SkillsManager : MonoBehaviour
 {
 	public PlayerController Controller { get { return gameObject.GetComponent<PlayerController>(); } }
 	
-	public float _experienceGained = 0;
 	public int _playerLevel = 0;
 	public int _skillPoints = 0;
+	[HideInInspector] public int _tempSkillPoints;
+	
+	private float _experienceGained = 0;
 	
 	private static float firstLevelExperience = 10;
 	private static float levelIntervalMultiplier = 0.2f;
 	private static float nextLevelExperience = 10;
 	
+	// Skill variables
+	public enum SKILLTYPE { Vitality, Strength, Intelligence };
+	[System.Serializable]
 	public struct SkillsList
 	{
+		public SkillsList(int inp_vitality, int inp_strength, int inp_intelligence)
+		{
+			vitality = inp_vitality;
+			strength = inp_strength;
+			intelligence = inp_intelligence;
+		}
+		
 		public int vitality;
 		public int strength;
 		public int intelligence;
 	}
-	public SkillsList _currentSkills = new SkillsList();
+	public SkillsList _currentSkills = new SkillsList(1, 1, 1);
+	
+	// Temp variables for changing skills before confirmation
+	[HideInInspector] public SkillsList _tempSkills = new SkillsList(1, 1, 1);
+	[HideInInspector] public bool _tempValuesActive;
 	
 	bool initialSkillsCheckComplete = false;
 	
 	void Start()
 	{
-		_playerLevel = 0;
-		_experienceGained = 0;
 		StartCoroutine(UpdatePlayerLevel());
 	}
 	
 	public void AddExperience(float amount)
 	{
 		_experienceGained += amount;
+	}
+	
+	public void ChangeSkillValue(SKILLTYPE type, int amount)
+	{
+		if(!_tempValuesActive)
+		{
+			_tempValuesActive = true;
+			
+			_tempSkillPoints = _skillPoints;
+			
+			_tempSkills.vitality = _currentSkills.vitality;
+			_tempSkills.strength = _currentSkills.strength;
+			_tempSkills.intelligence = _currentSkills.intelligence;
+		}
+		
+		switch(type)
+		{
+			case SKILLTYPE.Vitality:
+				_tempSkills.vitality += amount;
+				break;
+				
+			case SKILLTYPE.Strength:
+				_tempSkills.strength += amount;
+				break;
+				
+			case SKILLTYPE.Intelligence:
+				_tempSkills.intelligence += amount;
+				break;
+				
+			default:
+				break;
+		}
+		
+		_tempSkillPoints += -amount;
+	}
+	
+	public void ConfirmSkillChanges()
+	{
+		_tempValuesActive = false;
+		
+		_skillPoints = _tempSkillPoints;
+		
+		_currentSkills.vitality = _tempSkills.vitality;
+		_currentSkills.strength = _tempSkills.strength;
+		_currentSkills.intelligence = _tempSkills.intelligence;
 	}
 	
 	IEnumerator UpdatePlayerLevel()

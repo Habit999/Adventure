@@ -52,8 +52,8 @@ MonoBehaviour:
   _value: 0.5
   backgroundBar: {fileID: 6060708466250428979}
   progressionBar: {fileID: 8998439449942799520}
-  topOffset: 5
-  bottomOffset: 5
+  topOffset: 0
+  bottomOffset: 0
   sideOffset: 5
 --- !u!1 &5015487885962260810
 GameObject:

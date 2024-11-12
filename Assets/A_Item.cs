@@ -13,7 +13,12 @@ public abstract class A_Item : MonoBehaviour
 	{
 		public int levelRequired;
 		public float damage;
+		public float healthRecovery;
+		public float manaRecovery;
 	}
+	
+	[Space(5)]
+	public SkillsManager.SkillsList minimumStatRequirements = new SkillsManager.SkillsList(1, 1, 1);
 	
 	public abstract bool CollectItem();
 }

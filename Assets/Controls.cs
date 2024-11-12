@@ -20,6 +20,15 @@ public static class Controls
 	
 	public static KeyCode ToggleUI;
 	
+	public static KeyCode HotBar0;
+	public static KeyCode HotBar1;
+	public static KeyCode HotBar2;
+	public static KeyCode HotBar3;
+	public static KeyCode HotBar4;
+	public static KeyCode HotBar5;
+	public static KeyCode HotBar6;
+	public static KeyCode HotBar7;
+	
 	public static void LoadDefaults()
 	{
 		Forward = KeyCode.W;
@@ -34,5 +43,14 @@ public static class Controls
 		Back = KeyCode.Escape;
 		
 		ToggleUI = KeyCode.Space;
+		
+		HotBar0 = KeyCode.Alpha0;
+		HotBar1 = KeyCode.Alpha1;
+		HotBar2 = KeyCode.Alpha2;
+		HotBar3 = KeyCode.Alpha3;
+		HotBar4 = KeyCode.Alpha4;
+		HotBar5 = KeyCode.Alpha5;
+		HotBar6 = KeyCode.Alpha6;
+		HotBar7 = KeyCode.Alpha7;
 	}
 }

@@ -8,11 +8,16 @@ public class InventoryManager : MonoBehaviour
 	
 	public IDictionary<GameObject, int> _collectedItems = new Dictionary<GameObject, int>();
 	
-	public int _itemSlotCount = 4;
+	[HideInInspector] public int _itemSlotCount = 4;
+	
+	// To be used
+	[HideInInspector] public IDictionary<GameObject, int> _hotbarItemOrder = new Dictionary<GameObject, int>();
+	
+	[HideInInspector] public int _selectedInvSlot;
 	
 	void Awake()
 	{
-		_collectedItems.Clear();
+		_selectedInvSlot = -1;
 	}
 	
 	void Update()
@@ -20,6 +25,30 @@ public class InventoryManager : MonoBehaviour
 		UpdateInventoryStats();
 	}
 	
+	public void AssignHotbarItem(int position)
+	{
+		int count = 0;
+		foreach(GameObject checkedItem in _hotbarItemOrder.Keys)
+		{
+			if(count == position)
+			{
+				if(checkedItem != _collectedItems[_selectedInvSlot])
+				{
+					_hotbarItemOrder.Remove(checkedItem);
+					_hotbarItemOrder.Add(_collectedItems[_selectedInvSlot], position);
+					break;
+				}
+				else
+				{
+					_hotbarItemOrder.Add(_collectedItems[_selectedInvSlot], position);
+					break;
+				}
+			}
+			count++;
+		}
+	}
+	
+	// Add item to collected inventory
 	public bool AddItem(GameObject item, int amount)
 	{
 		foreach(GameObject invItem in _collectedItems.Keys)
@@ -41,6 +70,7 @@ public class InventoryManager : MonoBehaviour
 		return false;
 	}
 	
+	// Remove item from collected inventory
 	public bool RemoveItem(GameObject item, int amount)
 	{
 		foreach(GameObject invItem in _collectedItems.Keys)
@@ -64,21 +94,20 @@ public class InventoryManager : MonoBehaviour
 	
 	void UpdateInventoryStats()
 	{
-		// If player level is == to 5 then increase item slot number
-		// Inventory Slots
-		if(Controller.SkillsMngr._playerLevel == 0)
+		// Adjust inventory slots to player level
+		if(Controller.SkillsMngr._playerLevel == 1)
 		{
 			_itemSlotCount = 4;
 		}
-		else if(Controller.SkillsMngr._playerLevel == 1)
+		else if(Controller.SkillsMngr._playerLevel == 3)
 		{
 			_itemSlotCount = 8;
 		}
-		else if(Controller.SkillsMngr._playerLevel == 5)
+		else if(Controller.SkillsMngr._playerLevel == 6)
 		{
 			_itemSlotCount = 12;
 		}
-		else if(Controller.SkillsMngr._playerLevel == 10)
+		else if(Controller.SkillsMngr._playerLevel == 8)
 		{
 			_itemSlotCount = 16;
 		}

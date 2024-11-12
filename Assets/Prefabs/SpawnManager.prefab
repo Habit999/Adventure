@@ -46,7 +46,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _levelSpawnData: {fileID: 11400000, guid: 889e5ae90d9cc3d418cdd1e984a0d458, type: 2}
   lootPrefabs:
-  - {fileID: 8899489146511926636, guid: 0c1686f86b4d1b748a063896505f97fe, type: 3}
+  - {fileID: 8899489146511926636, guid: e05a0e1db993a6b4885a5754cf498744, type: 3}
+  - {fileID: 3107724098402954927, guid: 0c1686f86b4d1b748a063896505f97fe, type: 3}
+  - {fileID: 2924302850185203420, guid: f9e925efbe7968a46ba48eb9bd9fcd65, type: 3}
+  - {fileID: 5668910457724294936, guid: 0edc2447c28f6974e9233210d4c1b424, type: 3}
   _chestSpawnPoints:
   - {fileID: 0}
   - {fileID: 0}
