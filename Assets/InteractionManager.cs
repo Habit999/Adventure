@@ -9,17 +9,17 @@ public class InteractionManager : MonoBehaviour
 	public PlayerController Controller { get { return gameObject.GetComponent<PlayerController>(); } }
 	
 	[HideInInspector] public GameObject _objectInView;
+	[HideInInspector] public bool _objectPresent;
 	
 	public float _interactionDistance;
 	
 	// Player perspective raycast variables
 	RaycastHit playerCamHit;
 	Ray playerCamRay;
-	bool objectPresent;
 	
 	public INTERACTIONOUTCOMES Interact()
 	{
-		if(objectPresent)
+		if(_objectPresent)
 		{
 			if(playerCamHit.collider.gameObject.tag == "Map")
 			{
@@ -32,6 +32,11 @@ public class InteractionManager : MonoBehaviour
 				playerCamHit.collider.gameObject.GetComponent<ChestSpawnPoint>().OpenChest();
 				return INTERACTIONOUTCOMES.Successful;
 			}
+			else if(playerCamHit.collider.gameObject.tag == "Exit")
+			{
+				playerCamHit.collider.gameObject.GetComponent<DungeonExit>().Exit();
+				return INTERACTIONOUTCOMES.Successful;
+			}
 			else return INTERACTIONOUTCOMES.None;
 		}
 		else return INTERACTIONOUTCOMES.None;
@@ -39,22 +44,60 @@ public class InteractionManager : MonoBehaviour
 	
 	void Update()
 	{
-		objectPresent = Physics.Raycast(Controller._camera.position, Controller._camera.forward, out playerCamHit, _interactionDistance);
+		_objectPresent = Physics.Raycast(Controller._camera.position, Controller._camera.forward, out playerCamHit, _interactionDistance);
+		if(_objectPresent) _objectInView = playerCamHit.collider.gameObject;
 		
 		HotBarInteraction();
+		
+		ItemUsage();
+	}
+	
+	void ItemUsage()
+	{
+		if(Controller.PlayerState == PlayerController.PLAYERSTATE.FreeMove && !Controller.freeMoveVariables.isToggledUI)
+		{
+			if(Input.GetMouseButtonDown(Controls.MousePrimary) && Controller.InventoryMngr._equippedItem != null)
+			{
+				Controller.InventoryMngr._equippedItem.GetComponent<Item>().UseItem();
+			}
+		}
 	}
 	
 	void HotBarInteraction()
 	{
 		UserInterfaceController controllerUI = UserInterfaceController.Instance;
-		if(Input.GetKeyDown(Controls.HotBar0)) controllerUI.SetActiveActionKey(0);
-		else if(Input.GetKeyDown(Controls.HotBar1)) controllerUI.SetActiveActionKey(1);
-		else if(Input.GetKeyDown(Controls.HotBar2)) controllerUI.SetActiveActionKey(2);
-		else if(Input.GetKeyDown(Controls.HotBar3)) controllerUI.SetActiveActionKey(3);
-		else if(Input.GetKeyDown(Controls.HotBar4)) controllerUI.SetActiveActionKey(4);
-		else if(Input.GetKeyDown(Controls.HotBar5)) controllerUI.SetActiveActionKey(5);
-		else if(Input.GetKeyDown(Controls.HotBar6)) controllerUI.SetActiveActionKey(6);
-		else if(Input.GetKeyDown(Controls.HotBar7)) controllerUI.SetActiveActionKey(7);
+		if(Input.GetKeyDown(Controls.HotBar0))
+		{
+			controllerUI.SetActiveActionKey(0);
+		}
+		else if(Input.GetKeyDown(Controls.HotBar1))
+		{
+			controllerUI.SetActiveActionKey(1);
+		}
+		else if(Input.GetKeyDown(Controls.HotBar2))
+		{
+			controllerUI.SetActiveActionKey(2);
+		}
+		else if(Input.GetKeyDown(Controls.HotBar3))
+		{
+			controllerUI.SetActiveActionKey(3);
+		}
+		else if(Input.GetKeyDown(Controls.HotBar4))
+		{
+			controllerUI.SetActiveActionKey(4);
+		}
+		else if(Input.GetKeyDown(Controls.HotBar5))
+		{
+			controllerUI.SetActiveActionKey(5);
+		}
+		else if(Input.GetKeyDown(Controls.HotBar6))
+		{
+			controllerUI.SetActiveActionKey(6);
+		}
+		else if(Input.GetKeyDown(Controls.HotBar7))
+		{
+			controllerUI.SetActiveActionKey(7);
+		}
 	}
 	
 	#if UNITY_EDITOR

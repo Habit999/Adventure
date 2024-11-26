@@ -220,6 +220,8 @@ public class CustomGrid : MonoBehaviour
 					_occupantRotationOffsetData[x, z] = _gridCells[x, z]._occupantRotationOffset;
 				}
 			}
+			
+			SaveGridData();
 		}
 	}
 	
@@ -258,7 +260,7 @@ public class CustomGrid : MonoBehaviour
 		foreach(GameObject occupant in _gridCellOccupants)
 		{
 			int id = 1;
-			foreach(GameObject prefab in PrefabLibrary.PrefabID.Values)
+			foreach(GameObject prefab in PrefabLibrary.GridPrefabID.Values)
 			{
 				if(occupant == prefab)
 				{
@@ -317,7 +319,7 @@ public class CustomGrid : MonoBehaviour
 					_gridCulling[x, y] = gridData.cellCullingData[dataIndex];
 					if(gridData.cellOccupantIDData[dataIndex] != 0)
 					{
-						_gridCellOccupants[x, y] = PrefabLibrary.PrefabID[gridData.cellOccupantIDData[dataIndex]];
+						_gridCellOccupants[x, y] = PrefabLibrary.GridPrefabID[gridData.cellOccupantIDData[dataIndex]];
 					}
 					else _gridCellOccupants[x, y] = null;
 					

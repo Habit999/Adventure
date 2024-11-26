@@ -8,25 +8,20 @@ using TMPro;
 
 public class MapLevelIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
-	[SerializeField] SO_LevelDetails levelDetails;
+	[HideInInspector] public string _progressionStatus;
+	
+	public SO_LevelDetails _levelDetails;
 	[Space(5)]
 	[SerializeField] GameObject description;
 	
 	void Start()
 	{
-		// Getting child object if it cant find description
-		if(description == null && transform.childCount > 0)
-			description = transform.GetChild(0).gameObject;
-			
-		if(description != null)
-		{
-			description.SetActive(false);
-			description.GetComponent<TextMeshProUGUI>().SetText($"{levelDetails.LevelName}\n\n{levelDetails.LevelBrief}\n\nIncomplete");
-		}
+		description.SetActive(false);
 	}
 
 	public void OnPointerEnter(PointerEventData enterEventData)
 	{
+		description.GetComponent<TextMeshProUGUI>().SetText($"{_levelDetails.LevelName}\n\n\"{_levelDetails.LevelBrief}\"\n\n{_progressionStatus}");
 		description.SetActive(true);
 	}
 	
@@ -37,6 +32,6 @@ public class MapLevelIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 	
 	public void OnPointerDown(PointerEventData downEventData)
 	{
-		SceneManager.LoadScene(levelDetails.LevelBuildIndex);
+		SceneManager.LoadScene(_levelDetails.LevelBuildIndex);
 	}
 }

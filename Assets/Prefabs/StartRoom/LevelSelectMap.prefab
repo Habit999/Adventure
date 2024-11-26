@@ -568,8 +568,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b486b4ed1faec9478a2077a893c8d8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _levelCompleted: 
   mapCamera: {fileID: 485203230048302692}
-  levelCompleted: 
+  mapUI: {fileID: 1082658530782446094}
 --- !u!1001 &5755267057545541821
 PrefabInstance:
   m_ObjectHideFlags: 0

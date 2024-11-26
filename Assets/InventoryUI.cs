@@ -58,7 +58,7 @@ public class InventoryUI : MonoBehaviour
 				if(itemIndex == invItemCount)
 				{
 					_itemIcons[i].GetChild(0).gameObject.SetActive(true);
-					_itemIcons[i].GetChild(0).gameObject.GetComponent<Image>().sprite = invItem.GetComponent<A_Item>()._itemData.Image;
+					_itemIcons[i].GetChild(0).gameObject.GetComponent<Image>().sprite = invItem.GetComponent<Item>()._itemData.Image;
 					invItemCount++;
 					break;
 				}

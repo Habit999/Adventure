@@ -19,7 +19,7 @@ public class DevDebugTool : EditorWindow
 		
 		if(GUILayout.Button("Print Prefab Library"))
 		{
-			foreach(GameObject prefab in PrefabLibrary.PrefabID.Values)
+			foreach(GameObject prefab in PrefabLibrary.GridPrefabID.Values)
 			{
 				Debug.Log(prefab);
 			}

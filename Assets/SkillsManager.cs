@@ -10,11 +10,11 @@ public class SkillsManager : MonoBehaviour
 	public int _skillPoints = 0;
 	[HideInInspector] public int _tempSkillPoints;
 	
-	private float _experienceGained = 0;
+	[HideInInspector] public float _experienceGained;
+	[HideInInspector] public float _nextLevelExperience;
 	
 	private static float firstLevelExperience = 10;
 	private static float levelIntervalMultiplier = 0.2f;
-	private static float nextLevelExperience = 10;
 	
 	// Skill variables
 	public enum SKILLTYPE { Vitality, Strength, Intelligence };
@@ -97,13 +97,14 @@ public class SkillsManager : MonoBehaviour
 	
 	IEnumerator UpdatePlayerLevel()
 	{
-		nextLevelExperience = firstLevelExperience + ((firstLevelExperience * levelIntervalMultiplier) * _playerLevel);
+		_nextLevelExperience = firstLevelExperience + ((firstLevelExperience * levelIntervalMultiplier) * _playerLevel);
 		
-		if(_experienceGained / nextLevelExperience > 1)
+		if(_experienceGained / _nextLevelExperience > 1)
 		{
-			print(nextLevelExperience);
 			_playerLevel += 1;
 			if(initialSkillsCheckComplete) _skillPoints += 1;
+			
+			_experienceGained -= _nextLevelExperience;
 		}
 		else initialSkillsCheckComplete = true;
 		

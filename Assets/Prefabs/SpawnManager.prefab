@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2014431433985251484}
+  - component: {fileID: 2592279792706228827}
   - component: {fileID: 6765455880025955972}
   m_Layer: 0
   m_Name: SpawnManager
@@ -32,6 +33,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2592279792706228827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 215249328762872106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b34b52b31ea0914c964b7e961b069e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6765455880025955972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50,7 +63,4 @@ MonoBehaviour:
   - {fileID: 3107724098402954927, guid: 0c1686f86b4d1b748a063896505f97fe, type: 3}
   - {fileID: 2924302850185203420, guid: f9e925efbe7968a46ba48eb9bd9fcd65, type: 3}
   - {fileID: 5668910457724294936, guid: 0edc2447c28f6974e9233210d4c1b424, type: 3}
-  _chestSpawnPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  spawnPoints: {fileID: 0}

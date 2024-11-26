@@ -13,14 +13,16 @@ public class PlayerController : MonoBehaviour
 	public enum PLAYERSTATE { LockedInteract, LockedMove, FreeMove, Frozen, Dead };
 	public PLAYERSTATE PlayerState = PLAYERSTATE.LockedInteract;
 	
+	[HideInInspector] public bool _isInDungeon;
+	
 	[Space(10)]
 	
 	public CustomGrid.ORIENTAION PlayerOrientation;
 	
 	public float _maxHealth = 100;
 	public float _maxMana = 100;
-	public float _health = 100;
-	public float _mana = 100;
+	[HideInInspector] public float _health;
+	[HideInInspector] public float _mana;
 	
 	public Rigidbody PlayerRB {
 		get {
@@ -48,10 +50,16 @@ public class PlayerController : MonoBehaviour
 	
 	public SkillsManager SkillsMngr { get { return gameObject.GetComponent<SkillsManager>(); } }
 	
+	public CombatManager CombatMngr { get { return damageArea.GetComponent<CombatManager>(); } }
+	
 	[Space(10)]
 	
 	public Transform _camera;
 	public Transform _body;
+	
+	[Space(10)]
+	
+	[SerializeField] GameObject damageArea;
 	
 	[System.Serializable]
 	public struct LockedMovementVariables
@@ -91,7 +99,7 @@ public class PlayerController : MonoBehaviour
 		[HideInInspector] public float startingDrag;
 	}
 	[Space(10)]
-	[SerializeField] FreeMoveVariables freeMoveVariables = new FreeMoveVariables();
+	public FreeMoveVariables freeMoveVariables = new FreeMoveVariables();
 	
 	[HideInInspector] public MovePoint _currentMovePoint;
 	
@@ -111,10 +119,16 @@ public class PlayerController : MonoBehaviour
 	
 	void Start()
 	{
+		_health = _maxHealth;
+		_mana = _maxMana;
+		
 		freeMoveVariables.startingDrag = PlayerRB.drag;
 		
 		_canLook = true;
 		_canMove = true;
+		
+		mouseX = transform.eulerAngles.y;
+		mouseY = 0;
 	}
 	
 	void Update()
@@ -263,11 +277,20 @@ public class PlayerController : MonoBehaviour
 		_camera.gameObject.SetActive(true);
 	}
 	
+	public void HealPlayer(float health, float mana)
+	{
+		_health += health;
+		_health = Mathf.Clamp(_health, 0, _maxHealth);
+		
+		_mana += mana;
+		_mana = Mathf.Clamp(_mana, 0, _maxMana);
+	}
+	
 	public void DamagePlayer(float damage)
 	{
 		_health -= damage;
 		
-		if(_health <= 0) Destroy(this.gameObject);
+		if(_health <= 0) PlayerState = PLAYERSTATE.Dead;
 	}
 	
 	public void ClickMoveToPoint(Transform targetLocation, Transform orientation)
@@ -360,13 +383,21 @@ public class PlayerController : MonoBehaviour
 		}
 		
 		//Toggle UI Interaction
-		if(Input.GetKey(Controls.ToggleUI))
+		if(_isInDungeon)
 		{
-			freeMoveVariables.isToggledUI = true;
-		}
-		else
-		{
-			freeMoveVariables.isToggledUI = false;
+			if(Input.GetKey(Controls.ToggleUI))
+			{
+				freeMoveVariables.isToggledUI = true;
+			}
+			else
+			{
+				// Close UI menu's if open
+				UserInterfaceController controllerUI = UserInterfaceController.Instance;
+				if(controllerUI._isInvOpen) controllerUI.ToggleInventory();
+				if(controllerUI._isSkillsOpen) controllerUI.ToggleSkills();
+				
+				freeMoveVariables.isToggledUI = false;
+			}
 		}
 	}
 	

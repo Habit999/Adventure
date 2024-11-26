@@ -4,13 +4,30 @@ using UnityEngine;
 
 public class LevelMap : MonoBehaviour
 {
-	[SerializeField] GameObject mapCamera;
+	[HideInInspector] public List<bool> _levelCompleted = new List<bool>();
 	
-	[HideInInspector] public bool[] levelCompleted;
+	[SerializeField] GameObject mapCamera;
+	[SerializeField] Transform mapUI;
+	
+	List<MapLevelIcon> levelIcons = new List<MapLevelIcon>();
 	
 	void Start()
 	{
 		mapCamera.SetActive(false);
+		
+		foreach(Transform element in mapUI)
+		{
+			if(element.gameObject.GetComponent<MapLevelIcon>() != null)
+				levelIcons.Add(element.gameObject.GetComponent<MapLevelIcon>());
+		}
+		for(int i = 0; i < levelIcons.Count; i++)
+		{
+			if(levelIcons[i]._levelDetails.LevelNumber < GameManager.Instance._currentLevel)
+				levelIcons[i]._progressionStatus = "Completed";
+			else if(levelIcons[i]._levelDetails.LevelNumber == GameManager.Instance._currentLevel)
+				levelIcons[i]._progressionStatus = "Incompleted";
+			else levelIcons[i]._progressionStatus = "???";
+		}
 	}
 	
 	void Update()

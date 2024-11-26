@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cdc42337b8b8bc644bb550effc0dc5c5, type: 3}
-  m_Name: Dungeon3
+  m_Name: Dungeon1
   m_EditorClassIdentifier: 
-  levelBuildIndex: 2
-  levelName: Dungeon 3
-  levelBrief: Deceptive demons hide within
+  LevelNumber: 1
+  LevelBuildIndex: 2
+  LevelName: The Darkness
+  LevelBrief: The void looms

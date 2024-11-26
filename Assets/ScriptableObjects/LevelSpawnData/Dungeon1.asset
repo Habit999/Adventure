@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5a6619a4b1827543b9188778887bbb1, type: 3}
   m_Name: Dungeon1
   m_EditorClassIdentifier: 
-  MaxChestsInLevel: 2
+  MaxChestsInLevel: 9
+  MaxExperienceInLevel: 13
   MaxMimicsInLevel: 0
   MaxVoidsInLevel: 0
   MaxThievesInLevel: 0

@@ -36,6 +36,7 @@ public class ExperienceSpawnPoint : MonoBehaviour
 		if(col.gameObject.tag == "Player")
 		{
 			col.gameObject.GetComponent<SkillsManager>().AddExperience(Random.Range(minRandomAmountRange, maxRandomAmountRange));
+			gameObject.SetActive(false);
 		}
 	}
 	

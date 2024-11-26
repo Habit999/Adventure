@@ -31,12 +31,16 @@ public class GridCell : MonoBehaviour
 	
 	public void SpawnOccupant()
 	{
-		if(_activeCellOccupant != null) Destroy(_activeCellOccupant);
-		
-		if(_cellOccupantPrefab != null)
+		if(_connectedGrid)
 		{
-			_activeCellOccupant = Instantiate(_cellOccupantPrefab, _occupantPositionOffset, _cellOccupantPrefab.transform.rotation * Quaternion.Euler(_occupantRotationOffset), transform);
-			_activeCellOccupant.transform.parent = transform;
+			if(_activeCellOccupant != null) Destroy(_activeCellOccupant);
+		
+			if(_cellOccupantPrefab != null)
+			{
+				_activeCellOccupant = Instantiate(_cellOccupantPrefab, transform.position, _cellOccupantPrefab.transform.rotation * Quaternion.Euler(_occupantRotationOffset));
+				_activeCellOccupant.transform.parent = transform;
+				_activeCellOccupant.transform.position += _occupantPositionOffset;
+			}
 		}
 	}
 	

@@ -47,8 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _willSpawn: 0
-  minRandomAmountRange: 5
-  maxRandomAmountRange: 10
+  minRandomAmountRange: 2
+  maxRandomAmountRange: 7
 --- !u!135 &6845675838325881645
 SphereCollider:
   m_ObjectHideFlags: 0

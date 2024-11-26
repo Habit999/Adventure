@@ -13,4 +13,6 @@ public class SE_ItemData
 	public Sprite Image;
 	
 	public int MaxItemStack;
+	
+	public string AnimatorTriggerName;
 }

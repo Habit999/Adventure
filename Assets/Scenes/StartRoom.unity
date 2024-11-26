@@ -1198,6 +1198,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4727900057402550336, guid: 8a532243d1f5032489cf854e8c96a3f1, type: 3}
+      propertyPath: _levelDetails
+      value: 
+      objectReference: {fileID: 11400000, guid: 8d3d3033564b2b047b1bccdb4edda7f9, type: 2}
+    - target: {fileID: 5580958555757500942, guid: 8a532243d1f5032489cf854e8c96a3f1, type: 3}
+      propertyPath: _levelDetails
+      value: 
+      objectReference: {fileID: 11400000, guid: 8a407a6e524a2754d9534e6f6b01d4a9, type: 2}
+    - target: {fileID: 6564511085140011422, guid: 8a532243d1f5032489cf854e8c96a3f1, type: 3}
+      propertyPath: _levelDetails
+      value: 
+      objectReference: {fileID: 11400000, guid: b9ecd4e9d646afa41aa99afb98e6ea79, type: 2}
+    - target: {fileID: 8163867252644869691, guid: 8a532243d1f5032489cf854e8c96a3f1, type: 3}
+      propertyPath: _levelDetails
+      value: 
+      objectReference: {fileID: 11400000, guid: 21a03ab167b9f4a4383883b8cd99a07e, type: 2}
     - target: {fileID: 8608920420944034915, guid: 8a532243d1f5032489cf854e8c96a3f1, type: 3}
       propertyPath: m_Name
       value: LevelSelectMap

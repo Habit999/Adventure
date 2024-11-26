@@ -1,2 +1,5 @@
 Void Demon:
 - grid pathfinding is yet to work
+
+Items:
+- When deleting an item after using it, it causes an error both with weapons and healing

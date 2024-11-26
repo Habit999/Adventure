@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Map
   - Chest
+  - Exit
   layers:
   - Default
   - TransparentFX

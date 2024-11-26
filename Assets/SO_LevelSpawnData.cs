@@ -7,6 +7,7 @@ public class SO_LevelSpawnData : ScriptableObject
 {
 	[Header("Loot")]
 	public int MaxChestsInLevel;
+	public int MaxExperienceInLevel;
 	
 	[Header("Enemies")]
 	public int MaxMimicsInLevel;

@@ -17,7 +17,9 @@ public class SpawnManager : MonoBehaviour
 	
 	[Space(10)]
 	//Replace with grid system
-	public List<GameObject> _chestSpawnPoints = new List<GameObject>();
+	[SerializeField] Transform spawnPoints;
+	List<GameObject> chestSpawnPoints = new List<GameObject>();
+	List<GameObject> experienceSpawnPoints = new List<GameObject>();
 	
 	int chestToSpawn;
 	
@@ -45,7 +47,7 @@ public class SpawnManager : MonoBehaviour
 				List<GameObject> weaponTypes = new List<GameObject>();
 				foreach(GameObject lootPrf in lootPrefabs)
 				{
-					if(lootPrf.GetComponent<A_Item>()._itemData.Type == SE_ItemData.TYPE.Weapon)
+					if(lootPrf.GetComponent<Item>()._itemData.Type == Item.ItemData.TYPE.Weapon)
 					{
 						weaponTypes.Add(lootPrf);
 					}
@@ -67,7 +69,7 @@ public class SpawnManager : MonoBehaviour
 				List<GameObject> healingTypes = new List<GameObject>();
 				foreach(GameObject lootPrf in lootPrefabs)
 				{
-					if(lootPrf.GetComponent<A_Item>()._itemData.Type == SE_ItemData.TYPE.Healing)
+					if(lootPrf.GetComponent<Item>()._itemData.Type == Item.ItemData.TYPE.Healing)
 					{
 						healingTypes.Add(lootPrf);
 					}
@@ -95,16 +97,30 @@ public class SpawnManager : MonoBehaviour
 		if(Instance == null) Instance = this;
 		else Destroy(this.gameObject);
 		
-		StartCoroutine(SpawnLootRoutine(_levelSpawnData.MaxChestsInLevel));
+		foreach(Transform spawn in spawnPoints)
+		{
+			if(spawn.gameObject.GetComponent<ChestSpawnPoint>() != null)
+			{
+				chestSpawnPoints.Add(spawn.gameObject);
+			}
+			else if(spawn.gameObject.GetComponent<ExperienceSpawnPoint>() != null)
+			{
+				experienceSpawnPoints.Add(spawn.gameObject);
+			}
+		}
+		
+		StartCoroutine(SpawnLootRoutine(_levelSpawnData.MaxChestsInLevel, _levelSpawnData.MaxExperienceInLevel));
 	}
 	
-	IEnumerator SpawnLootRoutine(int chestsToSpawn)
+	IEnumerator SpawnLootRoutine(int chestsToSpawn, int experienceToSpawn)
 	{
 		int chestCount = chestsToSpawn;
-		int randomSpawnPoint = Random.Range(0, _chestSpawnPoints.Count);
+		int experienceCount = experienceToSpawn;
+		int randomSpawnPoint = Random.Range(0, chestSpawnPoints.Count);
 		int countIndex = 0;
 		
-		foreach(GameObject chestSpawn in _chestSpawnPoints)
+		// Chests
+		foreach(GameObject chestSpawn in chestSpawnPoints)
 		{
 			if(countIndex == randomSpawnPoint)
 			{
@@ -118,8 +134,27 @@ public class SpawnManager : MonoBehaviour
 			}
 			else countIndex++;
 		}
+		
+		// Experience
+		randomSpawnPoint = Random.Range(0, experienceSpawnPoints.Count);
+		countIndex = 0;
+		foreach(GameObject xpSpawn in experienceSpawnPoints)
+		{
+			if(countIndex == randomSpawnPoint)
+			{
+				if(!xpSpawn.GetComponent<ExperienceSpawnPoint>()._willSpawn)
+				{
+					xpSpawn.GetComponent<ExperienceSpawnPoint>()._willSpawn = true;
+					chestCount -= 1;
+					break;
+				}
+				else break;
+			}
+			else countIndex++;
+		}
+		
 		yield return new WaitForSeconds(0.01f);
-		if(chestCount > 0) StartCoroutine(SpawnLootRoutine(chestCount));
+		if(chestCount > 0 && experienceCount > 0) StartCoroutine(SpawnLootRoutine(chestCount, experienceCount));
 		else SpawnLevelLoot();
 	}
 }

@@ -7,6 +7,9 @@ public static class Controls
 	public static float MouseX { get { return Input.GetAxis("Mouse X"); } }
 	public static float MouseY { get { return Input.GetAxis("Mouse Y"); } }
 	
+	public static int MousePrimary = 0;
+	public static int MouseSecondary = 1;
+	
 	public static KeyCode Forward;
 	public static KeyCode Backward;
 	public static KeyCode Left;
@@ -31,6 +34,9 @@ public static class Controls
 	
 	public static void LoadDefaults()
 	{
+		MousePrimary = 0;
+		MouseSecondary = 1;
+		
 		Forward = KeyCode.W;
 		Backward = KeyCode.S;
 		Left = KeyCode.A;

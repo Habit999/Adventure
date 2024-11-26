@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -15,6 +16,10 @@ public class InventoryManager : MonoBehaviour
 	
 	[HideInInspector] public int _selectedInvSlot;
 	
+	[HideInInspector] public GameObject _equippedItem;
+	
+	[SerializeField] Transform rightHandSpot;
+	
 	void Awake()
 	{
 		_selectedInvSlot = -1;
@@ -27,26 +32,64 @@ public class InventoryManager : MonoBehaviour
 	
 	public void AssignHotbarItem(int position)
 	{
-		int count = 0;
+		// Check if position is already assigned to another item
 		foreach(GameObject checkedItem in _hotbarItemOrder.Keys)
 		{
-			if(count == position)
+			if(_hotbarItemOrder[checkedItem] == position)
 			{
-				if(checkedItem != _collectedItems[_selectedInvSlot])
+				if(checkedItem != _collectedItems.Keys.ElementAt(_selectedInvSlot))
 				{
 					_hotbarItemOrder.Remove(checkedItem);
-					_hotbarItemOrder.Add(_collectedItems[_selectedInvSlot], position);
-					break;
-				}
-				else
-				{
-					_hotbarItemOrder.Add(_collectedItems[_selectedInvSlot], position);
 					break;
 				}
 			}
-			count++;
+		}
+		
+		// Assign new position
+		if(_hotbarItemOrder.ContainsKey(_collectedItems.Keys.ElementAt(_selectedInvSlot))) 
+			_hotbarItemOrder[_collectedItems.Keys.ElementAt(_selectedInvSlot)] = position;
+		else _hotbarItemOrder.Add(_collectedItems.Keys.ElementAt(_selectedInvSlot), position);
+	}
+	
+	public void EquipItemRight()
+	{
+		UserInterfaceController controllerUI = UserInterfaceController.Instance;
+		if(controllerUI._currentActiveActionKey > 0 && controllerUI._currentActiveActionKey <= controllerUI.MaxActionKeysInRow)
+		{
+			if(_equippedItem == null)
+			{
+				foreach(GameObject item in _hotbarItemOrder.Keys)
+				{
+					if(_hotbarItemOrder[item] == UserInterfaceController.Instance._currentActiveActionKey - 1)
+					{
+						_equippedItem = item;
+						_equippedItem.transform.parent = rightHandSpot;
+						_equippedItem.transform.position = rightHandSpot.position;
+						_equippedItem.transform.rotation = rightHandSpot.rotation;
+						_equippedItem.SetActive(true);
+						break;
+					}
+				}
+			}
+			else
+			{
+				_equippedItem.SetActive(false);
+				_equippedItem.transform.parent = null;
+				_equippedItem = null;
+				EquipItemRight();
+			}
+		}
+		else
+		{
+			if(_equippedItem != null)
+			{
+				_equippedItem.SetActive(false);
+				_equippedItem.transform.parent = null;
+				_equippedItem = null;
+			}
 		}
 	}
+	
 	
 	// Add item to collected inventory
 	public bool AddItem(GameObject item, int amount)
@@ -55,7 +98,7 @@ public class InventoryManager : MonoBehaviour
 		{
 			if(item == invItem)
 			{
-				if(_collectedItems[item] + amount <= item.GetComponent<A_Item>()._itemData.MaxItemStack)
+				if(_collectedItems[item] + amount <= item.GetComponent<Item>()._itemData.MaxItemStack)
 				{
 					_collectedItems[item] += amount;
 					return true;
@@ -71,7 +114,7 @@ public class InventoryManager : MonoBehaviour
 	}
 	
 	// Remove item from collected inventory
-	public bool RemoveItem(GameObject item, int amount)
+	public void RemoveItem(GameObject item, int amount)
 	{
 		foreach(GameObject invItem in _collectedItems.Keys)
 		{
@@ -80,16 +123,18 @@ public class InventoryManager : MonoBehaviour
 				if(_collectedItems[item] - amount > 0)
 				{
 					_collectedItems[item] -= amount;
-					return true;
+					break;
 				}
 				else if(_collectedItems[item] - amount == 0)
 				{
 					_collectedItems.Remove(item);
+					_hotbarItemOrder.Remove(item);
+					if(item == _equippedItem) Destroy(item);
+					_equippedItem = null;
+					break;
 				}
-				else return false;
 			}
 		}
-		return false;
 	}
 	
 	void UpdateInventoryStats()
