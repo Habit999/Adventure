@@ -658,8 +658,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80418d65fb500a34e935219d3d96f5e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightHandAnimator: {fileID: 6641613512814332458}
-  swingTime: 0
+  _rightHandAnimator: {fileID: 6641613512814332458}
+  swingTime: 0.3
 --- !u!65 &7841219533132549411
 BoxCollider:
   m_ObjectHideFlags: 0

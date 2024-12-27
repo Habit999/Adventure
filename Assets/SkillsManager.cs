@@ -6,6 +6,9 @@ public class SkillsManager : MonoBehaviour
 {
 	public PlayerController Controller { get { return gameObject.GetComponent<PlayerController>(); } }
 	
+	public delegate void PlayerLevelUp();
+	public event PlayerLevelUp LevelUp;
+	
 	public int _playerLevel = 0;
 	public int _skillPoints = 0;
 	[HideInInspector] public int _tempSkillPoints;
@@ -97,14 +100,19 @@ public class SkillsManager : MonoBehaviour
 	
 	IEnumerator UpdatePlayerLevel()
 	{
+		// Experience required for next level
 		_nextLevelExperience = firstLevelExperience + ((firstLevelExperience * levelIntervalMultiplier) * _playerLevel);
 		
+		// Checks if player has enough xp for next level
 		if(_experienceGained / _nextLevelExperience > 1)
 		{
 			_playerLevel += 1;
 			if(initialSkillsCheckComplete) _skillPoints += 1;
 			
 			_experienceGained -= _nextLevelExperience;
+			
+			// Call level up event
+			LevelUp();
 		}
 		else initialSkillsCheckComplete = true;
 		

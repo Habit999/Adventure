@@ -20,14 +20,19 @@ public class InventoryManager : MonoBehaviour
 	
 	[SerializeField] Transform rightHandSpot;
 	
+	void OnEnable()
+	{
+		Controller.SkillsMngr.LevelUp += UpdateInventoryStats;
+	}
+	
+	void OnDisable()
+	{
+		Controller.SkillsMngr.LevelUp -= UpdateInventoryStats;
+	}
+	
 	void Awake()
 	{
 		_selectedInvSlot = -1;
-	}
-	
-	void Update()
-	{
-		UpdateInventoryStats();
 	}
 	
 	public void AssignHotbarItem(int position)
@@ -140,19 +145,19 @@ public class InventoryManager : MonoBehaviour
 	void UpdateInventoryStats()
 	{
 		// Adjust inventory slots to player level
-		if(Controller.SkillsMngr._playerLevel == 1)
+		if(Controller.SkillsMngr._currentSkills.strength == 1)
 		{
 			_itemSlotCount = 4;
 		}
-		else if(Controller.SkillsMngr._playerLevel == 3)
+		else if(Controller.SkillsMngr._currentSkills.strength == 3)
 		{
 			_itemSlotCount = 8;
 		}
-		else if(Controller.SkillsMngr._playerLevel == 6)
+		else if(Controller.SkillsMngr._currentSkills.strength == 5)
 		{
 			_itemSlotCount = 12;
 		}
-		else if(Controller.SkillsMngr._playerLevel == 8)
+		else if(Controller.SkillsMngr._currentSkills.strength == 7)
 		{
 			_itemSlotCount = 16;
 		}

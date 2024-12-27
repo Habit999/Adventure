@@ -59,6 +59,7 @@ public class InteractionManager : MonoBehaviour
 			if(Input.GetMouseButtonDown(Controls.MousePrimary) && Controller.InventoryMngr._equippedItem != null)
 			{
 				Controller.InventoryMngr._equippedItem.GetComponent<Item>().UseItem();
+				Controller.CombatMngr._rightHandAnimator.SetTrigger(Controller.InventoryMngr._equippedItem.GetComponent<Item>()._animatorTriggerName);
 			}
 		}
 	}

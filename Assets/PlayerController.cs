@@ -67,16 +67,15 @@ public class PlayerController : MonoBehaviour
 		public float lockedMovementSpeed;
 		public float lockedRotationSpeed;
 		
-		[HideInInspector] public Vector3 rotationDirection;
-		
 		[HideInInspector] public CustomGrid.ORIENTAION targetOrientation;
 		
 		[HideInInspector] public Vector3 moveTargetPosition;
-		[HideInInspector] public Vector3 moveTargetRotation;
+		[HideInInspector] public Quaternion moveTargetRotation;
 		[HideInInspector] public Vector3 currentLockedPosition;
-		[HideInInspector] public Vector3 currentLockedRotation;
+		[HideInInspector] public Quaternion currentLockedRotation;
 		
-		[HideInInspector] public float distanceFromTarget;
+		[HideInInspector] public float positionDistance;
+		[HideInInspector] public float rotationDistance;
 	}
 	[Space(20)]
 	[SerializeField] LockedMovementVariables lockedMovementVariables = new LockedMovementVariables();
@@ -295,12 +294,12 @@ public class PlayerController : MonoBehaviour
 	
 	public void ClickMoveToPoint(Transform targetLocation, Transform orientation)
 	{
-		lockedMovementVariables.distanceFromTarget = 0;
+		lockedMovementVariables.rotationDistance = 0;
 		
 		lockedMovementVariables.currentLockedPosition = transform.position;
-		lockedMovementVariables.currentLockedRotation = transform.eulerAngles;
+		lockedMovementVariables.currentLockedRotation = transform.rotation;
 		lockedMovementVariables.moveTargetPosition = targetLocation.position;
-		lockedMovementVariables.moveTargetRotation = orientation.eulerAngles;
+		lockedMovementVariables.moveTargetRotation = orientation.rotation;
 		PlayerState = PLAYERSTATE.LockedMove;
 	}
 	
@@ -316,22 +315,21 @@ public class PlayerController : MonoBehaviour
 	
 	void LockedMovement()
 	{
-		/*(lockedMovementVariables.distanceFromTarget += (lockedMovementVariables.lockedMovementSpeed / 100) * Time.deltaTime;
-		lockedMovementVariables.distanceFromTarget = Mathf.Clamp(lockedMovementVariables.distanceFromTarget, 0, 1);
+		/*(lockedMovementVariables.rotationDistance += (lockedMovementVariables.lockedMovementSpeed / 100) * Time.deltaTime;
+		lockedMovementVariables.rotationDistance = Mathf.Clamp(lockedMovementVariables.rotationDistance, 0, 1);*/
+		lockedMovementVariables.positionDistance += lockedMovementVariables.lockedMovementSpeed * Time.deltaTime;
+		lockedMovementVariables.positionDistance += lockedMovementVariables.lockedRotationSpeed * Time.deltaTime;
 		
-		transform.position = Vector3.Lerp(lockedMovementVariables.currentLockedPosition, lockedMovementVariables.moveTargetPosition, lockedMovementVariables.distanceFromTarget);
-		transform.rotation = Quaternion.Lerp(lockedMovementVariables.currentLockedRotation, lockedMovementVariables.moveTargetRotation, lockedMovementVariables.distanceFromTarget);*/
-		
-		lockedMovementVariables.rotationDirection = (lockedMovementVariables.moveTargetRotation) * Time.deltaTime;
-		transform.rotation = Quaternion.AngleAxis(lockedMovementVariables.rotationDirection.y, Vector3.up);
+		transform.position = Vector3.Lerp(lockedMovementVariables.currentLockedPosition, lockedMovementVariables.moveTargetPosition, lockedMovementVariables.positionDistance);
+		transform.rotation = Quaternion.Lerp(lockedMovementVariables.currentLockedRotation, lockedMovementVariables.moveTargetRotation, lockedMovementVariables.rotationDistance);
 		
 		print("Locked Movement MOVING");
-		if(transform.position == lockedMovementVariables.moveTargetPosition && Quaternion.Angle(transform.rotation, Quaternion.Euler(lockedMovementVariables.moveTargetRotation)) < 0.1f)
+		if(transform.position == lockedMovementVariables.moveTargetPosition && transform.rotation == lockedMovementVariables.moveTargetRotation)
 		{
 			//_currentMovePoint._orientation.transform.rotation = transform.rotation;
 			print("Locked Movement COMPLETE");
 			PlayerState = PLAYERSTATE.LockedInteract;
-			lockedMovementVariables.distanceFromTarget = 0;
+			lockedMovementVariables.rotationDistance = 0;
 			return;
 		}
 	}
@@ -412,24 +410,26 @@ public class PlayerController : MonoBehaviour
 	
 	public void RotateRight()
 	{
-		lockedMovementVariables.rotationDirection = Vector3.zero;
+		lockedMovementVariables.positionDistance = 1;
+		lockedMovementVariables.rotationDistance = 0;
 		
 		lockedMovementVariables.currentLockedPosition = transform.position;
-		lockedMovementVariables.currentLockedRotation = transform.eulerAngles;
+		lockedMovementVariables.currentLockedRotation = transform.rotation;
 		lockedMovementVariables.moveTargetPosition = transform.position;
-		lockedMovementVariables.moveTargetRotation = transform.eulerAngles;
+		lockedMovementVariables.moveTargetRotation = transform.rotation;
 		lockedMovementVariables.moveTargetRotation.y += 90;
 		PlayerState = PLAYERSTATE.LockedMove;
 	}
 	
 	public void RotateLeft()
 	{
-		lockedMovementVariables.rotationDirection = Vector3.zero;
+		lockedMovementVariables.positionDistance = 1;
+		lockedMovementVariables.rotationDistance = 0;
 		
 		lockedMovementVariables.currentLockedPosition = transform.position;
-		lockedMovementVariables.currentLockedRotation = transform.eulerAngles;
+		lockedMovementVariables.currentLockedRotation = transform.rotation;
 		lockedMovementVariables.moveTargetPosition = transform.position;
-		lockedMovementVariables.moveTargetRotation = transform.eulerAngles;
+		lockedMovementVariables.moveTargetRotation = transform.rotation;
 		lockedMovementVariables.moveTargetRotation.y += -90;
 		PlayerState = PLAYERSTATE.LockedMove;
 	}

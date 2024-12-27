@@ -7,7 +7,7 @@ public class Item : MonoBehaviour
 	[System.Serializable]
 	public struct ItemData
 	{
-		public enum TYPE {Weapon, Healing, Experience}
+		public enum TYPE {Weapon, Consumable, Experience}
 		public TYPE Type;
 		
 		public string Name;
@@ -39,7 +39,7 @@ public class Item : MonoBehaviour
 				print("Item Collected");
 				return PlayerController.Instance.InventoryMngr.AddItem(this.gameObject, 1);
 				
-			case ItemData.TYPE.Healing:
+			case ItemData.TYPE.Consumable:
 				print("Item Collected");
 				return PlayerController.Instance.InventoryMngr.AddItem(this.gameObject, 1);
 				
@@ -55,27 +55,20 @@ public class Item : MonoBehaviour
 	
 	public bool UseItem()
 	{
-		bool successfullyUsed = false;
 		switch(_itemData.Type)
 		{
 			case ItemData.TYPE.Weapon:
 				PlayerController.Instance.CombatMngr.SwingWeapon();
-				break;
+				return true;
 				
-			case ItemData.TYPE.Healing:
+			case ItemData.TYPE.Consumable:
 				PlayerController.Instance.HealPlayer(_healthRecovery, _manaRecovery);
-				successfullyUsed = true;
-				break;
+				return true;
 				
 			default:
 				break;
 		}
 		
-		if(successfullyUsed)
-		{
-			PlayerController.Instance.InventoryMngr.RemoveItem(this.gameObject, 1);
-			return true;
-		}
-		else return false;
+		return false;
 	}
 }

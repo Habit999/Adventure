@@ -6,7 +6,7 @@ public class SpawnManager : MonoBehaviour
 {
 	public static SpawnManager Instance;
 	
-	public enum RANDOMLOOTTYPE { Any, Weapon, Healing };
+	public enum RANDOMLOOTTYPE { Any, Weapon, Consumable };
 	
 	public SO_LevelSpawnData _levelSpawnData;
 	
@@ -30,7 +30,7 @@ public class SpawnManager : MonoBehaviour
 		switch(lootType)
 		{
 			case RANDOMLOOTTYPE.Any:
-				randomIndex = Random.Range(0, lootPrefabs.Count - 1);
+				randomIndex = Random.Range(0, lootPrefabs.Count);
 				foreach(GameObject lootPrf in lootPrefabs)
 				{
 					if(countIndex == randomIndex)
@@ -52,7 +52,7 @@ public class SpawnManager : MonoBehaviour
 						weaponTypes.Add(lootPrf);
 					}
 				}
-				randomIndex = Random.Range(0, weaponTypes.Count - 1);
+				randomIndex = Random.Range(0, weaponTypes.Count);
 				foreach(GameObject weaponPrf in weaponTypes)
 				{
 					if(countIndex == randomIndex)
@@ -65,21 +65,21 @@ public class SpawnManager : MonoBehaviour
 				}
 				return null;
 				
-			case RANDOMLOOTTYPE.Healing:
-				List<GameObject> healingTypes = new List<GameObject>();
+			case RANDOMLOOTTYPE.Consumable:
+				List<GameObject> consumableTypes = new List<GameObject>();
 				foreach(GameObject lootPrf in lootPrefabs)
 				{
-					if(lootPrf.GetComponent<Item>()._itemData.Type == Item.ItemData.TYPE.Healing)
+					if(lootPrf.GetComponent<Item>()._itemData.Type == Item.ItemData.TYPE.Consumable)
 					{
-						healingTypes.Add(lootPrf);
+						consumableTypes.Add(lootPrf);
 					}
 				}
-				randomIndex = Random.Range(0, healingTypes.Count - 1);
-				foreach(GameObject healingPrf in healingTypes)
+				randomIndex = Random.Range(0, consumableTypes.Count);
+				foreach(GameObject consumablePrf in consumableTypes)
 				{
 					if(countIndex == randomIndex)
 					{
-						GameObject lootInstance = Instantiate(healingPrf, Vector3.zero, Quaternion.identity);
+						GameObject lootInstance = Instantiate(consumablePrf, Vector3.zero, Quaternion.identity);
 						lootInstance.SetActive(false);
 						return lootInstance;
 					}

@@ -6,7 +6,7 @@ public class CombatManager : MonoBehaviour
 {
 	protected PlayerController Controller { get { return PlayerController.Instance; } }
 	
-	[SerializeField] Animator rightHandAnimator;
+	public Animator _rightHandAnimator;
 	
 	[Space(5)]
 	
@@ -22,12 +22,17 @@ public class CombatManager : MonoBehaviour
 		damageAreaColldier.enabled = false;
 	}
 	
+	void Update()
+	{
+		if(Input.GetMouseButtonDown(1))
+			_rightHandAnimator.SetTrigger("UseBandage");
+	}
+	
 	public void SwingWeapon()
 	{
 		if(!isAttacking)
 		{
 			isAttacking = true;
-			rightHandAnimator.SetTrigger(Controller.InventoryMngr._equippedItem.GetComponent<Item>()._animatorTriggerName);
 			StartCoroutine(AttackTiming());
 		}
 	}
@@ -37,7 +42,7 @@ public class CombatManager : MonoBehaviour
 		damageAreaColldier.enabled = true;
 		yield return new WaitForSeconds(swingTime);
 		damageAreaColldier.enabled = false;
-		yield return new WaitForSeconds(rightHandAnimator.GetCurrentAnimatorStateInfo(0).length);
+		yield return new WaitForSeconds(_rightHandAnimator.GetCurrentAnimatorStateInfo(0).length);
 		isAttacking = false;
 	}
 	

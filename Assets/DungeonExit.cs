@@ -15,13 +15,18 @@ public class DungeonExit : MonoBehaviour
 	
 	Vector3 startPoint;
 	
+	Vector3 transitionDirection;
+	
 	bool isLeaving;
 	
 	void Awake()
 	{
 		exitCam.gameObject.SetActive(false);
 		
-		startPoint = exitCam.localPosition;
+		startPoint = exitCam.position;
+		
+		transitionDirection = (camTarget.position - startPoint).normalized * camTransitionSpeed * Time.deltaTime;
+		
 		isLeaving = false;
 	}
 	
@@ -44,9 +49,9 @@ public class DungeonExit : MonoBehaviour
 	
 	void TransitionCam()
 	{
-		exitCam.localPosition = (camTarget.localPosition - startPoint).normalized * Time.deltaTime * camTransitionSpeed;
+		exitCam.position += transitionDirection;
 		
-		if(Vector3.Distance(exitCam.localPosition, camTarget.localPosition) < 0.1f)
+		if(Vector3.Distance(exitCam.position, camTarget.position) < 0.1f)
 		{
 			ExitDungeon();
 		}
