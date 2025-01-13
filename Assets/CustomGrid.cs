@@ -97,7 +97,6 @@ public class CustomGrid : MonoBehaviour
 		// Grid X Axis
 		for(int x = 0; x < _gridLengthX; x++)
 		{
-			// Grid X Axis			
 			if(x == 0)
 			{
 				Vector3 lastCellPosition = transform.position + new Vector3(_gridOffsetX, 0, _gridOffsetZ);

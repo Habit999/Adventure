@@ -31,7 +31,7 @@ public class GridCell : MonoBehaviour
 	
 	public void SpawnOccupant()
 	{
-		if(_connectedGrid)
+		if(_connectedGrid != null)
 		{
 			if(_activeCellOccupant != null) Destroy(_activeCellOccupant);
 		

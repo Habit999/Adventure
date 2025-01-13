@@ -38,7 +38,9 @@ public class GameManager : MonoBehaviour
 	void Update()
 	{
 		// Dev inputs for testing (DELETE FOR BUILD VERSIONS)
+		#region Developer Inputs
 		if(Input.GetKeyDown(KeyCode.L)) SaveGame();
+		#endregion
 	}
 	
 	public void ReturnToMapRoom()
