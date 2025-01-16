@@ -66,6 +66,17 @@ public class E_NewCustomGrid : Editor
 						targetGrid.TogglePreviewGrid();
 					}
 					
+					if(targetGrid._gridPreviewToggled)
+					{
+						string occupantsActive = targetGrid._cellOccupantsToggled ? "Active" : "Inactive";
+						GUILayout.Label($"Grid Preview : {occupantsActive}");
+						
+						if(GUILayout.Button("Toggle Cell Occupants"))
+						{
+							targetGrid.ToggleCellOccupants();
+						}
+					}
+					
 					EditorGUILayout.Space(20);
 					
 					if(GUILayout.Button("Save Grid Data"))

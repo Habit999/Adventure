@@ -57,6 +57,7 @@ public class NewCustomGrid : MonoBehaviour
 	[HideInInspector] public bool _isGridActive;
 	[HideInInspector] public bool _showGrid;
 	[HideInInspector] public bool _gridPreviewToggled;
+	[HideInInspector] public bool _cellOccupantsToggled;
 	
 	void Awake()
 	{
@@ -135,11 +136,6 @@ public class NewCustomGrid : MonoBehaviour
 				cellScript._gridIndex = new Vector2(axisX, axisZ);
 				cellScript._occupantPrefab = GeneratedData._cellOccupantPrefabs[axisX, axisZ];
 				
-				cellScript.SpawnOccupant();
-				GeneratedData._cellActiveOccupant = new GameObject[_gridLengthX, _gridLengthZ];
-				if(cellScript._activeOccupant != null)
-					GeneratedData._cellActiveOccupant[axisX, axisZ] = cellScript._activeOccupant;
-				
 				GeneratedData._spawnedCells[axisX, axisZ] = cellInstance;
 			}
 		}
@@ -190,23 +186,47 @@ public class NewCustomGrid : MonoBehaviour
 		}
 		else
 		{
+			if(_cellOccupantsToggled) ToggleCellOccupants();
+			
 			foreach(GameObject cell in GeneratedData._spawnedCells)
 			{
 				DestroyImmediate(cell, false);
 				GeneratedData._spawnedCells = null;
-			}
-			
-			foreach(GameObject occupant in GeneratedData._cellActiveOccupant)
-			{
-				DestroyImmediate(occupant, false);
-				GeneratedData._cellActiveOccupant = null;
 			}
 		}
 	}
 	
 	public void ToggleCellOccupants()
 	{
+		_cellOccupantsToggled = !_cellOccupantsToggled;
 		
+		if(_cellOccupantsToggled)
+		{
+			GeneratedData._cellActiveOccupant = new GameObject[_gridLengthX, _gridLengthZ];
+			
+			foreach(GameObject cell in GeneratedData._spawnedCells)
+			{
+				cell.GetComponent<NewGridCell>().SpawnOccupant();
+				
+				if(cell.GetComponent<NewGridCell>()._activeOccupant != null)
+				{
+					Vector2 cellIndex = cell.GetComponent<NewGridCell>()._gridIndex;
+					GeneratedData._cellActiveOccupant[(int) cellIndex.x, (int) cellIndex.y] = cell.GetComponent<NewGridCell>()._activeOccupant;
+				}
+			}
+		}
+		else
+		{
+			foreach(GameObject cell in GeneratedData._spawnedCells)
+			{
+				if(cell.GetComponent<NewGridCell>()._activeOccupant != null)
+				{
+					DestroyImmediate(cell.GetComponent<NewGridCell>()._activeOccupant, false);
+				}
+				
+				GeneratedData._cellActiveOccupant = null;
+			}
+		}
 	}
 	
 	public void UpdateGridFromCellData()
