@@ -7,331 +7,347 @@ using System.Text;
 
 public class CustomGrid : MonoBehaviour
 {
-	public static List<CustomGrid> ActiveGrids = new List<CustomGrid>();
+	[HideInInspector] public GridData _gridData;
 	
-	public enum ORIENTAION { North, East, South, West };
+	public string GridDataPath { get { return Application.dataPath + "/CustomGridData.json"; } }
 	
-	public static IDictionary<ORIENTAION, Vector2> OrientationDirection = new Dictionary<ORIENTAION, Vector2>()
+	public delegate void CellOccupantInstantiation();
+	public static event CellOccupantInstantiation SpawnCellOccupants;
+	
+	protected Vector3 CellScale { get { return _gridCellPrefab.transform.localScale; } }
+	
+	public struct GridGenerationData
 	{
-		{ ORIENTAION.North, new Vector2(0, 1) },
-		{ ORIENTAION.East, new Vector2(1, 0) },
-		{ ORIENTAION.South, new Vector2(0, -1) },
-		{ ORIENTAION.West, new Vector2(-1, 0) }
-	};
+		public Vector3[,] _cellPositions;
+		public GameObject[,] _spawnedCells;
+		public bool[,] _activeCells;
+		
+		public GameObject[,] _cellOccupantPrefabs;
+		public GameObject[,] _cellActiveOccupant;
+		
+		public Vector3[,] _cellOccupantPositions;
+		public Vector3[,] _cellOccupantEulerAngles;
+	}
+	public GridGenerationData GeneratedData = new GridGenerationData();
 	
-	public static IDictionary<ORIENTAION, Vector3> OrientationRotation = new Dictionary<ORIENTAION, Vector3>()
-	{
-		{ ORIENTAION.North, new Vector3(0, 0, 0) },
-		{ ORIENTAION.East, new Vector3(0, 90, 0) },
-		{ ORIENTAION.South, new Vector3(0,180, 0) },
-		{ ORIENTAION.West, new Vector3(0, 270, 0) }
-	};
+	public GameObject _gridCellPrefab;
+	[SerializeField] SO_PrefabLibrary prefabLibrary;
 	
-	// Grid Data Variables
-	string GridDataPath { get { return Application.dataPath + $"/{_gridName}_CustomGridData.json"; } }
-	
-	[HideInInspector] public Vector2[,] _cellGenerationPositions;
-	[HideInInspector] public GridCell[,] _gridCells;
-	[HideInInspector] public bool[,] _gridCulling;
-	[HideInInspector] public GameObject[,] _gridCellOccupants;
-	
-	[HideInInspector] public GridData gridData;
-	
-	//Transform Data
-	[HideInInspector] public Vector3[,] _cellPositionOffsetData;
-	[HideInInspector] public Vector3[,] _occupantPositionOffsetData;
-	[HideInInspector] public Vector3[,] _occupantRotationOffsetData;
-	
-	public string _gridName;
-	[Space(3)]
+	[Header("Customise Grid")]
 	public int _gridLengthX;
 	public int _gridLengthZ;
-	public float _gridCellSpacing;
-	
-	[Space(2)]
-	//
-	public float _gridOffsetX;
-	public float _gridOffsetZ;
 	
 	[Space(5)]
 	
-	public GameObject _gridCellPrefab;
+	public float _cellSpacing;
 	
-	// Editor Booleans
-	[HideInInspector] public bool _initialGenerationComplete = false;
-	[HideInInspector] public bool _isGridVisible = true;
-	[HideInInspector] public bool _activeGridPreview = false;
-	[HideInInspector] public bool _cellsAreActive = false;
+	[Space(5)]
+	
+	public float _cellOffsetX;
+	public float _cellOffsetZ;
+	
+	[Space(5)]
+	
+	[HideInInspector] public bool _generationComplete;
+	[HideInInspector] public bool _cellsSpawned;
 	
 	[Space(10)]
 	
-	public bool _enableEditorTools = false;
+	[HideInInspector] public bool _enableEditorTools;
+	[HideInInspector] public bool _isGridActive;
+	[HideInInspector] public bool _showGrid;
+	[HideInInspector] public bool _gridPreviewToggled;
+	[HideInInspector] public bool _cellOccupantsToggled;
 	
 	void Awake()
 	{
-		ActiveGrids.Add(this);
+		_enableEditorTools = false;
+		_isGridActive = true;
+		
+		_generationComplete = false;
+		_cellsSpawned = false;
 	}
 	
 	void Start()
 	{
-		_enableEditorTools = false;
-		_activeGridPreview = false;
+		if(_gridPreviewToggled) TogglePreviewGrid();
 		
 		GenerateGrid();
-		SpawnGrid();
+		LoadGridData();
+		
+		SpawnActiveGrid();
 	}
+	
+	#region Grid Control
 	
 	public void GenerateGrid()
 	{
-		_cellGenerationPositions = new Vector2[_gridLengthX, _gridLengthZ];
+		GeneratedData._cellPositions = new Vector3[_gridLengthX, _gridLengthZ];
+		GeneratedData._activeCells = new bool[_gridLengthX, _gridLengthZ];
 		
-		_cellPositionOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
-		_occupantPositionOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
-		_occupantRotationOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
+		GeneratedData._cellOccupantPrefabs = new GameObject[_gridLengthX, _gridLengthZ];
 		
-		LoadGridData();
+		GeneratedData._cellOccupantPositions = new Vector3[_gridLengthX, _gridLengthZ];
+		GeneratedData._cellOccupantEulerAngles = new Vector3[_gridLengthX, _gridLengthZ];
 		
-		float xAxis;
-		float zAxis;
-		
-		// Grid X Axis
-		for(int x = 0; x < _gridLengthX; x++)
+		// Make sure no left over cells are in the scene
+		int amountOfChildren = transform.childCount;
+		if(amountOfChildren > 0)
 		{
-			if(x == 0)
+			for(int i = 0; i < amountOfChildren; i++)
 			{
-				Vector3 lastCellPosition = transform.position + new Vector3(_gridOffsetX, 0, _gridOffsetZ);
-				_cellGenerationPositions[x, 0] = new Vector2(lastCellPosition.x, lastCellPosition.z);
+				DestroyImmediate(transform.GetChild(0).gameObject, false);
+			}
+			if(_gridPreviewToggled) TogglePreviewGrid();
+		}
+		
+		// Generate layout
+		Vector3 generatedCellPosition;
+		for(int axisX = 0; axisX < _gridLengthX; axisX++)
+		{
+			if(axisX == 0)
+			{
+				generatedCellPosition = transform.position;
+				generatedCellPosition.x += CellScale.x / 2;
+				generatedCellPosition.z += CellScale.z / 2;
+				GeneratedData._cellPositions[0, 0] = generatedCellPosition;
 			}
 			else
 			{
-				xAxis = _cellGenerationPositions[x - 1, 0].x + _gridOffsetX + _gridCellSpacing;
-				
-				Vector3 lastCellPosition = new Vector3(xAxis, 0, _gridOffsetZ + transform.position.z);
-				_cellGenerationPositions[x, 0] = new Vector2(lastCellPosition.x, lastCellPosition.z);
+				generatedCellPosition = GeneratedData._cellPositions[axisX - 1, 0];
+				generatedCellPosition.x += CellScale.x + _cellSpacing + _cellOffsetX;
+				GeneratedData._cellPositions[axisX, 0] = generatedCellPosition;
 			}
 			
-			// Grid Z Axis
-			for(int z = 1; z < _gridLengthZ; z++)
+			for(int axisZ = 1; axisZ < _gridLengthZ; axisZ++)
 			{
-				xAxis = _cellGenerationPositions[x, z - 1].x;
-				zAxis = _cellGenerationPositions[x, z - 1].y + _gridOffsetZ + _gridCellSpacing;
-				
-				Vector3 lastCellPosition = new Vector3(xAxis, 0, zAxis);
-				_cellGenerationPositions[x, z] = new Vector2(lastCellPosition.x, lastCellPosition.z);
+				generatedCellPosition = GeneratedData._cellPositions[axisX, axisZ - 1];
+				generatedCellPosition.z += CellScale.z + _cellSpacing + _cellOffsetZ;
+				GeneratedData._cellPositions[axisX, axisZ] = generatedCellPosition;
 			}
 		}
 		
-		_cellsAreActive = false;
-		_initialGenerationComplete = true;
-			
-		Debug.Log("Grid Generation Complete");
+		_generationComplete = true;
 	}
 	
 	public void SpawnGrid()
 	{
-		if(!_initialGenerationComplete) GenerateGrid();
-		if(_gridCells != null && _gridCells.Length > 0)
+		GeneratedData._spawnedCells = new GameObject[_gridLengthX, _gridLengthZ];
+		
+		for(int axisX = 0; axisX < _gridLengthX; axisX++)
 		{
-			foreach(GridCell cell in _gridCells)
+			for(int axisZ = 0; axisZ < _gridLengthZ; axisZ++)
 			{
-				if(cell != null) Destroy(cell.gameObject);
+				GameObject cellInstance = Instantiate(_gridCellPrefab, GeneratedData._cellPositions[axisX, axisZ], Quaternion.identity);
+				cellInstance.transform.parent = transform;
+				
+				// Modify cell script here
+				GridCell cellScript = cellInstance.GetComponent<GridCell>();
+				cellScript._connectedGrid = this;
+				cellScript._cellActive = GeneratedData._activeCells[axisX, axisZ];
+				cellScript._gridIndex = new Vector2(axisX, axisZ);
+				cellScript._occupantPrefab = GeneratedData._cellOccupantPrefabs[axisX, axisZ];
+				
+				GeneratedData._spawnedCells[axisX, axisZ] = cellInstance;
 			}
 		}
 		
-		_gridCells = new GridCell[_gridLengthX, _gridLengthZ];
+		_cellsSpawned = true;
+	}
+	
+	public void SpawnActiveGrid()
+	{
+		GeneratedData._spawnedCells = new GameObject[_gridLengthX, _gridLengthZ];
 		
-		for(int x = 0; x < _gridLengthX; x++)
+		for(int axisX = 0; axisX < _gridLengthX; axisX++)
 		{
-			for(int z = 0; z < _gridLengthZ; z++)
+			for(int axisZ = 0; axisZ < _gridLengthZ; axisZ++)
 			{
-				if(_gridCulling[x, z])
+				if(GeneratedData._activeCells[axisX, axisZ])
 				{
-					Vector3 spawnPosition = _cellGenerationPositions[x, z];
-					spawnPosition.z = spawnPosition.y;
-					spawnPosition.y = 0;
+					GameObject cellInstance = Instantiate(_gridCellPrefab, GeneratedData._cellPositions[axisX, axisZ], Quaternion.identity);
+					cellInstance.transform.parent = transform;
 					
-					_gridCells[x, z] = Instantiate(_gridCellPrefab, spawnPosition, Quaternion.identity, transform).GetComponent<GridCell>();
-					_gridCells[x, z]._cellIndex = new Vector2(x, z);
-					_gridCells[x, z]._connectedGrid = this;
-					_gridCells[x, z]._cellOccupantPrefab = _gridCellOccupants[x, z];
+					// Modify cell script here
+					GridCell cellScript = cellInstance.GetComponent<GridCell>();
+					cellScript._connectedGrid = this;
+					cellScript._cellActive = true;
+					cellScript._gridIndex = new Vector2(axisX, axisZ);
+					cellScript._occupantPrefab = GeneratedData._cellOccupantPrefabs[axisX, axisZ];
+					
+					GeneratedData._spawnedCells[axisX, axisZ] = cellInstance;
 				}
 			}
 		}
-		_cellsAreActive = true;
+		
+		if(SpawnCellOccupants != null)
+			SpawnCellOccupants();
+		
+		_cellsSpawned = true;
 	}
 	
 	public void TogglePreviewGrid()
 	{
-		if(_activeGridPreview)
+		if(_isGridActive) return;
+		
+		_gridPreviewToggled = !_gridPreviewToggled;
+		
+		if(_gridPreviewToggled)
 		{
-			if(!_initialGenerationComplete) GenerateGrid();
-			if(_gridCells != null && _gridCells.Length > 0)
-			{
-				foreach(GridCell cell in _gridCells)
-				{
-					if(cell != null) DestroyImmediate(cell.gameObject);
-				}
-			}
-			
-			_gridCells = new GridCell[_gridLengthX, _gridLengthZ];
-			
-			for(int x = 0; x < _gridLengthX; x++)
-			{
-				for(int z = 0; z < _gridLengthZ; z++)
-				{
-					Vector3 spawnPosition = _cellGenerationPositions[x, z];
-					spawnPosition.z = spawnPosition.y;
-					spawnPosition.y = 0;
-					
-					_gridCells[x, z] = Instantiate(_gridCellPrefab, spawnPosition, Quaternion.identity, transform).GetComponent<GridCell>();
-					_gridCells[x, z]._cellIndex = new Vector2(x, z);
-					_gridCells[x, z]._connectedGrid = this;
-					_gridCells[x, z]._cellOccupantPrefab = _gridCellOccupants[x, z];
-					_gridCells[x, z].SpawnOccupant();
-				}
-			}
-			_cellsAreActive = true;
+			SpawnGrid();
 		}
 		else
 		{
-			if(_gridCells != null && _gridCells.Length > 0)
-			{
-				foreach(GridCell cell in _gridCells)
-				{
-					if(cell != null) DestroyImmediate(cell.gameObject);
-				}
-			}
-			_cellsAreActive = false;
-		}
-	}
-	
-	public void UpdateGridDataFromInstances()
-	{
-		if(_cellsAreActive)
-		{
-			for(int x = 0; x < _gridLengthX; x++)
-			{
-				for(int z = 0; z < _gridLengthZ; z++)
-				{
-					_gridCellOccupants[x, z] = _gridCells[x, z]._cellOccupantPrefab;
-					_cellPositionOffsetData[x, z] = _gridCells[x, z]._cellPositionOffset;
-					_occupantPositionOffsetData[x, z] = _gridCells[x, z]._occupantPositionOffset;
-					_occupantRotationOffsetData[x, z] = _gridCells[x, z]._occupantRotationOffset;
-				}
-			}
+			if(_cellOccupantsToggled) ToggleCellOccupants();
 			
-			SaveGridData();
+			foreach(GameObject cell in GeneratedData._spawnedCells)
+			{
+				DestroyImmediate(cell, false);
+				GeneratedData._spawnedCells = null;
+			}
 		}
 	}
 	
-	#region Saving & Loading Grid Data
-	
-	// Use the public ones to store data in the correct format
-	public void SaveGridData()
+	public void ToggleCellOccupants()
 	{
-		gridData = new GridData();
-		gridData.cellCullingData = new bool[_gridLengthX * _gridLengthZ];
-		gridData.cellOccupantIDData = new int[_gridLengthX * _gridLengthZ];
-		gridData.cellPositionData = new Vector3[_gridLengthX * _gridLengthZ];
-		gridData.occupantPositionData = new Vector3[_gridLengthX * _gridLengthZ];
-		gridData.occupantRotationData = new Vector3[_gridLengthX * _gridLengthZ];
+		_cellOccupantsToggled = !_cellOccupantsToggled;
 		
-		// Converting Data:
+		if(_cellOccupantsToggled)
+		{
+			GeneratedData._cellActiveOccupant = new GameObject[_gridLengthX, _gridLengthZ];
+			
+			foreach(GameObject cell in GeneratedData._spawnedCells)
+			{
+				cell.GetComponent<GridCell>().SpawnOccupant();
+				
+				if(cell.GetComponent<GridCell>()._activeOccupant != null)
+				{
+					Vector2 cellIndex = cell.GetComponent<GridCell>()._gridIndex;
+					GeneratedData._cellActiveOccupant[(int) cellIndex.x, (int) cellIndex.y] = cell.GetComponent<GridCell>()._activeOccupant;
+				}
+			}
+		}
+		else
+		{
+			foreach(GameObject cell in GeneratedData._spawnedCells)
+			{
+				if(cell.GetComponent<GridCell>()._activeOccupant != null)
+				{
+					DestroyImmediate(cell.GetComponent<GridCell>()._activeOccupant, false);
+				}
+				
+				GeneratedData._cellActiveOccupant = null;
+			}
+		}
+	}
+	
+	public void UpdateGridFromCellData()
+	{
+		for(int x = 0; x < _gridLengthX; x++)
+		{
+			for(int z = 0; z < _gridLengthZ; z++)
+			{
+				GeneratedData._activeCells[x, z] = GeneratedData._spawnedCells[x, z].GetComponent<GridCell>()._cellActive;
+				GeneratedData._cellOccupantPrefabs[x, z] = GeneratedData._spawnedCells[x, z].GetComponent<GridCell>()._occupantPrefab;
+				GeneratedData._cellOccupantPositions[x, z] = GeneratedData._spawnedCells[x, z].GetComponent<GridCell>()._occupantPosition;
+				GeneratedData._cellOccupantEulerAngles[x, z] = GeneratedData._spawnedCells[x, z].GetComponent<GridCell>()._occupantEulerAngles;
+				
+				GeneratedData._spawnedCells[x, z].GetComponent<GridCell>().UpdateOccupantTransform();
+			}
+		}
+	}
+	
+	#endregion
+	
+	#region Saving & Loading
+	
+	public bool SaveGridData()
+	{
+		if(!_generationComplete) return false;
 		
-		// Grid Cells
+		_gridData = new GridData();
+		
+		_gridData.isCellActive = new bool[_gridLengthX * _gridLengthZ];
+		_gridData.occupantPrefabIDs = new int[_gridLengthX * _gridLengthZ];
+		_gridData.occupantPositions = new Vector3[_gridLengthX * _gridLengthZ];
+		_gridData.occupantEulerAngles = new Vector3[_gridLengthX * _gridLengthZ];
+		
+		// Store data
+		_gridData.lengthX = _gridLengthX;
+		_gridData.lengthZ = _gridLengthZ;
+		
+		_gridData.spacing = _cellSpacing;
+		
+		_gridData.offsetX = _cellOffsetX;
+		_gridData.offsetZ = _cellOffsetZ;
+		
 		int dataIndex = 0;
 		for(int x = 0; x < _gridLengthX; x++)
 		{
-			for(int y = 0; y < _gridLengthZ; y++)
+			for(int z = 0; z < _gridLengthZ; z++)
 			{
-				gridData.cellCullingData[dataIndex] = _gridCulling[x, y];
+				_gridData.isCellActive[dataIndex] = GeneratedData._activeCells[x, z];
 				
-				gridData.cellPositionData[dataIndex] = _cellPositionOffsetData[x, y];
-				gridData.occupantPositionData[dataIndex] = _occupantPositionOffsetData[x, y];
-				gridData.occupantRotationData[dataIndex] = _occupantRotationOffsetData[x, y];
+				// Setting cell data
+				_gridData.occupantPrefabIDs[dataIndex] = -1;
+				for(int i = 0; i < prefabLibrary._gridPresets.Count; i++)
+				{
+					if(prefabLibrary._gridPresets[i] == GeneratedData._cellOccupantPrefabs[x, z])
+					{
+						_gridData.occupantPrefabIDs[dataIndex] = i;
+						break;
+					}
+				}
+				_gridData.occupantPositions[dataIndex] = GeneratedData._cellOccupantPositions[x, z];
+				_gridData.occupantEulerAngles[dataIndex] = GeneratedData._cellOccupantEulerAngles[x, z];
 				
 				dataIndex++;
 			}
 		}
 		
-		// Cell Occupant ID
-		dataIndex = 0;
-		foreach(GameObject occupant in _gridCellOccupants)
-		{
-			int id = 1;
-			foreach(GameObject prefab in PrefabLibrary.GridPrefabID.Values)
-			{
-				if(occupant == prefab)
-				{
-					gridData.cellOccupantIDData[dataIndex] = id;
-					break;
-				}
-				id++;
-			}
-			dataIndex++;
-		}
-		
-		SaveData(gridData);
+		SaveData(_gridData);
+		return true;
 	}
 	
 	public bool LoadGridData()
 	{
-		var loadedData = LoadData();
+		GridData loadedData = LoadData();
+		if(loadedData == null) return false;
+		else _gridData = loadedData;
 		
-		if(loadedData != null && loadedData.cellCullingData.Length != _gridLengthX * _gridLengthZ)
-		{
-			print("Loaded Data Doesnt Match");
-			loadedData = null;
-		}
+		_gridLengthX = _gridData.lengthX;
+		_gridLengthZ = _gridData.lengthZ;
 		
-		if(loadedData == null)
+		_cellSpacing = _gridData.spacing;
+		
+		_cellOffsetX = _gridData.offsetX;
+		_cellOffsetZ = _gridData.offsetZ;
+		
+		int dataIndex = 0;
+		for(int x = 0; x < _gridLengthX; x++)
 		{
-			print("Generating Fresh Grid Data");
-			gridData = new GridData();
-			_gridCulling = new bool[_gridLengthX, _gridLengthZ];
-			_gridCellOccupants = new GameObject[_gridLengthX, _gridLengthZ];
-			_cellPositionOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
-			_occupantPositionOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
-			_occupantRotationOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
-			
-			return false;
-		}
-		else
-		{
-			print("Grid Data Loaded");
-			_gridCulling = new bool[_gridLengthX, _gridLengthZ];
-			_gridCellOccupants = new GameObject[_gridLengthX, _gridLengthZ];
-			_cellPositionOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
-			_occupantPositionOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
-			_occupantRotationOffsetData = new Vector3[_gridLengthX, _gridLengthZ];
-			
-			gridData = loadedData;
-			
-			// Converting Data:
-			
-			// grid culling (bool[] => bool[,])
-			int dataIndex = 0;
-			for(int x = 0; x < _gridLengthX; x++)
+			for(int z = 0; z < _gridLengthZ; z++)
 			{
-				for(int y = 0; y < _gridLengthZ; y++)
+				GeneratedData._activeCells[x, z] = _gridData.isCellActive[dataIndex];
+				
+				// Setting cell data
+				for(int i = 0; i < prefabLibrary._gridPresets.Count; i++)
 				{
-					_gridCulling[x, y] = gridData.cellCullingData[dataIndex];
-					if(gridData.cellOccupantIDData[dataIndex] != 0)
+					if(i == _gridData.occupantPrefabIDs[dataIndex])
 					{
-						_gridCellOccupants[x, y] = PrefabLibrary.GridPrefabID[gridData.cellOccupantIDData[dataIndex]];
+						GeneratedData._cellOccupantPrefabs[x, z] = prefabLibrary._gridPresets[i];
+						break;
 					}
-					else _gridCellOccupants[x, y] = null;
-					
-					_cellPositionOffsetData[x, y] = gridData.cellPositionData[dataIndex];
-					_occupantPositionOffsetData[x, y] = gridData.occupantPositionData[dataIndex];
-					_occupantRotationOffsetData[x, y] = gridData.occupantRotationData[dataIndex];
-					
-					dataIndex++;
+					else GeneratedData._cellOccupantPrefabs[x, z] = null;
 				}
+				GeneratedData._cellOccupantPositions[x, z] = _gridData.occupantPositions[dataIndex];
+				GeneratedData._cellOccupantEulerAngles[x, z] = _gridData.occupantEulerAngles[dataIndex];
+				
+				dataIndex++;
 			}
-			
-			return true;
 		}
+		
+		return true;
 	}
 	
 	void SaveData(GridData gData)
@@ -342,7 +358,7 @@ public class CustomGrid : MonoBehaviour
 		}
 		
 		string jsonData = JsonUtility.ToJson(gData);
-		System.IO.File.WriteAllText(GridDataPath, jsonData);
+		File.WriteAllText(GridDataPath, jsonData);
 	}
 	
 	GridData LoadData()
@@ -350,61 +366,53 @@ public class CustomGrid : MonoBehaviour
 		if(File.Exists(GridDataPath))
 		{
 			string jsonData = File.ReadAllText(GridDataPath);
-			return gridData = JsonUtility.FromJson<GridData>(jsonData);
+			return _gridData = JsonUtility.FromJson<GridData>(jsonData);
 		}
 		else return null;
 	}
 	
-	/*public bool CheckStoredGridDataCompatibility() - May or may not be needed
-	{
-		if(gridData.cellCullingData.Length == _gridLengthX * _gridLengthZ) return true;
-		else return false;
-	}*/
-	
 	#endregion
 	
 	#if UNITY_EDITOR
+	
 	void OnDrawGizmos()
 	{
-		// DRAW GRID WITH GIZMOS
-		if(_enableEditorTools && _isGridVisible)
+		if(_enableEditorTools && _showGrid && GeneratedData._cellPositions != null && GeneratedData._activeCells != null)
 		{
-			try
+			if(GeneratedData._cellPositions.GetLength(0) == _gridLengthX && GeneratedData._cellPositions.GetLength(1) == _gridLengthZ)
 			{
-				if(!_initialGenerationComplete) GenerateGrid();
-			
-				if(_initialGenerationComplete)
+				for(int x = 0; x < _gridLengthX; x++)
 				{
-					for(int x = 0; x < _gridLengthX; x++)
+					for(int z = 0; z < _gridLengthZ; z++)
 					{
-						for(int y = 0; y < _gridLengthZ; y++)
+						if(GeneratedData._activeCells.GetLength(0) == _gridLengthX && GeneratedData._activeCells.GetLength(1) == _gridLengthZ)
 						{
-							if(_gridCulling[x, y]) Gizmos.color = Color.green;
-							else Gizmos.color = Color.red;
-							Vector3 drawPosition = _cellGenerationPositions[x, y];
-							drawPosition.z = drawPosition.y;
-							drawPosition.y = 0;
-							Gizmos.DrawWireCube(drawPosition, _gridCellPrefab.transform.localScale);
+							Gizmos.color = GeneratedData._activeCells[x, z]? Color.green : Color.red;
 						}
+						else Gizmos.color = Color.yellow;
+						Gizmos.DrawWireCube(GeneratedData._cellPositions[x, z], CellScale);
 					}
 				}
 			}
-			catch(System.Exception e)
-			{
-				Debug.Log("Grid Not Generated OR No Custom Grid Assigned In Inspector \r\n" + e.Message);
-			}
 		}
 	}
+	
 	#endif
 }
 
 [System.Serializable]
 public class GridData
 {
-	public bool[] cellCullingData;
-	public int[] cellOccupantIDData;
+	public int lengthX;
+	public int lengthZ;
 	
-	public Vector3[] cellPositionData;
-	public Vector3[] occupantPositionData;
-	public Vector3[] occupantRotationData;
+	public float spacing;
+	
+	public float offsetX;
+	public float offsetZ;
+	
+	public bool[] isCellActive;
+	public int[] occupantPrefabIDs;
+	public Vector3[] occupantPositions;
+	public Vector3[] occupantEulerAngles;
 }

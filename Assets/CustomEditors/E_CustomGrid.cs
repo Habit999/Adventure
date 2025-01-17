@@ -5,18 +5,19 @@ using UnityEditor;
 using System;
 using System.IO;
 
-[CustomEditor(typeof(NewCustomGrid))]
-public class E_NewCustomGrid : Editor
+[CustomEditor(typeof(CustomGrid))]
+public class E_CustomGrid : Editor
 {
-	NewCustomGrid targetGrid;
+	CustomGrid targetGrid;
+	
+	void Awake()
+	{
+		targetGrid = (CustomGrid)target;
+	}
 	
 	public override void OnInspectorGUI()
 	{
 		base.OnInspectorGUI();
-		
-		EditorGUILayout.Space(5);
-		
-		targetGrid = (NewCustomGrid) EditorGUILayout.ObjectField("Target Grid", targetGrid, typeof(NewCustomGrid), true);
 		
 		if(targetGrid != null)
 		{
@@ -69,7 +70,7 @@ public class E_NewCustomGrid : Editor
 					if(targetGrid._gridPreviewToggled)
 					{
 						string occupantsActive = targetGrid._cellOccupantsToggled ? "Active" : "Inactive";
-						GUILayout.Label($"Grid Preview : {occupantsActive}");
+						GUILayout.Label($"Cell Occupants : {occupantsActive}");
 						
 						if(GUILayout.Button("Toggle Cell Occupants"))
 						{

@@ -1,70 +1,68 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GridCell : MonoBehaviour
 {
-	private static float checkCellTransformBuffer = 3f;
+	public CustomGrid _connectedGrid;
 	
-	[HideInInspector] public Vector2 _cellIndex;
-	[HideInInspector] public CustomGrid _connectedGrid;
+	public bool _cellActive;
 	
-	[HideInInspector] public GameObject _activeCellOccupant;
-	public GameObject _cellOccupantPrefab;
+	public Vector3 OccupantPosition { get { return _activeOccupant != null ? _activeOccupant.transform.position : transform.position; } }
 	
-	[Space(10)]
+	[HideInInspector] public Vector2 _gridIndex;
 	
-	public Vector3 _cellPositionOffset;
+	public GameObject _occupantPrefab;
+	[HideInInspector] public GameObject _activeOccupant;
+	
 	[Space(5)]
-	public Vector3 _occupantPositionOffset;
-	public Vector3 _occupantRotationOffset;
 	
-	IEnumerator transformCheckRoutine;
+	public Vector3 _occupantPosition;
+	public Vector3 _occupantEulerAngles;
 	
-	void Start()
+	void OnEnable()
 	{
-		transformCheckRoutine = TransformCheckBuffer();
-		StartCoroutine(transformCheckRoutine);
-		
-		SpawnOccupant();
+		CustomGrid.SpawnCellOccupants += SpawnOccupant;
+	}
+	
+	void OnDisable()
+	{
+		CustomGrid.SpawnCellOccupants -= SpawnOccupant;
+	}
+	
+	void Update()
+	{
+		if(Input.GetKeyDown(KeyCode.T)) SpawnOccupant();
+	}
+	
+	public void UpdateOccupantTransform()
+	{
+		if(_activeOccupant != null)
+		{
+			_activeOccupant.transform.position = _occupantPosition;
+			_activeOccupant.transform.eulerAngles = _occupantEulerAngles;
+		}
 	}
 	
 	public void SpawnOccupant()
 	{
-		if(_connectedGrid != null)
+		if(_occupantPrefab != null)
 		{
-			if(_activeCellOccupant != null) Destroy(_activeCellOccupant);
-		
-			if(_cellOccupantPrefab != null)
+			if(!_connectedGrid._enableEditorTools)
 			{
-				_activeCellOccupant = Instantiate(_cellOccupantPrefab, transform.position, _cellOccupantPrefab.transform.rotation * Quaternion.Euler(_occupantRotationOffset));
-				_activeCellOccupant.transform.parent = transform;
-				_activeCellOccupant.transform.position += _occupantPositionOffset;
+				if(_activeOccupant != null) Destroy(_activeOccupant);
 			}
-		}
-	}
-	
-	IEnumerator TransformCheckBuffer()
-	{
-		CheckTransform();
-		yield return new WaitForSeconds(checkCellTransformBuffer);
-		transformCheckRoutine = TransformCheckBuffer();
-		StartCoroutine(transformCheckRoutine);
-	}
-		
-	void CheckTransform()
-	{
-		// Cell Position
-		Vector3 correctedCellPosition = _connectedGrid._cellGenerationPositions[(int) _cellIndex.x, (int) _cellIndex.y];
-		correctedCellPosition.z = correctedCellPosition.y;
-		correctedCellPosition.y = 0;
-		transform.position = correctedCellPosition + _cellPositionOffset;
-		
-		//Occupant Position & Rotation
-		if(_activeCellOccupant != null)
-		{
-			_activeCellOccupant.transform.position = _occupantPositionOffset;
-			_activeCellOccupant.transform.rotation = _cellOccupantPrefab.transform.rotation * Quaternion.Euler(_occupantRotationOffset);
+			else
+			{
+				if(_activeOccupant != null) DestroyImmediate(_activeOccupant, false);
+			}
+			
+			_activeOccupant = Instantiate(_occupantPrefab, transform.position, Quaternion.identity);
+			_activeOccupant.transform.parent = transform;
+			
+			_activeOccupant.transform.localPosition = _occupantPosition;
+			_activeOccupant.transform.rotation = Quaternion.Euler(_occupantEulerAngles);
 		}
 	}
 }

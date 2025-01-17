@@ -4,7 +4,16 @@ using UnityEngine;
 
 public class U_Enemy_VoidDemon : A_Enemy
 {
-	public ENEMYSTATE EnemyState = ENEMYSTATE.Idle;
+	protected override void EnemyBehaviour()
+	{
+		
+	}
+	
+	public override void DamageEnemy(float incomingDamage)
+	{
+		
+	}
+	/*public ENEMYSTATE EnemyState = ENEMYSTATE.Idle;
 	
 	public EnemyData _currentEnemyData = new EnemyData(100, 30, 10, 20);
 	
@@ -29,7 +38,7 @@ public class U_Enemy_VoidDemon : A_Enemy
 	
 	[Space(3)]
 	
-	public CustomGrid _startGrid;
+	public OldCustomGrid _startGrid;
 	
 	[Space(3)]
 	
@@ -130,7 +139,7 @@ public class U_Enemy_VoidDemon : A_Enemy
 	
 	IEnumerator CheckClosestCell()
 	{
-		GridCell closestCell = null;
+		OldGridCell closestCell = null;
 		
 		if(_startGrid == null)
 		{
@@ -155,7 +164,7 @@ public class U_Enemy_VoidDemon : A_Enemy
 		{
 			yield return new WaitWhile(() => _startGrid._gridCells == null);
 			yield return new WaitWhile(() => _startGrid._gridCells.GetLength(0) != _startGrid._gridLengthX && _startGrid._gridCells.GetLength(1) != _startGrid._gridLengthZ);
-			foreach(GridCell cell in _startGrid._gridCells)
+			foreach(OldGridCell cell in _startGrid._gridCells)
 			{
 				if(cell != null)
 				{
@@ -176,11 +185,11 @@ public class U_Enemy_VoidDemon : A_Enemy
 	
 	void GetRoamingTarget()
 	{
-		CustomGrid currentGrid = (_startGrid == null)? _currentLocalGridVriables.targetGridCell._connectedGrid : _startGrid;
+		OldCustomGrid currentGrid = (_startGrid == null)? _currentLocalGridVriables.targetGridCell._connectedGrid : _startGrid;
 		Vector2 currentCellPos = _currentLocalGridVriables.gridCellPosition;
 		
 		Vector2[] checkSpaces = new Vector2[4];
-		GridCell[] availableSpaces;
+		OldGridCell[] availableSpaces;
 		
 		// Check Spaces
 		int spacesFree = 0;
@@ -227,14 +236,14 @@ public class U_Enemy_VoidDemon : A_Enemy
 		}
 		
 		// Decide From Free Spaces
-		availableSpaces = new GridCell[spacesFree];
+		availableSpaces = new OldGridCell[spacesFree];
 		int availableIndex = 0;
 		foreach(Vector2 checkCell in checkSpaces)
 		{
 			availableSpaces[availableIndex] = currentGrid._gridCells[(int) checkCell.x, (int) checkCell.y];
 		}
 		
-		_currentLocalGridVriables.targetGridCell = availableSpaces[Random.Range(0, spacesFree)];
+		_currentLocalGridVriables.targetGridCell = availableSpaces[Random.Range(0, spacesFree)];*/
 		
 		/*if(currentCellPos.x + 1 < currentGrid._gridCells.GetLength(0) && currentCellPos.x + 1 < currentGrid._gridLengthX)
 		{
@@ -356,7 +365,7 @@ public class U_Enemy_VoidDemon : A_Enemy
 				
 			}
 		}*/
-	}
+	/*}
 	
 	IEnumerator IdleToRoamTime(float incomingWaitTime)
 	{
@@ -365,5 +374,5 @@ public class U_Enemy_VoidDemon : A_Enemy
 		EnemyState = ENEMYSTATE.Roaming;
 	}
 	
-	#endregion
+	#endregion*/
 }

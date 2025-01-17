@@ -15,34 +15,14 @@ public class PlayerController : MonoBehaviour
 	
 	[HideInInspector] public bool _isInDungeon;
 	
-	[Space(10)]
+	public enum Orientation { North, East, South, West };
 	
-	public CustomGrid.ORIENTAION PlayerOrientation;
+	public Orientation PlayerOrientation;
 	
 	public float _maxHealth = 100;
 	public float _maxMana = 100;
 	[HideInInspector] public float _health;
 	[HideInInspector] public float _mana;
-	
-	public Rigidbody PlayerRB {
-		get {
-			if(playerRB != null) return playerRB;
-			else
-			{
-				if(gameObject.GetComponent<Rigidbody>() == null)
-				{
-					playerRB = gameObject.AddComponent<Rigidbody>();
-					playerRB.constraints = RigidbodyConstraints.FreezeRotation;
-				}
-				else
-				{
-					playerRB = gameObject.GetComponent<Rigidbody>(); 
-				}
-				return playerRB;
-			}
-		} 
-	}
-	Rigidbody playerRB;
 	
 	public InteractionManager InteractionMngr { get { return gameObject.GetComponent<InteractionManager>(); } }
 	
@@ -53,6 +33,8 @@ public class PlayerController : MonoBehaviour
 	public CombatManager CombatMngr { get { return damageArea.GetComponent<CombatManager>(); } }
 	
 	[Space(10)]
+	
+	[HideInInspector] public Rigidbody _playerRB;
 	
 	public Transform _camera;
 	public Transform _body;
@@ -67,7 +49,7 @@ public class PlayerController : MonoBehaviour
 		public float lockedMovementSpeed;
 		public float lockedRotationSpeed;
 		
-		[HideInInspector] public CustomGrid.ORIENTAION targetOrientation;
+		[HideInInspector] public Orientation targetOrientation;
 		
 		[HideInInspector] public Vector3 moveTargetPosition;
 		[HideInInspector] public Quaternion moveTargetRotation;
@@ -118,10 +100,12 @@ public class PlayerController : MonoBehaviour
 	
 	void Start()
 	{
+		_playerRB = GetComponent<Rigidbody>();
+		
 		_health = _maxHealth;
 		_mana = _maxMana;
 		
-		freeMoveVariables.startingDrag = PlayerRB.drag;
+		freeMoveVariables.startingDrag = _playerRB.drag;
 		
 		_canLook = true;
 		_canMove = true;
@@ -137,7 +121,7 @@ public class PlayerController : MonoBehaviour
 	
 	void FixedUpdate()
 	{
-		PlayerRB.AddForce(freeMoveVariables.forceDirection);
+		_playerRB.AddForce(freeMoveVariables.forceDirection);
 	}
 	
 	void PlayerBehaviour()
@@ -182,15 +166,15 @@ public class PlayerController : MonoBehaviour
 		
 		float dotProduct = Vector3.Dot(playerForwardDirection, worldNorth);
 		
-		if(dotProduct > 0.9f) PlayerOrientation = CustomGrid.ORIENTAION.North;
+		if(dotProduct > 0.9f) PlayerOrientation = Orientation.North;
 		else if(dotProduct < 0.1 && dotProduct > -0.1)
 		{
 			dotProduct = Vector3.Dot(playerForwardDirection, worldEast);
 		
-			if(dotProduct > 0.9f) PlayerOrientation = CustomGrid.ORIENTAION.East;
-			else if(dotProduct < -0.9f) PlayerOrientation = CustomGrid.ORIENTAION.West;
+			if(dotProduct > 0.9f) PlayerOrientation = Orientation.East;
+			else if(dotProduct < -0.9f) PlayerOrientation = Orientation.West;
 		}
-		else if(dotProduct < -0.9f) PlayerOrientation = CustomGrid.ORIENTAION.South;
+		else if(dotProduct < -0.9f) PlayerOrientation = Orientation.South;
 	}
 	
 	void CheckMouse()
@@ -232,23 +216,23 @@ public class PlayerController : MonoBehaviour
 	{
 		if(PlayerState == PLAYERSTATE.Dead)
 		{
-			PlayerRB.constraints = RigidbodyConstraints.None;
+			_playerRB.constraints = RigidbodyConstraints.None;
 		}
 		else if(PlayerState == PLAYERSTATE.LockedInteract || PlayerState == PLAYERSTATE.LockedMove || PlayerState == PLAYERSTATE.Frozen)
 		{
-			PlayerRB.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
+			_playerRB.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
 		}
 		else if(PlayerState == PLAYERSTATE.FreeMove)
 		{
-			PlayerRB.constraints = RigidbodyConstraints.FreezeRotation;
+			_playerRB.constraints = RigidbodyConstraints.FreezeRotation;
 			
 			if(Input.GetKey(Controls.Forward) || Input.GetKey(Controls.Backward) || Input.GetKey(Controls.Left) || Input.GetKey(Controls.Right))
 			{
-				PlayerRB.drag = freeMoveVariables.movingDrag;
+				_playerRB.drag = freeMoveVariables.movingDrag;
 			}
 			else
 			{
-				PlayerRB.drag = freeMoveVariables.startingDrag;
+				_playerRB.drag = freeMoveVariables.startingDrag;
 			}
 		}
 	}
