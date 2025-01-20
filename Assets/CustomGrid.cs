@@ -147,6 +147,8 @@ public class CustomGrid : MonoBehaviour
 				cellScript._cellActive = GeneratedData._activeCells[axisX, axisZ];
 				cellScript._gridIndex = new Vector2(axisX, axisZ);
 				cellScript._occupantPrefab = GeneratedData._cellOccupantPrefabs[axisX, axisZ];
+				cellScript._occupantPosition = GeneratedData._cellOccupantPositions[axisX, axisZ];
+				cellScript._occupantEulerAngles = GeneratedData._cellOccupantEulerAngles[axisX, axisZ];
 				
 				GeneratedData._spawnedCells[axisX, axisZ] = cellInstance;
 			}
@@ -174,8 +176,10 @@ public class CustomGrid : MonoBehaviour
 					cellScript._cellActive = true;
 					cellScript._gridIndex = new Vector2(axisX, axisZ);
 					cellScript._occupantPrefab = GeneratedData._cellOccupantPrefabs[axisX, axisZ];
-					
-					GeneratedData._spawnedCells[axisX, axisZ] = cellInstance;
+                    cellScript._occupantPosition = GeneratedData._cellOccupantPositions[axisX, axisZ];
+                    cellScript._occupantEulerAngles = GeneratedData._cellOccupantEulerAngles[axisX, axisZ];
+
+                    GeneratedData._spawnedCells[axisX, axisZ] = cellInstance;
 				}
 			}
 		}
@@ -373,7 +377,7 @@ public class CustomGrid : MonoBehaviour
 	
 	#endregion
 	
-	#if UNITY_EDITOR
+#if UNITY_EDITOR
 	
 	void OnDrawGizmos()
 	{
@@ -397,7 +401,7 @@ public class CustomGrid : MonoBehaviour
 		}
 	}
 	
-	#endif
+#endif
 }
 
 [System.Serializable]

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class GridCell : MonoBehaviour
 {
+	//
 	public CustomGrid _connectedGrid;
 	
 	public bool _cellActive;
@@ -65,4 +66,14 @@ public class GridCell : MonoBehaviour
 			_activeOccupant.transform.rotation = Quaternion.Euler(_occupantEulerAngles);
 		}
 	}
+
+#if UNITY_EDITOR
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+		Gizmos.DrawWireSphere(transform.position + _occupantPosition, 0.3f);
+    }
+
+#endif
 }
