@@ -28,7 +28,6 @@ public class StartPoint : MonoBehaviour
 			Destroy(preGameCam);
 			
 			PlayerController newPlayer = Instantiate(playerPrefab, GetComponent<MovePoint>()._cameraTarget.position, GetComponent<MovePoint>()._cameraTarget.rotation).GetComponent<PlayerController>();
-			newPlayer._currentMovePoint = GetComponent<MovePoint>();
 		}
 		else print("ERROR => StartPoint Doesn't Have A MovePoint Component!");
 	}

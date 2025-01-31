@@ -59,11 +59,11 @@ public class DungeonExit : MonoBehaviour
 	
 	void ToggleExitMessage()
 	{
-		if(PlayerController.Instance.InteractionMngr._objectPresent)
+		if(PlayerController.Instance.InteractionMngr.ObjectPresent)
 		{
-			if(PlayerController.Instance.InteractionMngr._objectInView == this.gameObject)
+			if(PlayerController.Instance.InteractionMngr.ObjectInView == this.gameObject)
 				exitMsg.SetActive(true);
-			else if(PlayerController.Instance.InteractionMngr._objectInView == null || PlayerController.Instance.InteractionMngr._objectInView != this.gameObject) 
+			else if(PlayerController.Instance.InteractionMngr.ObjectInView == null || PlayerController.Instance.InteractionMngr.ObjectInView != this.gameObject) 
 				exitMsg.SetActive(false);
 		}
 		else exitMsg.SetActive(false);

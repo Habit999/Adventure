@@ -31,28 +31,11 @@ public class MovePoint : MonoBehaviour
 	{
 		movePointIcon.SetActive(true);
 		
-		movePointIcon.transform.LookAt(PlayerController.Instance._camera.transform, Vector3.up);
+		movePointIcon.transform.LookAt(PlayerController.Instance.Camera.transform, Vector3.up);
 	}
 	
 	void OnMouseExit()
 	{
 		movePointIcon.SetActive(false);
-	}
-	
-	void OnMouseDown()
-	{
-		_orientation.rotation = PlayerController.Instance._currentMovePoint._orientation.transform.rotation;
-		PlayerController.Instance._currentMovePoint.SetInteracables(false);
-		PlayerController.Instance.ClickMoveToPoint(_cameraTarget, _orientation);
-		PlayerController.Instance._currentMovePoint = this;
-		
-		StartCoroutine(WaitForPlayer());
-	}
-	
-	IEnumerator WaitForPlayer()
-	{
-		yield return new WaitWhile(() => PlayerController.Instance.transform.position != _cameraTarget.position);
-		SetInteracables(true);
-		print("Player Arrived");
 	}
 }

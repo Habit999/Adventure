@@ -235,7 +235,7 @@ public class CustomGrid : MonoBehaviour
 		{
 			foreach(GameObject cell in GeneratedData._spawnedCells)
 			{
-				if(cell.GetComponent<GridCell>()._activeOccupant != null)
+				if(cell != null && cell.GetComponent<GridCell>()._activeOccupant != null)
 				{
 					DestroyImmediate(cell.GetComponent<GridCell>()._activeOccupant, false);
 				}

@@ -191,10 +191,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87fac36eb5ff835478e8639b9c6ac56d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _healthBar: {fileID: 1677481862512031776}
-  _manaBar: {fileID: 5543626766520251681}
-  _experienceBar: {fileID: 6719653109598356332}
-  _currentActiveActionKey: 0
+  HealthBar: {fileID: 1677481862512031776}
+  ManaBar: {fileID: 5543626766520251681}
+  ExperienceBar: {fileID: 6719653109598356332}
+  CurrentActiveActionKey: 0
   actionKeys: {fileID: 7357281429329481930}
   inactiveKeyColor: {r: 0.38823533, g: 0.38823533, b: 0.38823533, a: 1}
   activeKeyColor: {r: 0.509434, g: 0, b: 0, a: 1}
@@ -204,8 +204,8 @@ MonoBehaviour:
   lockedMovementUI:
   - {fileID: 6754328249336681551}
   - {fileID: 7146035308826900505}
-  _isInvOpen: 0
-  _isSkillsOpen: 0
+  IsInvOpen: 0
+  IsSkillsOpen: 0
 --- !u!1001 &3254460490849285948
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -607,6 +607,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8523281163694526526}
     m_Modifications:
+    - target: {fileID: 503377094788080527, guid: 824a026853dac5744b518e83631db0ea, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -70.00006
+      objectReference: {fileID: 0}
+    - target: {fileID: 503377094788080527, guid: 824a026853dac5744b518e83631db0ea, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 19.999968
+      objectReference: {fileID: 0}
     - target: {fileID: 700170016000986214, guid: 824a026853dac5744b518e83631db0ea, type: 3}
       propertyPath: m_Name
       value: InventoryUI

@@ -8,10 +8,10 @@ public class InteractionManager : MonoBehaviour
 	
 	public PlayerController Controller { get { return gameObject.GetComponent<PlayerController>(); } }
 	
-	[HideInInspector] public GameObject _objectInView;
-	[HideInInspector] public bool _objectPresent;
+	[HideInInspector] public GameObject ObjectInView;
+	[HideInInspector] public bool ObjectPresent;
 	
-	public float _interactionDistance;
+	public float InteractionDistance;
 	
 	// Player perspective raycast variables
 	RaycastHit playerCamHit;
@@ -19,7 +19,7 @@ public class InteractionManager : MonoBehaviour
 	
 	public INTERACTIONOUTCOMES Interact()
 	{
-		if(_objectPresent)
+		if(ObjectPresent)
 		{
 			if(playerCamHit.collider.gameObject.tag == "Map")
 			{
@@ -44,8 +44,8 @@ public class InteractionManager : MonoBehaviour
 	
 	void Update()
 	{
-		_objectPresent = Physics.Raycast(Controller._camera.position, Controller._camera.forward, out playerCamHit, _interactionDistance);
-		if(_objectPresent) _objectInView = playerCamHit.collider.gameObject;
+		ObjectPresent = Physics.Raycast(Controller.Camera.position, Controller.Camera.forward, out playerCamHit, InteractionDistance);
+		if(ObjectPresent) ObjectInView = playerCamHit.collider.gameObject;
 		
 		HotBarInteraction();
 		
@@ -54,9 +54,9 @@ public class InteractionManager : MonoBehaviour
 	
 	void ItemUsage()
 	{
-		if(Controller.PlayerState == PlayerController.PLAYERSTATE.FreeMove && !Controller.freeMoveVariables.isToggledUI)
+		if(Controller.PlayerState == PlayerController.PLAYERSTATE.FreeLook && !Controller.MouseToggled)
 		{
-			if(Input.GetMouseButtonDown(Controls.MousePrimary) && Controller.InventoryMngr._equippedItem != null)
+			if(Input.GetMouseButtonDown(GameManager.Instance.Controls.MousePrimary) && Controller.InventoryMngr._equippedItem != null)
 			{
 				Controller.InventoryMngr._equippedItem.GetComponent<Item>().UseItem();
 				Controller.CombatMngr._rightHandAnimator.SetTrigger(Controller.InventoryMngr._equippedItem.GetComponent<Item>()._animatorTriggerName);
@@ -67,35 +67,35 @@ public class InteractionManager : MonoBehaviour
 	void HotBarInteraction()
 	{
 		UserInterfaceController controllerUI = UserInterfaceController.Instance;
-		if(Input.GetKeyDown(Controls.HotBar0))
+		if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar0))
 		{
 			controllerUI.SetActiveActionKey(0);
 		}
-		else if(Input.GetKeyDown(Controls.HotBar1))
+		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar1))
 		{
 			controllerUI.SetActiveActionKey(1);
 		}
-		else if(Input.GetKeyDown(Controls.HotBar2))
+		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar2))
 		{
 			controllerUI.SetActiveActionKey(2);
 		}
-		else if(Input.GetKeyDown(Controls.HotBar3))
+		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar3))
 		{
 			controllerUI.SetActiveActionKey(3);
 		}
-		else if(Input.GetKeyDown(Controls.HotBar4))
+		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar4))
 		{
 			controllerUI.SetActiveActionKey(4);
 		}
-		else if(Input.GetKeyDown(Controls.HotBar5))
+		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar5))
 		{
 			controllerUI.SetActiveActionKey(5);
 		}
-		else if(Input.GetKeyDown(Controls.HotBar6))
+		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar6))
 		{
 			controllerUI.SetActiveActionKey(6);
 		}
-		else if(Input.GetKeyDown(Controls.HotBar7))
+		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar7))
 		{
 			controllerUI.SetActiveActionKey(7);
 		}
@@ -105,7 +105,7 @@ public class InteractionManager : MonoBehaviour
 	void OnDrawGizmos()
 	{
 		Gizmos.color = Color.red;
-		Gizmos.DrawLine(Controller._camera.position, Controller._camera.position + Controller._camera.forward * _interactionDistance);
+		Gizmos.DrawLine(Controller.Camera.position, Controller.Camera.position + Controller.Camera.forward * InteractionDistance);
 	}
 	#endif
 }

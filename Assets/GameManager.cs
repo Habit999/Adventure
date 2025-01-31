@@ -12,26 +12,28 @@ public class GameManager : MonoBehaviour
 	
 	private static string GameSaveDataPath = Application.dataPath + "/SaveData.json";
 	
-	public GameData _gameData;
-	
-	public int _currentLevel;
+	public GameSaveData GameData;
+
+	public SO_Controls Controls;
+
+	[Space(5)]
+
+	public int CurrentLevel;
 	
 	void Awake()
 	{
-		/*if(Instance == null)*/ Instance = this;
-		/*else Destroy(this.gameObject);
-		
-		DontDestroyOnLoad(this.gameObject);*/
+		if(Instance == null) Instance = this;
+		else Destroy(this.gameObject);
 		
 		if(LoadGameData() == null)
 		{
-			Controls.LoadDefaults();
+            GameManager.Instance.Controls.LoadDefaults();
 			
-			_currentLevel = 1;
+			CurrentLevel = 1;
 		}
 		else
 		{
-			Controls.LoadDefaults();
+			GameManager.Instance.Controls.LoadDefaults();
 		}
 	}
 	
@@ -50,17 +52,17 @@ public class GameManager : MonoBehaviour
 	
 	public bool LoadGame()
 	{
-		GameData loadedData = LoadGameData();
+		GameSaveData loadedData = LoadGameData();
 		
 		if(loadedData == null)
 		{
-			_gameData = new GameData();
+			GameData = new GameSaveData();
 			print("No Game Data Loaded => Applying Defaults");
 			return false;
 		}
 		else
 		{
-			_currentLevel = loadedData.CurrentLevel;
+			CurrentLevel = loadedData.CurrentLevel;
 			
 			PlayerController player = PlayerController.Instance;
 			// Player inventory
@@ -78,7 +80,7 @@ public class GameManager : MonoBehaviour
 			player.SkillsMngr._currentSkills.strength = loadedData.PlayerSkillLevels[1];
 			player.SkillsMngr._currentSkills.intelligence = loadedData.PlayerSkillLevels[2];
 			
-			_gameData = loadedData;
+			GameData = loadedData;
 			print("Game Data Loaded");
 			return true;
 		}
@@ -86,14 +88,14 @@ public class GameManager : MonoBehaviour
 	
 	public void SaveGame()
 	{
-		_gameData = new GameData();
+		GameData = new GameSaveData();
 		
-		_gameData.CurrentLevel = _currentLevel;
+		GameData.CurrentLevel = CurrentLevel;
 		
 		PlayerController player = PlayerController.Instance;
 		// Player inventory
-		_gameData.PlayerItems = new int[player.InventoryMngr._collectedItems.Count];
-		_gameData.PlayerItemAmounts = new int[player.InventoryMngr._collectedItems.Count];
+		GameData.PlayerItems = new int[player.InventoryMngr._collectedItems.Count];
+		GameData.PlayerItemAmounts = new int[player.InventoryMngr._collectedItems.Count];
 		int arrayIndex = 0;
 		foreach(GameObject invItem in player.InventoryMngr._collectedItems.Keys)
 		{
@@ -101,8 +103,8 @@ public class GameManager : MonoBehaviour
 			{
 				if(PrefabLibrary.ItemPrefabID[itemID].GetComponent<Item>()._itemData.Name == invItem.GetComponent<Item>()._itemData.Name)
 				{
-					_gameData.PlayerItems[arrayIndex] = itemID;
-					_gameData.PlayerItemAmounts[arrayIndex] = player.InventoryMngr._collectedItems[invItem];
+					GameData.PlayerItems[arrayIndex] = itemID;
+					GameData.PlayerItemAmounts[arrayIndex] = player.InventoryMngr._collectedItems[invItem];
 					break;
 				}
 			}
@@ -110,31 +112,31 @@ public class GameManager : MonoBehaviour
 		}
 		
 		// Player skill & level stats
-		_gameData.PlayerLevel = player.SkillsMngr._playerLevel;
-		_gameData.PlayerSkillPoints = player.SkillsMngr._skillPoints;
-		_gameData.PlayerExperience = player.SkillsMngr._experienceGained;
-		_gameData.PlayerSkillLevels = new int[3];
-		_gameData.PlayerSkillLevels[0] = player.SkillsMngr._currentSkills.vitality;
-		_gameData.PlayerSkillLevels[1] = player.SkillsMngr._currentSkills.strength;
-		_gameData.PlayerSkillLevels[2] = player.SkillsMngr._currentSkills.intelligence;
+		GameData.PlayerLevel = player.SkillsMngr._playerLevel;
+		GameData.PlayerSkillPoints = player.SkillsMngr._skillPoints;
+		GameData.PlayerExperience = player.SkillsMngr._experienceGained;
+		GameData.PlayerSkillLevels = new int[3];
+		GameData.PlayerSkillLevels[0] = player.SkillsMngr._currentSkills.vitality;
+		GameData.PlayerSkillLevels[1] = player.SkillsMngr._currentSkills.strength;
+		GameData.PlayerSkillLevels[2] = player.SkillsMngr._currentSkills.intelligence;
 		
 		// Save to json file
-		SaveGameData(_gameData);
+		SaveGameData(GameData);
 		
 		print("Game Data Saved");
 	}
 	
-	GameData LoadGameData()
+	GameSaveData LoadGameData()
 	{
 		if(File.Exists(GameSaveDataPath))
 		{
 			string jsonData = File.ReadAllText(GameSaveDataPath);
-			return JsonUtility.FromJson<GameData>(jsonData);
+			return JsonUtility.FromJson<GameSaveData>(jsonData);
 		}
 		else return null;
 	}
 	
-	void SaveGameData(GameData newGameData)
+	void SaveGameData(GameSaveData newGameData)
 	{
 		if(File.Exists(GameSaveDataPath))
 		{
@@ -146,7 +148,7 @@ public class GameManager : MonoBehaviour
 	}
 }
 
-public class GameData
+public class GameSaveData
 {
 	public int CurrentLevel;
 	

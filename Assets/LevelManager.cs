@@ -6,7 +6,7 @@ public class LevelManager : MonoBehaviour
 {
 	void Start()
 	{
-		PlayerController.Instance._isInDungeon = true;
+		PlayerController.Instance.IsInDungeon = true;
 		GameManager.Instance.LoadGame();
 	}
 }

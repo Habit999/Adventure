@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class ChestSpawnPoint : IInteractable
 {	
-	[Space(5)]
-	public bool _willSpawn;
+	public bool WillSpawn;
 	
 	[Space(5)]
 	
 	[SerializeField] GameObject interactMsg;
 	
-	[HideInInspector] public bool _isOpen;
+	[HideInInspector] public bool IsOpen;
 	
 	GameObject chest;
 	
@@ -20,14 +19,13 @@ public class ChestSpawnPoint : IInteractable
 	Animator chestAnimator;
 	BoxCollider chestCollider;
 	
-	
 	public void OpenChest()
 	{
 		if(!_canInteract || itemInChest == null) return;
 		bool collectedItem = itemInChest.GetComponent<Item>().CollectItem();
 		if(collectedItem)
 		{
-			_isOpen = true;
+			IsOpen = true;
 			chestAnimator.SetBool("Open", true);
 		}
 		_canInteract = false;
@@ -45,8 +43,6 @@ public class ChestSpawnPoint : IInteractable
 	
 	void Awake()
 	{
-		//_willSpawn = false;
-		
 		chest = transform.GetChild(0).gameObject;
 		chest.SetActive(false);
 		
@@ -54,7 +50,7 @@ public class ChestSpawnPoint : IInteractable
 		chestCollider = gameObject.GetComponent<BoxCollider>();
 		chestCollider.enabled = false;
 		
-		_isOpen = false;
+		IsOpen = false;
 	}
 	
 	void Update()
@@ -64,9 +60,9 @@ public class ChestSpawnPoint : IInteractable
 	
 	void CheckDisplayInteractionMsg()
 	{
-		if(PlayerController.Instance.InteractionMngr._objectPresent && !_isOpen && _willSpawn)
+		if(PlayerController.Instance.InteractionMngr.ObjectPresent && !IsOpen && WillSpawn)
 		{
-			if(PlayerController.Instance.InteractionMngr._objectInView == this.gameObject)
+			if(PlayerController.Instance.InteractionMngr.ObjectInView == this.gameObject)
 			{
 				interactMsg.SetActive(true);
 			}
@@ -77,15 +73,10 @@ public class ChestSpawnPoint : IInteractable
 	
 	void SpawnChest()
 	{
-		if(!_willSpawn) return;
+		if(!WillSpawn) return;
 		chest.SetActive(true);
 		chestCollider.enabled = true;
 		itemInChest = SpawnManager.Instance.GenerateRandomLoot(SpawnManager.RANDOMLOOTTYPE.Any);
-	}
-	
-	void OnMouseDown()
-	{
-		if(!_isOpen && _canInteract && PlayerController.Instance.PlayerState == PlayerController.PLAYERSTATE.LockedInteract) OpenChest();
 	}
 	
 	#if UNITY_EDITOR

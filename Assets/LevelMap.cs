@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LevelMap : MonoBehaviour
 {
-	[HideInInspector] public List<bool> _levelCompleted = new List<bool>();
+	[HideInInspector] public List<bool> LevelCompleted = new List<bool>();
 	
 	[SerializeField] GameObject mapCamera;
 	[SerializeField] Transform mapUI;
@@ -22,9 +22,9 @@ public class LevelMap : MonoBehaviour
 		}
 		for(int i = 0; i < levelIcons.Count; i++)
 		{
-			if(levelIcons[i]._levelDetails.LevelNumber < GameManager.Instance._currentLevel)
+			if(levelIcons[i]._levelDetails.LevelNumber < GameManager.Instance.CurrentLevel)
 				levelIcons[i]._progressionStatus = "Completed";
-			else if(levelIcons[i]._levelDetails.LevelNumber == GameManager.Instance._currentLevel)
+			else if(levelIcons[i]._levelDetails.LevelNumber == GameManager.Instance.CurrentLevel)
 				levelIcons[i]._progressionStatus = "Incompleted";
 			else levelIcons[i]._progressionStatus = "???";
 		}
@@ -32,7 +32,7 @@ public class LevelMap : MonoBehaviour
 	
 	void Update()
 	{
-		if(Input.GetKeyDown(Controls.Back)) CloseMap();
+		if(Input.GetKeyDown(GameManager.Instance.Controls.Back)) CloseMap();
 	}
 	
 	public void OpenMap()
@@ -45,6 +45,6 @@ public class LevelMap : MonoBehaviour
 	void CloseMap()
 	{
 		mapCamera.SetActive(false);
-		PlayerController.Instance.UnFreezePlayer(PlayerController.PLAYERSTATE.FreeMove);
+		PlayerController.Instance.UnFreezePlayer();
 	}
 }

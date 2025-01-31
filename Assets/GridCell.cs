@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class GridCell : MonoBehaviour
 {
-	//
 	public CustomGrid _connectedGrid;
 	
 	public bool _cellActive;
@@ -41,7 +40,7 @@ public class GridCell : MonoBehaviour
 	{
 		if(_activeOccupant != null)
 		{
-			_activeOccupant.transform.position = _occupantPosition;
+			_activeOccupant.transform.localPosition = _occupantPosition;
 			_activeOccupant.transform.eulerAngles = _occupantEulerAngles;
 		}
 	}

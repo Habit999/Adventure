@@ -430,7 +430,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 444083623181405205}
-  - component: {fileID: 8864631752314530080}
+  - component: {fileID: 3399678198194313114}
   - component: {fileID: 6705436349346823103}
   - component: {fileID: 4055824760635202867}
   - component: {fileID: 3296375011072242749}
@@ -460,7 +460,7 @@ Transform:
   - {fileID: 6984754148921075596}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8864631752314530080
+--- !u!114 &3399678198194313114
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -469,43 +469,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 7343080708152209228}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b44722e0b05943e49a063e7774b25b42, type: 3}
+  m_Script: {fileID: 11500000, guid: 2426f5c58fe1a6d4d9e58f04934d61c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerState: 0
-  _isInDungeon: 0
-  PlayerOrientation: 0
-  _maxHealth: 100
-  _maxMana: 100
-  _health: 100
-  _mana: 100
-  _camera: {fileID: 1272739564960542880}
-  _body: {fileID: 6984754148921075596}
+  IsInDungeon: 0
+  Camera: {fileID: 2624188408872534697}
+  Body: {fileID: 6984754148921075596}
   damageArea: {fileID: 7515552356548293980}
-  lockedMovementVariables:
-    lockedMovementSpeed: 1
-    lockedRotationSpeed: 1
-    targetOrientation: 0
-    moveTargetPosition: {x: 0, y: 0, z: 0}
-    moveTargetRotation: {x: 0, y: 0, z: 0, w: 0}
-    currentLockedPosition: {x: 0, y: 0, z: 0}
-    currentLockedRotation: {x: 0, y: 0, z: 0, w: 0}
-    positionDistance: 0
-    rotationDistance: 0
-  freeMoveVariables:
-    mouseSensitivity: 5
-    forceMode: 1
-    walkMoveSpeed: 15
-    sprintMoveSpeed: 20
-    strafeDampening: 2
-    movingDrag: 2
-    forceDirection: {x: 0, y: 0, z: 0}
-    isToggledUI: 0
-    startingDrag: 0
-  _currentMovePoint: {fileID: 0}
-  _isSprinting: 0
-  _canLook: 0
-  _canMove: 0
+  MaxHealth: 100
+  MaxMana: 100
+  Health: 0
+  Mana: 0
+  walkSpeed: 10
+  sprintSpeed: 20
+  strafeModifier: 0.76
+  MouseToggled: 0
 --- !u!114 &6705436349346823103
 MonoBehaviour:
   m_ObjectHideFlags: 0

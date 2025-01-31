@@ -12,11 +12,11 @@ public class UserInterfaceController : MonoBehaviour
 	protected int ItemCountInInventory { get { return PlayerController.Instance.InventoryMngr._collectedItems.Count; } }
 	protected int MaxActionPages { get { return (ItemCountInInventory / MaxActionKeysInRow) + ((ItemCountInInventory % MaxActionKeysInRow > 0) ? 1 : 0); } }
 	
-	public ProgressBar _healthBar;
-	public ProgressBar _manaBar;
-	public ProgressBar _experienceBar;
+	public ProgressBar HealthBar;
+	public ProgressBar ManaBar;
+	public ProgressBar ExperienceBar;
 	
-	[HideInInspector] public int _currentActiveActionKey;
+	[HideInInspector] public int CurrentActiveActionKey;
 	[Space(10)]
 	[SerializeField] Transform actionKeys;
 	[SerializeField] Color inactiveKeyColor;
@@ -35,8 +35,8 @@ public class UserInterfaceController : MonoBehaviour
 	
 	int actionKeyPage;
 	
-	[HideInInspector] public bool _isInvOpen;
-	[HideInInspector] public bool _isSkillsOpen;
+	[HideInInspector] public bool IsInvOpen;
+	[HideInInspector] public bool IsSkillsOpen;
 	
 	void Awake()
 	{
@@ -46,7 +46,7 @@ public class UserInterfaceController : MonoBehaviour
 		// Setting default values
 		actionKeyPage = 1;
 		
-		_currentActiveActionKey = 0;
+		CurrentActiveActionKey = 0;
 		
 		skillsAnimator = skillsUI.GetComponent<Animator>();
 		
@@ -55,8 +55,8 @@ public class UserInterfaceController : MonoBehaviour
 		skillsContent = skillsUI.GetChild(0).GetChild(2);
 		confirmButton = skillsUI.GetChild(0).GetChild(3).gameObject;
 		
-		_isInvOpen = false;
-		_isSkillsOpen = false;
+		IsInvOpen = false;
+		IsSkillsOpen = false;
 	}
 	
 	void Update()
@@ -82,12 +82,12 @@ public class UserInterfaceController : MonoBehaviour
 		PlayerController player = PlayerController.Instance;
 		
 		// Setting UI health & mana bar
-		_healthBar._value = player._health / player._maxHealth;
-		_manaBar._value = player._mana / player._maxMana;
-		_experienceBar._value = player.SkillsMngr._experienceGained / player.SkillsMngr._nextLevelExperience;
+		HealthBar.Value = player.Health / player.MaxHealth;
+		ManaBar.Value = player.Mana / player.MaxMana;
+		ExperienceBar.Value = player.SkillsMngr._experienceGained / player.SkillsMngr._nextLevelExperience;
 		
 		// Toggles turning UI buttons depending on player state
-		if(player.PlayerState == PlayerController.PLAYERSTATE.FreeMove)
+		if(player.PlayerState == PlayerController.PLAYERSTATE.FreeLook)
 		{
 			foreach(GameObject elementUI in lockedMovementUI)
 			{
@@ -166,11 +166,11 @@ public class UserInterfaceController : MonoBehaviour
 	public void ToggleInventory()
 	{
 		// Close other menu's if they're open
-		if(_isSkillsOpen) ToggleSkills();
+		if(IsSkillsOpen) ToggleSkills();
 		
 		// Toggle animator
-		_isInvOpen = !_isInvOpen;
-		inventoryUI._invAnimator.SetBool("Open", _isInvOpen);
+		IsInvOpen = !IsInvOpen;
+		inventoryUI._invAnimator.SetBool("Open", IsInvOpen);
 		
 		PlayerController.Instance.InventoryMngr._selectedInvSlot = -1;
 	}
@@ -178,14 +178,14 @@ public class UserInterfaceController : MonoBehaviour
 	public void ToggleSkills()
 	{
 		// Close other menu's if they're open
-		if(_isInvOpen) ToggleInventory();
+		if(IsInvOpen) ToggleInventory();
 		
 		// Disable temp skill values
 		PlayerController.Instance.SkillsMngr._tempValuesActive = false;
 		
 		// Toggle animator
-		_isSkillsOpen = !_isSkillsOpen;
-		skillsAnimator.SetBool("Open", _isSkillsOpen);
+		IsSkillsOpen = !IsSkillsOpen;
+		skillsAnimator.SetBool("Open", IsSkillsOpen);
 	}
 	
 	// Skills Window Button
@@ -198,20 +198,20 @@ public class UserInterfaceController : MonoBehaviour
 	public void SetActiveActionKey(int selectedActionKey)
 	{
 		// Deactivate last selected
-		if(_currentActiveActionKey != 0) 
-			actionKeys.GetChild(_currentActiveActionKey - 1).gameObject.GetComponent<Image>().color = inactiveKeyColor;
+		if(CurrentActiveActionKey != 0) 
+			actionKeys.GetChild(CurrentActiveActionKey - 1).gameObject.GetComponent<Image>().color = inactiveKeyColor;
 		
 		// Return if 0 selected
 		if(selectedActionKey == 0)
 		{
-			_currentActiveActionKey = selectedActionKey;
+			CurrentActiveActionKey = selectedActionKey;
 			PlayerController.Instance.InventoryMngr.EquipItemRight();
 			return;
 		}
 		
 		// Activate selected if not 0
 		actionKeys.GetChild(selectedActionKey - 1).gameObject.GetComponent<Image>().color = activeKeyColor;
-		_currentActiveActionKey = selectedActionKey;
+		CurrentActiveActionKey = selectedActionKey;
 		
 		PlayerController.Instance.InventoryMngr.EquipItemRight();
 	}
@@ -252,17 +252,6 @@ public class UserInterfaceController : MonoBehaviour
 	public void ActivateActionKey(int actionIndex)
 	{
 		int itemIndex = actionIndex + (MaxActionKeysInRow * (actionKeyPage - 1));
-	}
-	
-	// Rotation
-	public void TurnRightButton()
-	{
-		PlayerController.Instance.RotateRight();
-	}
-	
-	public void TurnLeftButton()
-	{
-		PlayerController.Instance.RotateLeft();
 	}
 	
 	#endregion

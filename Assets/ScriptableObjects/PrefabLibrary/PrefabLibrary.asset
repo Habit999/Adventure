@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: PrefabLibrary
   m_EditorClassIdentifier: 
   _gridPresets:
-  - {fileID: 4056820040249737828, guid: 2e9d4450c63323044815362792043a6b, type: 3}
-  - {fileID: 4848487975303482403, guid: ca7b0a5d557b03b499c734a12ca67f7b, type: 3}
+  - {fileID: 5211964168041447258, guid: e259cb7f9a3c2614e9ad4b21987a0cbd, type: 3}
   _gameItems:
   - {fileID: 3107724098402954927, guid: 0c1686f86b4d1b748a063896505f97fe, type: 3}
   - {fileID: 2924302850185203420, guid: f9e925efbe7968a46ba48eb9bd9fcd65, type: 3}

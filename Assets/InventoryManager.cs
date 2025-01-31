@@ -59,13 +59,13 @@ public class InventoryManager : MonoBehaviour
 	public void EquipItemRight()
 	{
 		UserInterfaceController controllerUI = UserInterfaceController.Instance;
-		if(controllerUI._currentActiveActionKey > 0 && controllerUI._currentActiveActionKey <= controllerUI.MaxActionKeysInRow)
+		if(controllerUI.CurrentActiveActionKey > 0 && controllerUI.CurrentActiveActionKey <= controllerUI.MaxActionKeysInRow)
 		{
 			if(_equippedItem == null)
 			{
 				foreach(GameObject item in _hotbarItemOrder.Keys)
 				{
-					if(_hotbarItemOrder[item] == UserInterfaceController.Instance._currentActiveActionKey - 1)
+					if(_hotbarItemOrder[item] == UserInterfaceController.Instance.CurrentActiveActionKey - 1)
 					{
 						_equippedItem = item;
 						_equippedItem.transform.parent = rightHandSpot;

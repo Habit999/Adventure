@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ProgressBar : MonoBehaviour
 {
-	[Range(0, 1)] public float _value;
+	[Range(0, 1)] public float Value;
 	[Space(5)]
 	[SerializeField] RectTransform backgroundBar;
 	[SerializeField] RectTransform progressionBar;
@@ -22,9 +22,9 @@ public class ProgressBar : MonoBehaviour
 	void UpdateProgressBar()
 	{
 		// Value
-		_value = Mathf.Clamp(_value, 0, 1);
+		Value = Mathf.Clamp(Value, 0, 1);
 		Vector2 progress = progressionBar.sizeDelta;
-		progress.y = (backgroundBar.sizeDelta.y - (topOffset + bottomOffset)) * _value;
+		progress.y = (backgroundBar.sizeDelta.y - (topOffset + bottomOffset)) * Value;
 		progress.x = backgroundBar.sizeDelta.x - sideOffset;
 		progressionBar.sizeDelta = progress;
 		

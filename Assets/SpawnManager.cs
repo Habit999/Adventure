@@ -124,9 +124,9 @@ public class SpawnManager : MonoBehaviour
 		{
 			if(countIndex == randomSpawnPoint)
 			{
-				if(!chestSpawn.GetComponent<ChestSpawnPoint>()._willSpawn)
+				if(!chestSpawn.GetComponent<ChestSpawnPoint>().WillSpawn)
 				{
-					chestSpawn.GetComponent<ChestSpawnPoint>()._willSpawn = true;
+					chestSpawn.GetComponent<ChestSpawnPoint>().WillSpawn = true;
 					chestCount -= 1;
 					break;
 				}
