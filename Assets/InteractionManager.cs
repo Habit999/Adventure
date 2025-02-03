@@ -1,14 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class InteractionManager : MonoBehaviour
 {
-	public enum INTERACTIONOUTCOMES { None, Successful, Failed };
-	
 	public PlayerController Controller { get { return gameObject.GetComponent<PlayerController>(); } }
+
+	public event Action<int> OnSwitchHotbar;
 	
-	[HideInInspector] public GameObject ObjectInView;
+	[HideInInspector] public GameObject ObjectInView = null;
 	[HideInInspector] public bool ObjectPresent;
 	
 	public float InteractionDistance;
@@ -17,35 +18,32 @@ public class InteractionManager : MonoBehaviour
 	RaycastHit playerCamHit;
 	Ray playerCamRay;
 	
-	public INTERACTIONOUTCOMES Interact()
+	public void Interact()
 	{
-		if(ObjectPresent)
+		if(Input.GetKeyDown(GameManager.Instance.Controls.Interact) && ObjectPresent)
 		{
-			if(playerCamHit.collider.gameObject.tag == "Map")
+			if(ObjectInView.tag == "Map")
 			{
 				Controller.FreezePlayer(true, true);
-				playerCamHit.collider.gameObject.GetComponent<LevelMap>().OpenMap();
-				return INTERACTIONOUTCOMES.Successful;
+				ObjectInView.GetComponent<LevelMap>().OpenMap();
 			}
-			else if(playerCamHit.collider.gameObject.tag == "Chest")
+			else if(ObjectInView.tag == "Chest")
 			{
-				playerCamHit.collider.gameObject.GetComponent<ChestSpawnPoint>().OpenChest();
-				return INTERACTIONOUTCOMES.Successful;
+				ObjectInView.GetComponent<ChestSpawnPoint>().OpenChest();
 			}
-			else if(playerCamHit.collider.gameObject.tag == "Exit")
+			else if(ObjectInView.tag == "Exit")
 			{
-				playerCamHit.collider.gameObject.GetComponent<DungeonExit>().Exit();
-				return INTERACTIONOUTCOMES.Successful;
+				ObjectInView.GetComponent<DungeonExit>().Exit();
 			}
-			else return INTERACTIONOUTCOMES.None;
 		}
-		else return INTERACTIONOUTCOMES.None;
 	}
 	
 	void Update()
 	{
 		ObjectPresent = Physics.Raycast(Controller.Camera.position, Controller.Camera.forward, out playerCamHit, InteractionDistance);
 		if(ObjectPresent) ObjectInView = playerCamHit.collider.gameObject;
+
+		Interact();
 		
 		HotBarInteraction();
 		
@@ -56,48 +54,55 @@ public class InteractionManager : MonoBehaviour
 	{
 		if(Controller.PlayerState == PlayerController.PLAYERSTATE.FreeLook && !Controller.MouseToggled)
 		{
-			if(Input.GetMouseButtonDown(GameManager.Instance.Controls.MousePrimary) && Controller.InventoryMngr._equippedItem != null)
+			if(Input.GetMouseButtonDown(GameManager.Instance.Controls.MousePrimary) && Controller.InventoryMngr.EquippedItem != null)
 			{
-				Controller.InventoryMngr._equippedItem.GetComponent<Item>().UseItem();
-				Controller.CombatMngr._rightHandAnimator.SetTrigger(Controller.InventoryMngr._equippedItem.GetComponent<Item>()._animatorTriggerName);
+				Controller.InventoryMngr.EquippedItem.GetComponent<Item>().UseItem();
+				Controller.CombatMngr._rightHandAnimator.SetTrigger(Controller.InventoryMngr.EquippedItem.GetComponent<Item>().AnimatorTriggerName);
 			}
 		}
 	}
 	
 	void HotBarInteraction()
 	{
-		UserInterfaceController controllerUI = UserInterfaceController.Instance;
 		if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar0))
 		{
-			controllerUI.SetActiveActionKey(0);
-		}
+			OnSwitchHotbar?.Invoke(0);
+            Controller.InventoryMngr.EquipItem();
+        }
 		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar1))
 		{
-			controllerUI.SetActiveActionKey(1);
+			OnSwitchHotbar?.Invoke(1);
+			Controller.InventoryMngr.EquipItem();
 		}
 		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar2))
 		{
-			controllerUI.SetActiveActionKey(2);
+			OnSwitchHotbar?.Invoke(2);
+			Controller.InventoryMngr.EquipItem();
 		}
 		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar3))
 		{
-			controllerUI.SetActiveActionKey(3);
+			OnSwitchHotbar?.Invoke(3);
+			Controller.InventoryMngr.EquipItem();
 		}
 		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar4))
 		{
-			controllerUI.SetActiveActionKey(4);
+			OnSwitchHotbar?.Invoke(4);
+			Controller.InventoryMngr.EquipItem();
 		}
 		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar5))
 		{
-			controllerUI.SetActiveActionKey(5);
+			OnSwitchHotbar?.Invoke(5);
+			Controller.InventoryMngr.EquipItem();
 		}
 		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar6))
 		{
-			controllerUI.SetActiveActionKey(6);
+			OnSwitchHotbar?.Invoke(6);
+			Controller.InventoryMngr.EquipItem();
 		}
 		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar7))
 		{
-			controllerUI.SetActiveActionKey(7);
+			OnSwitchHotbar?.Invoke(7);
+			Controller.InventoryMngr.EquipItem();
 		}
 	}
 	

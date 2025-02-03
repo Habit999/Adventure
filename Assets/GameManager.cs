@@ -94,17 +94,17 @@ public class GameManager : MonoBehaviour
 		
 		PlayerController player = PlayerController.Instance;
 		// Player inventory
-		GameData.PlayerItems = new int[player.InventoryMngr._collectedItems.Count];
-		GameData.PlayerItemAmounts = new int[player.InventoryMngr._collectedItems.Count];
+		GameData.PlayerItems = new int[player.InventoryMngr.CollectedItems.Count];
+		GameData.PlayerItemAmounts = new int[player.InventoryMngr.CollectedItems.Count];
 		int arrayIndex = 0;
-		foreach(GameObject invItem in player.InventoryMngr._collectedItems.Keys)
+		foreach(GameObject invItem in player.InventoryMngr.CollectedItems.Keys)
 		{
 			foreach(int itemID in PrefabLibrary.ItemPrefabID.Keys)
 			{
-				if(PrefabLibrary.ItemPrefabID[itemID].GetComponent<Item>()._itemData.Name == invItem.GetComponent<Item>()._itemData.Name)
+				if(PrefabLibrary.ItemPrefabID[itemID].GetComponent<Item>().ItemData.Name == invItem.GetComponent<Item>().ItemData.Name)
 				{
 					GameData.PlayerItems[arrayIndex] = itemID;
-					GameData.PlayerItemAmounts[arrayIndex] = player.InventoryMngr._collectedItems[invItem];
+					GameData.PlayerItemAmounts[arrayIndex] = player.InventoryMngr.CollectedItems[invItem];
 					break;
 				}
 			}

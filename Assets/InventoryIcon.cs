@@ -12,13 +12,13 @@ public class InventoryIcon : MonoBehaviour
 		switch(IconType)
 		{
 			case ICONTYPE.ItemSlot:
-				if(transform.GetSiblingIndex() <= PlayerController.Instance.InventoryMngr._collectedItems.Count)
-					PlayerController.Instance.InventoryMngr._selectedInvSlot = transform.GetSiblingIndex();
+				if(transform.GetSiblingIndex() <= PlayerController.Instance.InventoryMngr.CollectedItems.Count)
+					PlayerController.Instance.InventoryMngr.SelectedInvSlot = transform.GetSiblingIndex();
 				break;
 			
 			case ICONTYPE.HotbarButton:
-				if(PlayerController.Instance.InventoryMngr._selectedInvSlot >= 0 && PlayerController.Instance.InventoryMngr._selectedInvSlot < PlayerController.Instance.InventoryMngr._collectedItems.Count)
-					PlayerController.Instance.InventoryMngr.AssignHotbarItem(transform.GetSiblingIndex());
+				if(PlayerController.Instance.InventoryMngr.SelectedInvSlot >= 0 && PlayerController.Instance.InventoryMngr.SelectedInvSlot < PlayerController.Instance.InventoryMngr.CollectedItems.Count)
+					PlayerController.Instance.InventoryMngr.AssignHotbarItem(transform.GetSiblingIndex() + 1);
 				break;
 			
 			default:

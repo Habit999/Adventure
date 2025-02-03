@@ -1,0 +1,11 @@
+To-Do:
+
+- Move UI updates out of update function
+
+- Write enemy scripts
+
+- Setup chests and xp with grid system
+
+- Check all scripts for unessaccery code
+
+- Get rid of any .GetChildren / .parent unreliable code

@@ -43,22 +43,22 @@ public class InventoryUI : MonoBehaviour
 			icon.GetChild(0).gameObject.SetActive(false);
 			
 			// Setting selected item
-			if(iconCount == InvManager._selectedInvSlot) icon.gameObject.GetComponent<Image>().color = selectedItemColor;
+			if(iconCount == InvManager.SelectedInvSlot) icon.gameObject.GetComponent<Image>().color = selectedItemColor;
 			else icon.gameObject.GetComponent<Image>().color = unselectedItemColor;
 			iconCount++;
 		}
 		int invItemCount = 0;
-		for(int i = 0; i < InvManager._itemSlotCount; i++)
+		for(int i = 0; i < InvManager.AvailableItemSlots; i++)
 		{
 			int itemIndex = 0;
 			_itemIcons[i].gameObject.SetActive(true);
-			foreach(GameObject invItem in InvManager._collectedItems.Keys)
+			foreach(GameObject invItem in InvManager.CollectedItems.Keys)
 			{
 				// Enabling active slots and setting item images
 				if(itemIndex == invItemCount)
 				{
 					_itemIcons[i].GetChild(0).gameObject.SetActive(true);
-					_itemIcons[i].GetChild(0).gameObject.GetComponent<Image>().sprite = invItem.GetComponent<Item>()._itemData.Image;
+					_itemIcons[i].GetChild(0).gameObject.GetComponent<Image>().sprite = invItem.GetComponent<Item>().ItemData.Image;
 					invItemCount++;
 					break;
 				}

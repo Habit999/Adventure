@@ -5,7 +5,7 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
 	[System.Serializable]
-	public struct ItemData
+	public struct ItemDataStructure
 	{
 		public enum TYPE {Weapon, Consumable, Experience}
 		public TYPE Type;
@@ -16,34 +16,35 @@ public class Item : MonoBehaviour
 		
 		public int MaxItemStack;
 	}
-	public ItemData _itemData = new ItemData();
+	public ItemDataStructure ItemData = new ItemDataStructure();
+
 	
 	[Space(10)]
-	public string _animatorTriggerName;
+	public string AnimatorTriggerName;
 	
 	[Space(10)]
-	public float _damage;
-	public float _healthRecovery;
-	public float _manaRecovery;
+	public float Damage;
+	public float HealthRecovery;
+	public float ManaRecovery;
 	
 	[Space(10)]
-	public SkillsManager.SkillsList _minimumStatsRequirements = new SkillsManager.SkillsList(1, 1, 1);
+	public SkillsManager.SkillsList MinimumStatsRequirements = new SkillsManager.SkillsList(1, 1, 1);
 	
 	public float GetRandomExperience { get { return Random.Range(5, 10); } }
 	
 	public bool CollectItem()
 	{
-		switch(_itemData.Type)
+		switch(ItemData.Type)
 		{
-			case ItemData.TYPE.Weapon:
+			case ItemDataStructure.TYPE.Weapon:
 				print("Item Collected");
 				return PlayerController.Instance.InventoryMngr.AddItem(this.gameObject, 1);
 				
-			case ItemData.TYPE.Consumable:
+			case ItemDataStructure.TYPE.Consumable:
 				print("Item Collected");
 				return PlayerController.Instance.InventoryMngr.AddItem(this.gameObject, 1);
 				
-			case ItemData.TYPE.Experience:
+			case ItemDataStructure.TYPE.Experience:
 				PlayerController.Instance.SkillsMngr.AddExperience(GetRandomExperience);
 				return true;
 				
@@ -55,14 +56,14 @@ public class Item : MonoBehaviour
 	
 	public bool UseItem()
 	{
-		switch(_itemData.Type)
+		switch(ItemData.Type)
 		{
-			case ItemData.TYPE.Weapon:
+			case ItemDataStructure.TYPE.Weapon:
 				PlayerController.Instance.CombatMngr.SwingWeapon();
 				return true;
 				
-			case ItemData.TYPE.Consumable:
-				PlayerController.Instance.HealPlayer(_healthRecovery, _manaRecovery);
+			case ItemDataStructure.TYPE.Consumable:
+				PlayerController.Instance.HealPlayer(HealthRecovery, ManaRecovery);
 				return true;
 				
 			default:

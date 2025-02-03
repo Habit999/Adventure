@@ -36,7 +36,6 @@ public class SpawnManager : MonoBehaviour
 					if(countIndex == randomIndex)
 					{
 						GameObject lootInstance = Instantiate(lootPrf, Vector3.zero, Quaternion.identity);
-						lootInstance.SetActive(false);
 						return lootInstance;
 					}
 					else countIndex++;
@@ -47,7 +46,7 @@ public class SpawnManager : MonoBehaviour
 				List<GameObject> weaponTypes = new List<GameObject>();
 				foreach(GameObject lootPrf in lootPrefabs)
 				{
-					if(lootPrf.GetComponent<Item>()._itemData.Type == Item.ItemData.TYPE.Weapon)
+					if(lootPrf.GetComponent<Item>().ItemData.Type == Item.ItemDataStructure.TYPE.Weapon)
 					{
 						weaponTypes.Add(lootPrf);
 					}
@@ -58,7 +57,6 @@ public class SpawnManager : MonoBehaviour
 					if(countIndex == randomIndex)
 					{
 						GameObject lootInstance = Instantiate(weaponPrf, Vector3.zero, Quaternion.identity);
-						lootInstance.SetActive(false);
 						return lootInstance;
 					}
 					else countIndex++;
@@ -69,7 +67,7 @@ public class SpawnManager : MonoBehaviour
 				List<GameObject> consumableTypes = new List<GameObject>();
 				foreach(GameObject lootPrf in lootPrefabs)
 				{
-					if(lootPrf.GetComponent<Item>()._itemData.Type == Item.ItemData.TYPE.Consumable)
+					if(lootPrf.GetComponent<Item>().ItemData.Type == Item.ItemDataStructure.TYPE.Consumable)
 					{
 						consumableTypes.Add(lootPrf);
 					}
@@ -80,7 +78,6 @@ public class SpawnManager : MonoBehaviour
 					if(countIndex == randomIndex)
 					{
 						GameObject lootInstance = Instantiate(consumablePrf, Vector3.zero, Quaternion.identity);
-						lootInstance.SetActive(false);
 						return lootInstance;
 					}
 					else countIndex++;
