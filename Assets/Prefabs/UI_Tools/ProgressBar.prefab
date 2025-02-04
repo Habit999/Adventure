@@ -32,10 +32,10 @@ RectTransform:
   - {fileID: 6060708466250428979}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -1600, y: -200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3766864870982763743
 MonoBehaviour:
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 673b71baf78270b48960ace8e2fd172b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _value: 0.5
+  Value: 0
   backgroundBar: {fileID: 6060708466250428979}
   progressionBar: {fileID: 8998439449942799520}
   topOffset: 0
@@ -87,11 +87,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 6060708466250428979}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 30, y: 50}
-  m_Pivot: {x: 0.5, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1370577018286683074
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -160,10 +160,10 @@ RectTransform:
   - {fileID: 8998439449942799520}
   m_Father: {fileID: 1472995382468490289}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 30, y: 200}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7068233603018461248
 CanvasRenderer:

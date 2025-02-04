@@ -1,6 +1,6 @@
 To-Do:
 
-- Move UI updates out of update function
+- Inventory not scaled right
 
 - Write enemy scripts
 
