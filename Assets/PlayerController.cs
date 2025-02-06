@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,9 @@ public class PlayerController : MonoBehaviour
     public SkillsManager SkillsMngr { get { return gameObject.GetComponent<SkillsManager>(); } }
 
     public CombatManager CombatMngr { get { return damageArea.GetComponent<CombatManager>(); } }
+
+    public event Action OnDeath;
+    public event Action OnVanish;
 
     [HideInInspector] public bool IsInDungeon;
 
@@ -66,6 +70,36 @@ public class PlayerController : MonoBehaviour
         mouseY = 0;
     }
 
+    private void Update()
+    {
+        PlayerBehaviour();
+        CheckBodyState();
+    }
+
+    private void FixedUpdate()
+    {
+        rb.AddForce(moveDirection);
+        moveDirection = Vector3.zero;
+    }
+
+    #region Publics
+    public void ApplyExternalForce(Vector3 appliedForce)
+    {
+        moveDirection += appliedForce;
+    }
+
+    public void KillPlayer()
+    {
+        PlayerState = PLAYERSTATE.Dead;
+        OnDeath();
+    }
+
+    public void VanishPlayer()
+    {
+        PlayerState = PLAYERSTATE.Dead;
+        OnVanish();
+    }
+
     public void DamagePlayer(float damage)
     {
         Health -= damage;
@@ -91,17 +125,7 @@ public class PlayerController : MonoBehaviour
         canMove = true;
     }
 
-    private void Update()
-    {
-        PlayerBehaviour();
-        CheckBodyState();
-    }
-
-    private void FixedUpdate()
-    {
-        rb.AddForce(moveDirection);
-        moveDirection = Vector3.zero;
-    }
+    #endregion
 
     private void PlayerBehaviour()
     {

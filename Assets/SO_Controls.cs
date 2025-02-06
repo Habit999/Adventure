@@ -10,6 +10,7 @@ public class SO_Controls : ScriptableObject
 	
 	public int MousePrimary = 0;
 	public int MouseSecondary = 1;
+	public float MouseSensitivity = 1;
 	
 	public KeyCode Forward = KeyCode.W;
 	public KeyCode Backward = KeyCode.S;
@@ -37,8 +38,9 @@ public class SO_Controls : ScriptableObject
 	{
 		MousePrimary = 0;
 		MouseSecondary = 1;
-		
-		Forward = KeyCode.W;
+        MouseSensitivity = 1;
+
+        Forward = KeyCode.W;
 		Backward = KeyCode.S;
 		Left = KeyCode.A;
 		Right = KeyCode.D;

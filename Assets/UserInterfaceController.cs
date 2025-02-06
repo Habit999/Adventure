@@ -12,8 +12,12 @@ public class UserInterfaceController : MonoBehaviour
 
     private List<HotbarSlot> hotbarSpaces = new List<HotbarSlot>();
 
+    private Animator guiAnimator;
+
     private void Start()
     {
+        guiAnimator = GetComponent<Animator>();
+
         foreach(Transform slot in hotbarCollection)
         {
             hotbarSpaces.Add(slot.gameObject.GetComponent<HotbarSlot>());
@@ -25,5 +29,15 @@ public class UserInterfaceController : MonoBehaviour
         hotbarSpaces[ActiveHotbarSlot].ToggleActive(false);
         hotbarSpaces[newTarget].ToggleActive(true);
         ActiveHotbarSlot = newTarget;
+    }
+
+    public void Died()
+    {
+        guiAnimator.SetTrigger("Died");
+    }
+
+    public void Vanished()
+    {
+        guiAnimator.SetTrigger("Vanished");
     }
 }

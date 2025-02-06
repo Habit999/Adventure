@@ -436,7 +436,8 @@ GameObject:
   - component: {fileID: 3296375011072242749}
   - component: {fileID: 3262189669786413659}
   - component: {fileID: 4535908132418365451}
-  m_Layer: 0
+  - component: {fileID: 596304459738358366}
+  m_Layer: 3
   m_Name: Player_DemonHunter
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -497,9 +498,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4ae108078624c4585210a3def78d75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectInView: {fileID: 0}
-  _objectPresent: 0
-  _interactionDistance: 2
+  ObjectInView: {fileID: 0}
+  ObjectPresent: 0
+  InteractionDistance: 2
 --- !u!114 &4055824760635202867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -512,9 +513,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2f832467db207f4d992be2153f846fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemSlotCount: 4
-  _selectedInvSlot: 0
-  _equippedItem: {fileID: 0}
+  AvailableItemSlots: 4
+  SelectedInvSlot: 0
+  EquippedItem: {fileID: 0}
   rightHandSpot: {fileID: 5020995149499430937}
 --- !u!114 &3296375011072242749
 MonoBehaviour:
@@ -592,6 +593,22 @@ CapsuleCollider:
   m_Height: 2.4
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!208 &596304459738358366
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7343080708152209228}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.0005, y: 0.0005, z: 0.0005}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &7515552356548293980
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,11 +9,21 @@ public class UserInterfaceMediator : MonoBehaviour
 
     private void OnEnable()
     {
-        playerController.InteractionMngr.OnSwitchHotbar += userInterfaceController.ChangeActiveHotbar;
+        if(playerController != null)
+        {
+            playerController.InteractionMngr.OnSwitchHotbar += userInterfaceController.ChangeActiveHotbar;
+            playerController.OnVanish += userInterfaceController.Vanished;
+            playerController.OnDeath += userInterfaceController.Died;
+        }
     }
 
     private void OnDisable()
     {
-        playerController.InteractionMngr.OnSwitchHotbar -= userInterfaceController.ChangeActiveHotbar;
+        if(playerController != null)
+        {
+            playerController.InteractionMngr.OnSwitchHotbar -= userInterfaceController.ChangeActiveHotbar;
+            playerController.OnVanish += userInterfaceController.Vanished;
+            playerController.OnDeath += userInterfaceController.Died;
+        }
     }
 }

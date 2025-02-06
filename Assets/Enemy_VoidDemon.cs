@@ -1,0 +1,72 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Enemy_VoidDemon : Enemy
+{
+    [Space(5)]
+    [SerializeField] private float gravityForce;
+
+    private SphereCollider sphereCollider;
+
+    private PlayerController playerController;
+
+    private void Start()
+    {
+        sphereCollider = GetComponent<SphereCollider>();
+    }
+
+    private void OnTriggerStay(Collider trigger)
+    {
+        if (trigger.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            playerController = trigger.gameObject.GetComponent<PlayerController>();
+            if (CheckObstacles(trigger.gameObject))
+            {
+                // Checks if players within the threshold
+                if (Vector3.Distance(trigger.transform.position, transform.position) <= sphereCollider.radius)
+                {
+                    ApplyGravity(trigger.gameObject);
+                }
+            }
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            playerController.VanishPlayer();
+        }
+    }
+
+    private bool CheckObstacles(GameObject target)
+    {
+        Vector3 playerDirection = target.transform.position - transform.position;
+        if (Physics.Raycast(transform.position, playerDirection, out RaycastHit hit, sphereCollider.radius))
+        {
+            if (hit.collider.gameObject == target)
+            {
+                return true;
+            }
+            else return false;
+        }
+        else return false;
+    }
+
+    private void ApplyGravity(GameObject player)
+    {
+        float force = CalculateForce(player.transform);
+        Vector3 directionalForce = (transform.position - player.transform.position).normalized * force;
+        playerController.ApplyExternalForce(directionalForce);
+    }
+
+    private float CalculateForce(Transform target)
+    {
+        float playerDistance = Vector3.Distance(target.position, transform.position);
+        float distanceInRange = playerDistance / sphereCollider.radius;
+        float flippedPercentage = 1 - distanceInRange;
+        print(flippedPercentage);
+        return gravityForce * flippedPercentage;
+    }
+}
