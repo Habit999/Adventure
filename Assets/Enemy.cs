@@ -8,18 +8,18 @@ public class Enemy : MonoBehaviour
     public enum EnemyState { Roaming, Targeting, Fleeing, Hiding };
     public EnemyState CurrentState;
 
-	private Vector3 movePoint;
+	protected Vector3 movePoint;
 
-    [SerializeField] private float roamingSpeed = 3.5f;
-    [SerializeField] private float roamingRotationSpeed = 120;
+    [SerializeField] protected float roamingSpeed = 3.5f;
+    [SerializeField] protected float roamingRotationSpeed = 120;
 
     [Space(5)]
 
-	[SerializeField] private float randomLocationRange = 170;
+	[SerializeField] protected float randomLocationRange = 170;
 
-	private NavMeshAgent navAgent;
+	protected NavMeshAgent navAgent;
 
-    private bool hasDestination;
+    protected bool hasDestination;
 
     protected virtual void Awake()
     {

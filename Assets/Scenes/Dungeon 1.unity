@@ -32148,6 +32148,7 @@ GameObject:
   - component: {fileID: 754633654246407600}
   - component: {fileID: 1192683183146394116}
   - component: {fileID: 2229683108739814044}
+  - component: {fileID: 4321332865134927248}
   m_Layer: 0
   m_Name: Plane.003
   m_TagString: Untagged
@@ -32155,6 +32156,25 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &4321332865134927248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4321332865134927247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!33 &4563802966582760012
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -32450,6 +32470,7 @@ GameObject:
   - component: {fileID: 7564928131401531064}
   - component: {fileID: 261458418366483321}
   - component: {fileID: 2801092615777701579}
+  - component: {fileID: 8823566581143593113}
   m_Layer: 0
   m_Name: Plane.004
   m_TagString: Untagged
@@ -32457,6 +32478,25 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8823566581143593113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8823566581143593112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &9164521345770262588
 GameObject:
   m_ObjectHideFlags: 0

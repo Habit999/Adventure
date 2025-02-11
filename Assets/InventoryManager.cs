@@ -55,8 +55,8 @@ public class InventoryManager : MonoBehaviour
 			HotbarItemOrder[CollectedItems.Keys.ElementAt(SelectedInvSlot)] = position;
 		else HotbarItemOrder.Add(CollectedItems.Keys.ElementAt(SelectedInvSlot), position);
 	}
-	
-	public void EquipItem()
+
+    public void EquipItem()
 	{
 		//UserInterfaceController controllerUI = UserInterfaceController.Instance;
 		/*if(UserInterfaceController.ActiveHotbarSlot > 0 && UserInterfaceController.ActiveHotbarSlot <= UserInterfaceController.MaxActionKeysInRow)
@@ -93,29 +93,6 @@ public class InventoryManager : MonoBehaviour
 				EquippedItem = null;
 			}
 		}*/
-
-		void RemoveItemFromHand()
-		{
-            EquippedItem.SetActive(false);
-			EquippedItem.transform.parent = null;
-            EquippedItem = null;
-        }
-
-		void AddItemToHand()
-		{
-			foreach(GameObject item in HotbarItemOrder.Keys)
-			{
-				if(HotbarItemOrder[item] == UserInterfaceController.ActiveHotbarSlot)
-				{
-					EquippedItem = item;
-					item.transform.parent = rightHandSpot;
-					item.transform.localPosition = Vector3.zero;
-					item.transform.localRotation = Quaternion.identity;
-					item.SetActive(true);
-					break;
-				}
-			}
-		}
 
 		if(UserInterfaceController.ActiveHotbarSlot == 0)
 		{
@@ -156,7 +133,7 @@ public class InventoryManager : MonoBehaviour
 	}
 	
 	// Remove item from collected inventory
-	public void RemoveItem(GameObject item, int amount)
+	public GameObject RemoveItem(GameObject item, int amount)
 	{
 		foreach(GameObject invItem in CollectedItems.Keys)
 		{
@@ -165,18 +142,18 @@ public class InventoryManager : MonoBehaviour
 				if(CollectedItems[item] - amount > 0)
 				{
 					CollectedItems[item] -= amount;
-					break;
+					return item;
 				}
 				else if(CollectedItems[item] - amount == 0)
 				{
 					CollectedItems.Remove(item);
 					HotbarItemOrder.Remove(item);
-					if(item == EquippedItem) Destroy(item);
-					EquippedItem = null;
-					break;
+					if(item == EquippedItem) RemoveItemFromHand();
+					return item;
 				}
 			}
 		}
+		return null;
 	}
 	
 	void UpdateInventoryStats()
@@ -199,4 +176,27 @@ public class InventoryManager : MonoBehaviour
 			AvailableItemSlots = 16;
 		}
 	}
+
+    private void RemoveItemFromHand()
+    {
+        EquippedItem.SetActive(false);
+        EquippedItem.transform.parent = null;
+        EquippedItem = null;
+    }
+
+    private void AddItemToHand()
+    {
+        foreach (GameObject item in HotbarItemOrder.Keys)
+        {
+            if (HotbarItemOrder[item] == UserInterfaceController.ActiveHotbarSlot)
+            {
+                EquippedItem = item;
+                item.transform.parent = rightHandSpot;
+                item.transform.localPosition = Vector3.zero;
+                item.transform.localRotation = Quaternion.identity;
+                item.SetActive(true);
+                break;
+            }
+        }
+    }
 }

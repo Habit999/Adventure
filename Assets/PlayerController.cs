@@ -83,6 +83,7 @@ public class PlayerController : MonoBehaviour
     }
 
     #region Publics
+
     public void ApplyExternalForce(Vector3 appliedForce)
     {
         moveDirection += appliedForce;
