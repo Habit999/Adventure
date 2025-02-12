@@ -8,6 +8,11 @@ public class Enemy_ThiefDemon : Enemy
     [Space(5)]
     [SerializeField] private float targetingSpeed;
     [SerializeField] private float targetingRotationSpeed;
+    [SerializeField] private float fleeingSpeed;
+    [SerializeField] private float fleeingRotationSpeed;
+
+    [Space(5)]
+    [SerializeField] private float timeToExitFlee;
 
     [Space(5)]
     [SerializeField] private float distanceToSteal;
@@ -24,6 +29,8 @@ public class Enemy_ThiefDemon : Enemy
 
     private GameObject stolenItem;
 
+    private float fleeExitTimer;
+
     private bool isInRange;
     private bool isInView;
 
@@ -32,6 +39,8 @@ public class Enemy_ThiefDemon : Enemy
         base.Awake();
 
         sphereCollider = GetComponent<SphereCollider>();
+
+        fleeExitTimer = timeToExitFlee;
 
         isInRange = false;
         isInView = false;
@@ -62,7 +71,7 @@ public class Enemy_ThiefDemon : Enemy
     {
         base.Roaming();
 
-        if(isInView ) SwitchState(EnemyState.Targeting);
+        if(isInView) SwitchState(EnemyState.Targeting);
     }
 
     private void Targeting()
@@ -81,7 +90,31 @@ public class Enemy_ThiefDemon : Enemy
 
     private void Fleeing()
     {
+        if (!hasDestination)
+        {
+            if (!GenerateRandomNavLocation())
+            {
+                fleeExitTimer = timeToExitFlee;
+                return;
+            }
+        }
+        if (isInView)
+        {
+            if (!GenerateRandomNavLocation())
+            {
+                fleeExitTimer = timeToExitFlee;
+                return;
+            }
+        }
 
+        fleeExitTimer -= Time.deltaTime;
+
+        navAgent.SetDestination(movePoint);
+
+        if(fleeExitTimer <= 0)
+        {
+            SwitchState(EnemyState.Roaming);
+        }
     }
 
     private void EquipStolenItem()
@@ -101,12 +134,11 @@ public class Enemy_ThiefDemon : Enemy
                 if(hit.collider.transform == playerTarget)
                 {
                     isInView = true;
+                    return;
                 }
-                else isInView = false;
             }
-            else isInView = false;
         }
-        else isInView = false;
+        isInView = false;
     }
 
     protected override void CheckSpeed()
@@ -121,6 +153,11 @@ public class Enemy_ThiefDemon : Enemy
             case EnemyState.Targeting:
                 navAgent.speed = targetingSpeed;
                 navAgent.angularSpeed = targetingRotationSpeed;
+                break;
+
+            case EnemyState.Fleeing:
+                navAgent.speed = fleeingSpeed;
+                navAgent.angularSpeed = fleeingRotationSpeed;
                 break;
 
             default:

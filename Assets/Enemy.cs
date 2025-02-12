@@ -53,12 +53,7 @@ public class Enemy : MonoBehaviour
         // Find random location to roam to
         if(!hasDestination)
         {
-            if (GenerateRandomNavLocation(out Vector3 result))
-            {
-                movePoint = result;
-                hasDestination = true;
-            }
-            else return;
+            if (!GenerateRandomNavLocation()) return;
         }
 
         navAgent.SetDestination(movePoint);
@@ -73,6 +68,7 @@ public class Enemy : MonoBehaviour
     protected virtual void SwitchState(EnemyState newState)
     {
         CheckSpeed();
+        hasDestination = false;
         CurrentState = newState;
     }
 
@@ -90,16 +86,16 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private bool GenerateRandomNavLocation(out Vector3 returnLocation)
+    protected bool GenerateRandomNavLocation()
     {
         Vector3 randomPosition = transform.position + Random.insideUnitSphere * randomLocationRange;
         if(NavMesh.SamplePosition(randomPosition, out NavMeshHit hitData, 100, NavMesh.AllAreas))
         {
-            returnLocation = hitData.position;
-            return true;
+            movePoint = hitData.position;
+            return hasDestination = true;
         }
-        returnLocation = Vector3.zero;
-        return false;
+        movePoint = Vector3.zero;
+        return hasDestination = false;
     }
     private void OnDrawGizmos()
     {
