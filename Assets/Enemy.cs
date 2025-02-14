@@ -15,7 +15,12 @@ public class Enemy : MonoBehaviour
 
     [Space(5)]
 
-	[SerializeField] protected float randomLocationRange = 170;
+	[SerializeField] protected float randomLocationRange;
+	[SerializeField] protected int validPositionAttempts;
+
+    [Space(5)]
+
+    [SerializeField] protected float destinationStopDistance;
 
 	protected NavMeshAgent navAgent;
 
@@ -59,7 +64,7 @@ public class Enemy : MonoBehaviour
         navAgent.SetDestination(movePoint);
 
         // Reached destination?
-        if(transform.position.x == movePoint.x && transform.position.z == movePoint.z)
+        if(!navAgent.pathPending && navAgent.remainingDistance <= destinationStopDistance)
         {
             hasDestination = false;
         }
@@ -86,16 +91,26 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    [ContextMenu("GeneratePoint")]
     protected bool GenerateRandomNavLocation()
     {
-        Vector3 randomPosition = transform.position + Random.insideUnitSphere * randomLocationRange;
-        if(NavMesh.SamplePosition(randomPosition, out NavMeshHit hitData, 100, NavMesh.AllAreas))
+        Vector3 randomPosition = transform.position + Random.insideUnitSphere * Random.Range(10, randomLocationRange);
+        NavMeshHit hitData;
+
+        for (int i = 0; i < validPositionAttempts; i++)
         {
-            movePoint = hitData.position;
-            return hasDestination = true;
+            if (NavMesh.SamplePosition(randomPosition, out hitData, 10, NavMesh.AllAreas))
+            {
+                movePoint = hitData.position;
+                return hasDestination = true;
+            }
+            else
+            {
+                randomPosition = transform.position + Random.insideUnitSphere * Random.Range(10, randomLocationRange);
+            }
         }
-        movePoint = Vector3.zero;
-        return hasDestination = false;
+   
+        return hasDestination = true;
     }
     private void OnDrawGizmos()
     {

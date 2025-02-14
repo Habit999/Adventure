@@ -91,7 +91,7 @@ public class Enemy_ThiefDemon : Enemy
         }
 
         // Is player looking this way?
-        if(Vector3.Dot(playerTarget.transform.forward, transform.position - playerTarget.transform.position) > playerCanSeeRange)
+        if(Vector3.Dot(playerTarget.transform.forward, (transform.position - playerTarget.transform.position).normalized) > playerCanSeeRange)
         {
             SwitchState(EnemyState.Fleeing);
         }
@@ -109,11 +109,7 @@ public class Enemy_ThiefDemon : Enemy
         }
         if (isInView)
         {
-            if (!GenerateRandomNavLocation())
-            {
-                fleeExitTimer = timeToExitFlee;
-                return;
-            }
+            fleeExitTimer = timeToExitFlee;
         }
 
         fleeExitTimer -= Time.deltaTime;
@@ -138,15 +134,11 @@ public class Enemy_ThiefDemon : Enemy
         Vector3 playerDirection = (playerTarget.transform.position - transform.position).normalized;
         if(Vector3.Dot(transform.forward, playerDirection) >= fieldOfViewRange)
         {
-            print(4);
             if (Physics.Raycast(transform.position, playerDirection, out RaycastHit hit, sphereCollider.radius))
             {
-                print(5);
 
                 if (hit.collider.transform == playerTarget.transform)
                 {
-                    print(6);
-
                     isInView = true;
                     return;
                 }
@@ -185,7 +177,6 @@ public class Enemy_ThiefDemon : Enemy
         {
             isInRange = true;
             if(playerTarget == null) playerTarget = enterTrigger.gameObject.GetComponent<PlayerController>();
-            print(1);
         }
     }
 
@@ -194,7 +185,6 @@ public class Enemy_ThiefDemon : Enemy
         if (isInRange)
         {
             CheckPlayerInView();
-            print(2);
         }
     }
 
@@ -204,7 +194,6 @@ public class Enemy_ThiefDemon : Enemy
         {
             isInRange = false;
             isInView = false;
-            print(3);
         }
     }
 }
