@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChestSpawnPoint : IInteractable
+public class TreasureChest : IInteractable
 {	
-	public bool WillSpawn;
+
+	/*public bool WillSpawn;
 	
 	[Space(5)]
 	
@@ -88,5 +89,5 @@ public class ChestSpawnPoint : IInteractable
 		Gizmos.DrawLine(chestModel.position, chestModel.position + -chestModel.right);
 	}
 	
-	#endif
+	#endif*/
 }

@@ -1,11 +1,59 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
+	public event Action OnSpawnChestLoot;
+
+	[SerializeField] private SO_LevelSpawnData spawnData;
+
+	[SerializeField] private CustomGrid targetGrid;
+
+	private List<TreasureChest> treasureChests = new List<TreasureChest>();
+	private HashSet<TreasureChest> spawnedChests = new HashSet<TreasureChest>();
+
+    private int chestsToSpawn;
+
+    private void Awake()
+    {
+        chestsToSpawn = spawnData.MaxChestsInLevel;
+    }
+    private void SelectLootInGrid()
+	{
+		foreach(var entity in targetGrid.GridData.OccupantPrefabs)
+		{
+			if(entity.GetComponent<TreasureChest>() != null)
+			{
+                treasureChests.Add(entity.GetComponent<TreasureChest>());
+            }
+		}
+	}
+
+	private void SpawnRandomChests()
+	{
+		int randomIndex = UnityEngine.Random.Range(0, treasureChests.Count - 1);
+		if (!spawnedChests.Contains(treasureChests[randomIndex]))
+		{
+			spawnedChests.Add(treasureChests[randomIndex]);
+			chestsToSpawn--;
+        }
+
+		if (chestsToSpawn > 0) SpawnRandomChests();
+		else
+		{
+			foreach(var chest in spawnedChests)
+			{
+                
+            }
+		}
+    }
+
+
+    /*
 	public static SpawnManager Instance;
-	
+
 	public enum RANDOMLOOTTYPE { Any, Weapon, Consumable };
 	
 	public SO_LevelSpawnData _levelSpawnData;
@@ -153,5 +201,5 @@ public class SpawnManager : MonoBehaviour
 		yield return new WaitForSeconds(0.01f);
 		if(chestCount > 0 && experienceCount > 0) StartCoroutine(SpawnLootRoutine(chestCount, experienceCount));
 		else SpawnLevelLoot();
-	}
+	}*/
 }

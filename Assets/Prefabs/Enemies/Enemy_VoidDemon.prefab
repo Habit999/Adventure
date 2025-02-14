@@ -51,7 +51,9 @@ MonoBehaviour:
   CurrentState: 0
   roamingSpeed: 3.5
   roamingRotationSpeed: 120
-  randomLocationRange: 170
+  randomLocationRange: 50
+  validPositionAttempts: 10
+  destinationStopDistance: 1
   gravityForce: 50
 --- !u!195 &2026596716541910812
 NavMeshAgent:

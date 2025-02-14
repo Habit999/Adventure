@@ -49,7 +49,7 @@ public class GridCell : MonoBehaviour
 	{
 		if(_occupantPrefab != null)
 		{
-			if(!_connectedGrid._enableEditorTools)
+			if(!_connectedGrid.EnableEditorTools)
 			{
 				if(_activeOccupant != null) Destroy(_activeOccupant);
 			}

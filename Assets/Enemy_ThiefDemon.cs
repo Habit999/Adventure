@@ -84,9 +84,7 @@ public class Enemy_ThiefDemon : Enemy
         // Close enough to steal?
         if(Vector3.Distance(transform.position, playerTarget.transform.position) <= distanceToSteal)
         {
-            int randomItem = Random.Range(0, playerTarget.InventoryMngr.CollectedItems.Count - 1);
-            stolenItem = playerTarget.InventoryMngr.RemoveItem(playerTarget.InventoryMngr.CollectedItems.Keys.ElementAt(randomItem), 1);
-            EquipStolenItem();
+            if(StealItem()) EquipStolenItem();
             SwitchState(EnemyState.Fleeing);
         }
 
@@ -120,6 +118,17 @@ public class Enemy_ThiefDemon : Enemy
         {
             SwitchState(EnemyState.Roaming);
         }
+    }
+
+    private bool StealItem()
+    {
+        if (playerTarget.InventoryMngr.CollectedItems.Count > 0)
+        {
+            int randomItem = Random.Range(0, playerTarget.InventoryMngr.CollectedItems.Count - 1);
+            stolenItem = playerTarget.InventoryMngr.RemoveItem(playerTarget.InventoryMngr.CollectedItems.Keys.ElementAt(randomItem), 1);
+            return true;
+        }
+        else return false;
     }
 
     private void EquipStolenItem()

@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using System;
-using System.IO;
 
 [CustomEditor(typeof(CustomGrid))]
 public class E_CustomGrid : Editor
@@ -21,25 +19,25 @@ public class E_CustomGrid : Editor
 		
 		if(targetGrid != null)
 		{
-			string editorModeState = targetGrid._enableEditorTools ? "Disable" : "Enable";
+			string editorModeState = targetGrid.EnableEditorTools ? "Disable" : "Enable";
 			if(GUILayout.Button($"{editorModeState} Editor Tools"))
 			{
 				// Disable & Destroy Preview Grid
-				if(targetGrid._gridPreviewToggled) targetGrid.TogglePreviewGrid();
+				if(targetGrid.GridPreviewToggled) targetGrid.TogglePreviewGrid();
 				
-				targetGrid._enableEditorTools = !targetGrid._enableEditorTools;
+				targetGrid.EnableEditorTools = !targetGrid.EnableEditorTools;
 			}
 			
 			EditorGUILayout.Space(10);
 		
-			if(targetGrid._enableEditorTools)
+			if(targetGrid.EnableEditorTools)
 			{
 				if(GUILayout.Button("Generate New Grid"))
 				{
 					targetGrid.GenerateGrid();
 				}
 				
-				if(targetGrid.GeneratedData._spawnedCells != null)
+				if(targetGrid.GeneratedData.SpawnedCells != null)
 				{
 					if(GUILayout.Button("Update Grid From Cell Data"))
 					{
@@ -49,17 +47,17 @@ public class E_CustomGrid : Editor
 				
 				EditorGUILayout.Space(5);
 				
-				if(targetGrid._generationComplete)
+				if(targetGrid.GenerationComplete)
 				{
-					string gizmosActive = targetGrid._showGrid ? "Active" : "Inactive";
+					string gizmosActive = targetGrid.ShowGrid ? "Active" : "Inactive";
 					GUILayout.Label($"Grid Gizmos : {gizmosActive}");
 									
 					if(GUILayout.Button("Toggle Grid Gizmos"))
 					{
-						targetGrid._showGrid = !targetGrid._showGrid;
+						targetGrid.ShowGrid = !targetGrid.ShowGrid;
 					}
 					
-					string previewActive = targetGrid._gridPreviewToggled ? "Active" : "Inactive";
+					string previewActive = targetGrid.GridPreviewToggled ? "Active" : "Inactive";
 					GUILayout.Label($"Grid Preview : {previewActive}");
 					
 					if(GUILayout.Button("Toggle Preview Grid"))
@@ -67,9 +65,9 @@ public class E_CustomGrid : Editor
 						targetGrid.TogglePreviewGrid();
 					}
 					
-					if(targetGrid._gridPreviewToggled)
+					if(targetGrid.GridPreviewToggled)
 					{
-						string occupantsActive = targetGrid._cellOccupantsToggled ? "Active" : "Inactive";
+						string occupantsActive = targetGrid.CellOccupantsToggled ? "Active" : "Inactive";
 						GUILayout.Label($"Cell Occupants : {occupantsActive}");
 						
 						if(GUILayout.Button("Toggle Cell Occupants"))
@@ -80,14 +78,14 @@ public class E_CustomGrid : Editor
 					
 					EditorGUILayout.Space(20);
 					
-					if(GUILayout.Button("Save Grid Data"))
+					if(targetGrid.GridData != null)
 					{
-						targetGrid.SaveGridData();
-					}
-					
-					if(File.Exists(targetGrid.GridDataPath))
-					{
-						if(GUILayout.Button("Load Grid Data"))
+                        if (GUILayout.Button("Save Grid Data"))
+                        {
+                            targetGrid.SaveGridData();
+                        }
+
+                        if (GUILayout.Button("Load Grid Data"))
 						{
 							targetGrid.GenerateGrid();
 							targetGrid.LoadGridData();

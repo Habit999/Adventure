@@ -44,76 +44,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6310c3b03a8296c4ead551692e35971c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gridData:
-    lengthX: 5
-    lengthZ: 5
-    spacing: 1
-    offsetX: 0
-    offsetZ: 0
-    isCellActive: 00000000000000000000000000000000000000000101010101
-    occupantPrefabIDs: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-    occupantPositions:
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    occupantEulerAngles:
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 0}
-  _gridCellPrefab: {fileID: 5078177872939564257, guid: 0efd7b7cb72d3db44b8af2d2afcc8079, type: 3}
+  GridData: {fileID: 11400000, guid: 5ac3bfb39696c69478f926113aed5ed4, type: 2}
+  GridCellPrefab: {fileID: 5078177872939564257, guid: 0efd7b7cb72d3db44b8af2d2afcc8079, type: 3}
   prefabLibrary: {fileID: 11400000, guid: d55c67db4e341b946bb6d5cbf5c49c67, type: 2}
-  _gridLengthX: 5
-  _gridLengthZ: 5
-  _cellSpacing: 1
-  _cellOffsetX: 0
-  _cellOffsetZ: 0
-  _generationComplete: 1
-  _cellsSpawned: 1
-  _enableEditorTools: 0
-  _isGridActive: 0
-  _showGrid: 1
-  _gridPreviewToggled: 0
+  GridLengthX: 0
+  GridLengthZ: 0
+  CellSpacing: 0
+  CellOffsetX: 0
+  CellOffsetZ: 0
+  GenerationComplete: 0
+  CellsSpawned: 0
+  EnableEditorTools: 0
+  IsGridActive: 0
+  ShowGrid: 0
+  GridPreviewToggled: 0
+  CellOccupantsToggled: 0

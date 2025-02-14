@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SO_GridData : MonoBehaviour
+[CreateAssetMenu(fileName = "GridData", menuName = "CustomGrid/GridData")]
+public class SO_GridData : ScriptableObject
 {
     public int LengthX;
     public int LengthZ;
@@ -13,7 +14,7 @@ public class SO_GridData : MonoBehaviour
     public float OffsetZ;
 
     public bool[,] IsCellActive;
-    public int[,] OccupantPrefabs;
+    public GameObject[,] OccupantPrefabs;
     public Vector3[,] OccupantPositions;
     public Vector3[,] OccupantEulerAngles;
 }

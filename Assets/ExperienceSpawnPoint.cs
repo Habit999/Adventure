@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ExperienceSpawnPoint : MonoBehaviour
 {
-	[HideInInspector] public bool _willSpawn;
+	/*[HideInInspector] public bool _willSpawn;
 	
 	[SerializeField] float minRandomAmountRange;
 	[SerializeField] float maxRandomAmountRange;
@@ -45,5 +45,5 @@ public class ExperienceSpawnPoint : MonoBehaviour
 		if(!_willSpawn) return;
 		body.SetActive(true);
 		sphereCollider.enabled = true;
-	}
+	}*/
 }

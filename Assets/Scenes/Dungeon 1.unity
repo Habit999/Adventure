@@ -2120,7 +2120,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4911472505256892790, guid: 813ef44ef36f30046a3055eb2ff18974, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -89
+      value: -89.83
       objectReference: {fileID: 0}
     - target: {fileID: 4911472505256892790, guid: 813ef44ef36f30046a3055eb2ff18974, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2163,12 +2163,32 @@ PrefabInstance:
       value: GridSystem
       objectReference: {fileID: 0}
     - target: {fileID: 7584426653529443797, guid: 813ef44ef36f30046a3055eb2ff18974, type: 3}
+      propertyPath: ShowGrid
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7584426653529443797, guid: 813ef44ef36f30046a3055eb2ff18974, type: 3}
+      propertyPath: CellSpacing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7584426653529443797, guid: 813ef44ef36f30046a3055eb2ff18974, type: 3}
+      propertyPath: GridLengthX
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7584426653529443797, guid: 813ef44ef36f30046a3055eb2ff18974, type: 3}
+      propertyPath: GridLengthZ
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7584426653529443797, guid: 813ef44ef36f30046a3055eb2ff18974, type: 3}
       propertyPath: _gridLengthX
       value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 7584426653529443797, guid: 813ef44ef36f30046a3055eb2ff18974, type: 3}
       propertyPath: _gridLengthZ
       value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 7584426653529443797, guid: 813ef44ef36f30046a3055eb2ff18974, type: 3}
+      propertyPath: EnableEditorTools
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7584426653529443797, guid: 813ef44ef36f30046a3055eb2ff18974, type: 3}
       propertyPath: _gridData.lengthX
@@ -2180,6 +2200,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7584426653529443797, guid: 813ef44ef36f30046a3055eb2ff18974, type: 3}
       propertyPath: _gridData.spacing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7584426653529443797, guid: 813ef44ef36f30046a3055eb2ff18974, type: 3}
+      propertyPath: GenerationComplete
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7584426653529443797, guid: 813ef44ef36f30046a3055eb2ff18974, type: 3}

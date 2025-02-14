@@ -29,7 +29,7 @@ public class InteractionManager : MonoBehaviour
 			}
 			else if(ObjectInView.tag == "Chest")
 			{
-				ObjectInView.GetComponent<ChestSpawnPoint>().OpenChest();
+				//ObjectInView.GetComponent<ChestSpawnPoint>().OpenChest();
 			}
 			else if(ObjectInView.tag == "Exit")
 			{
