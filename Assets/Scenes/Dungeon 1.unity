@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.5
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.26572725, g: 0.27143627, b: 0.25494534, a: 0.5}
+  m_IndirectSpecularColor: {r: 0.31356692, g: 0.349289, b: 0.4094143, a: 0.5}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 5242e9cf91dd32147b9358369bb6f0e5, type: 2}
+  m_LightingDataAsset: {fileID: 112000000, guid: 15e6172fd185e8f449fb16124d965fe9, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -810,7 +810,7 @@ Light:
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1650,7 +1650,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 1572996a9ba0e8d428db69b2976a4a58, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: dd44ac83556214e429e89822d2b95f9e, type: 2}
   m_BuildHeightMesh: 0
 --- !u!4 &1116300896
 Transform:
@@ -2094,7 +2094,7 @@ Light:
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -30296,6 +30296,68 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4689566237813724145, guid: 4bd66ffc441659d4db4fb45c069ef190, type: 3}
   m_PrefabInstance: {fileID: 1372560475}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1392794766
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1730029819}
+    m_Modifications:
+    - target: {fileID: 4422617388777128825, guid: 450200063ce11064f8497a361ce22d85, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 17.63
+      objectReference: {fileID: 0}
+    - target: {fileID: 4422617388777128825, guid: 450200063ce11064f8497a361ce22d85, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 4422617388777128825, guid: 450200063ce11064f8497a361ce22d85, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4422617388777128825, guid: 450200063ce11064f8497a361ce22d85, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4422617388777128825, guid: 450200063ce11064f8497a361ce22d85, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4422617388777128825, guid: 450200063ce11064f8497a361ce22d85, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4422617388777128825, guid: 450200063ce11064f8497a361ce22d85, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4422617388777128825, guid: 450200063ce11064f8497a361ce22d85, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4422617388777128825, guid: 450200063ce11064f8497a361ce22d85, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4422617388777128825, guid: 450200063ce11064f8497a361ce22d85, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6939681071320325907, guid: 450200063ce11064f8497a361ce22d85, type: 3}
+      propertyPath: m_Name
+      value: Enemy_ThiefDemon
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 450200063ce11064f8497a361ce22d85, type: 3}
+--- !u!4 &1392794767 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4422617388777128825, guid: 450200063ce11064f8497a361ce22d85, type: 3}
+  m_PrefabInstance: {fileID: 1392794766}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1424004225
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30863,7 +30925,7 @@ Light:
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -30971,6 +31033,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1836032223531667608}
+  - {fileID: 1392794767}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1745707968
@@ -31895,6 +31958,10 @@ PrefabInstance:
     - target: {fileID: 4871631552089111114, guid: 82aed33adce50284496f8837c24b15f1, type: 3}
       propertyPath: m_Name
       value: Enemy_VoidDemon
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871631552089111114, guid: 82aed33adce50284496f8837c24b15f1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

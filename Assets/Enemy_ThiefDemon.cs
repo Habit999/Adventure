@@ -8,6 +8,8 @@ public class Enemy_ThiefDemon : Enemy
     [Space(5)]
     [SerializeField] private float targetingSpeed;
     [SerializeField] private float targetingRotationSpeed;
+
+    [Space(5)]
     [SerializeField] private float fleeingSpeed;
     [SerializeField] private float fleeingRotationSpeed;
 
@@ -21,7 +23,8 @@ public class Enemy_ThiefDemon : Enemy
     [SerializeField] private Transform hands;
 
     [Space(5)]
-    [SerializeField][Range(-1, 1)] private float fieldOfView;
+    [SerializeField][Range(-1, 1)] private float fieldOfViewRange;
+    [SerializeField][Range(-1, 1)] private float playerCanSeeRange;
 
     private PlayerController playerTarget;
 
@@ -86,6 +89,12 @@ public class Enemy_ThiefDemon : Enemy
             EquipStolenItem();
             SwitchState(EnemyState.Fleeing);
         }
+
+        // Is player looking this way?
+        if(Vector3.Dot(playerTarget.transform.forward, transform.position - playerTarget.transform.position) > playerCanSeeRange)
+        {
+            SwitchState(EnemyState.Fleeing);
+        }
     }
 
     private void Fleeing()
@@ -127,12 +136,17 @@ public class Enemy_ThiefDemon : Enemy
     private void CheckPlayerInView()
     {
         Vector3 playerDirection = (playerTarget.transform.position - transform.position).normalized;
-        if(Vector3.Dot(transform.forward, playerDirection) >= fieldOfView)
+        if(Vector3.Dot(transform.forward, playerDirection) >= fieldOfViewRange)
         {
-            if(Physics.Raycast(transform.position, playerDirection, out RaycastHit hit, sphereCollider.radius))
+            print(4);
+            if (Physics.Raycast(transform.position, playerDirection, out RaycastHit hit, sphereCollider.radius))
             {
-                if(hit.collider.transform == playerTarget)
+                print(5);
+
+                if (hit.collider.transform == playerTarget.transform)
                 {
+                    print(6);
+
                     isInView = true;
                     return;
                 }
@@ -171,6 +185,7 @@ public class Enemy_ThiefDemon : Enemy
         {
             isInRange = true;
             if(playerTarget == null) playerTarget = enterTrigger.gameObject.GetComponent<PlayerController>();
+            print(1);
         }
     }
 
@@ -179,6 +194,7 @@ public class Enemy_ThiefDemon : Enemy
         if (isInRange)
         {
             CheckPlayerInView();
+            print(2);
         }
     }
 
@@ -188,6 +204,7 @@ public class Enemy_ThiefDemon : Enemy
         {
             isInRange = false;
             isInView = false;
+            print(3);
         }
     }
 }
