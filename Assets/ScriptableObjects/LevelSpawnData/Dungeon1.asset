@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxChestsInLevel: 9
   MaxExperienceInLevel: 13
-  MaxMimicsInLevel: 0
-  MaxVoidsInLevel: 0
-  MaxThievesInLevel: 0
+  MaxMimicsInLevel: 1
+  MaxVoidsInLevel: 1
+  MaxThievesInLevel: 1

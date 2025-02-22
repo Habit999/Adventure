@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [CreateAssetMenu(fileName = "GridData", menuName = "CustomGrid/GridData")]
 public class SO_GridData : ScriptableObject
@@ -13,8 +14,8 @@ public class SO_GridData : ScriptableObject
     public float OffsetX;
     public float OffsetZ;
 
-    public bool[,] IsCellActive;
-    public GameObject[,] OccupantPrefabs;
-    public Vector3[,] OccupantPositions;
-    public Vector3[,] OccupantEulerAngles;
+    public List<bool> IsCellActive;
+    public List<GameObject> OccupantPrefabs;
+    public List<Vector3> OccupantPositions;
+    public List<Vector3> OccupantEulerAngles;
 }

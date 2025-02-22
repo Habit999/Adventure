@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class CustomGrid : MonoBehaviour
@@ -46,8 +47,6 @@ public class CustomGrid : MonoBehaviour
 
 	[Space(5)]
 
-	[SerializeField] private bool spawnAllOnStart;
-	
 	[HideInInspector] public bool GenerationComplete;
 	[HideInInspector] public bool CellsSpawned;
 	
@@ -72,10 +71,9 @@ public class CustomGrid : MonoBehaviour
 	{
 		if(GridPreviewToggled) TogglePreviewGrid();
 		
-		GenerateGrid();
 		LoadGridData();
 		
-		if(spawnAllOnStart) SpawnActiveGrid();
+		SpawnActiveGrid();
 	}
 	
 	#region Grid Control
@@ -97,8 +95,9 @@ public class CustomGrid : MonoBehaviour
 			for(int i = 0; i < amountOfChildren; i++)
 			{
 				DestroyImmediate(transform.GetChild(0).gameObject, false);
-			}
-			if(GridPreviewToggled) TogglePreviewGrid();
+                GridPreviewToggled = false;
+                GeneratedData.SpawnedCells = null;
+            }
 		}
 		
 		// Generate layout
@@ -188,7 +187,9 @@ public class CustomGrid : MonoBehaviour
 			SpawnCellOccupants();
 		
 		CellsSpawned = true;
-	}
+
+		OnGridSpawned?.Invoke();
+    }
 	
 	public void TogglePreviewGrid()
 	{
@@ -269,14 +270,17 @@ public class CustomGrid : MonoBehaviour
 	
 	public bool SaveGridData()
 	{
-		if(!GenerationComplete) return false;
+		if (!GenerationComplete)
+		{
+            Debug.LogWarning("Grid generation is not complete. Cannot save data.");
+            return false;
+        }
 
-		if (GridData == null) return false;
-		
-		GridData.IsCellActive = new bool[GridLengthX, GridLengthZ];
-		GridData.OccupantPrefabs = new GameObject[GridLengthX, GridLengthZ];
-		GridData.OccupantPositions = new Vector3[GridLengthX, GridLengthZ];
-		GridData.OccupantEulerAngles = new Vector3[GridLengthX, GridLengthZ];
+		if (GridData == null)
+		{
+            Debug.LogWarning("No grid data assigned. Cannot save data.");
+			return false;
+        }
 		
 		// Store data
 		GridData.LengthX = GridLengthX;
@@ -286,25 +290,35 @@ public class CustomGrid : MonoBehaviour
 		
 		GridData.OffsetX = CellOffsetX;
 		GridData.OffsetZ = CellOffsetZ;
-		
-		for(int x = 0; x < GridLengthX; x++)
+
+        GridData.IsCellActive = new List<bool>();
+        GridData.OccupantPrefabs = new List<GameObject>();
+        GridData.OccupantPositions = new List<Vector3>();
+        GridData.OccupantEulerAngles = new List<Vector3>();
+
+        for (int x = 0; x < GridLengthX; x++)
 		{
 			for(int z = 0; z < GridLengthZ; z++)
 			{
-				GridData.IsCellActive[x, z] = GeneratedData.ActiveCells[x, z];
+				GridData.IsCellActive.Add(GeneratedData.ActiveCells[x, z]);
 
-				GridData.OccupantPrefabs[x, z] = GeneratedData.CellOccupantPrefabs[x, z];
-                GridData.OccupantPositions[x, z] = GeneratedData.CellOccupantPositions[x, z];
-				GridData.OccupantEulerAngles[x, z] = GeneratedData.CellOccupantEulerAngles[x, z];
-			}
+                GridData.OccupantPrefabs.Add(GeneratedData.CellOccupantPrefabs[x, z]);
+                GridData.OccupantPositions.Add(GeneratedData.CellOccupantPositions[x, z]);
+				GridData.OccupantEulerAngles.Add(GeneratedData.CellOccupantEulerAngles[x, z]);
+            }
 		}
-		
-		return true;
+
+        Debug.Log("Grid data saved");
+        return true;
 	}
 	
 	public bool LoadGridData()
 	{
-		if(GridData == null) return false;
+		if(GridData == null)
+		{
+			Debug.Log("No grid data assigned. Cannot load data.");
+            return false;
+        }
 		
 		GridLengthX = GridData.LengthX;
 		GridLengthZ = GridData.LengthZ;
@@ -313,20 +327,26 @@ public class CustomGrid : MonoBehaviour
 		
 		CellOffsetX = GridData.OffsetX;
 		CellOffsetZ = GridData.OffsetZ;
-		
-		for(int x = 0; x < GridLengthX; x++)
+
+        GenerateGrid();
+
+        int dataIndex = 0;
+        for (int x = 0; x < GridLengthX; x++)
 		{
 			for(int z = 0; z < GridLengthZ; z++)
 			{
-				GeneratedData.ActiveCells[x, z] = GridData.IsCellActive[x, z];
+				GeneratedData.ActiveCells[x, z] = GridData.IsCellActive[dataIndex];
 
-				GeneratedData.CellOccupantPrefabs[x, z] = GridData.OccupantPrefabs[x, z];
-                GeneratedData.CellOccupantPositions[x, z] = GridData.OccupantPositions[x, z];
-				GeneratedData.CellOccupantEulerAngles[x, z] = GridData.OccupantEulerAngles[x ,z];
-			}
+				GeneratedData.CellOccupantPrefabs[x, z] = GridData.OccupantPrefabs[dataIndex];
+                GeneratedData.CellOccupantPositions[x, z] = GridData.OccupantPositions[dataIndex];
+				GeneratedData.CellOccupantEulerAngles[x, z] = GridData.OccupantEulerAngles[dataIndex];
+
+				dataIndex++;
+            }
 		}
-		
-		return true;
+
+        Debug.Log("Grid data loaded");
+        return true;
 	}
 	
 	#endregion

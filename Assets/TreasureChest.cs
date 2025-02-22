@@ -2,10 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TreasureChest : IInteractable
-{	
+public class TreasureChest : MonoBehaviour
+{
+	[HideInInspector] public Item ItemInChest;
 
-	/*public bool WillSpawn;
+    private Transform itemSpawnLocation;
+
+    private Animation animator;
+
+	private bool isOpen;
+
+	private void Awake()
+    {
+        animator = GetComponent<Animation>();
+    }
+
+    public void SpawnLootItem(Item lootItem)
+	{
+		print(lootItem);
+        ItemInChest = Instantiate(lootItem, itemSpawnLocation);
+    }
+
+	public void OpenChest()
+	{
+		if (!isOpen)
+		{
+            isOpen = true;
+			StartCoroutine(OpenRoutine());
+        }
+    }
+
+	private IEnumerator OpenRoutine()
+	{
+		animator.Play();
+		yield return new WaitForSeconds(animator.clip.length);
+        itemSpawnLocation.gameObject.SetActive(false);
+    }
+
+    /*public bool WillSpawn;
 	
 	[Space(5)]
 	

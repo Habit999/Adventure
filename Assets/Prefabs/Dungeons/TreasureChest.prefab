@@ -282,7 +282,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6310503784131315365}
   - component: {fileID: 4193312460317396228}
+  - component: {fileID: 4903178772230324837}
   - component: {fileID: 2349760945873368807}
+  - component: {fileID: 6010700976330037463}
   m_Layer: 0
   m_Name: TreasureChest
   m_TagString: Chest
@@ -319,10 +321,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e138480b6c9491d42b13f6ef9104eb96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canInteract: 1
-  WillSpawn: 0
-  interactMsg: {fileID: 7570626697400117754}
-  IsOpen: 0
+  ItemInChest: {fileID: 0}
+--- !u!114 &4903178772230324837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5211964168041447258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 186307e5c530157469e3c355e8ecc614, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particlePrefab: {fileID: 2057284486698829904, guid: d2696fd2b9bb5a74e8e30bae7c6d30bd, type: 3}
+  timeBetweenParticleSpawns: 5
+  particleDespawnHeight: 2
+  spawnRadius: 1
+  floatUpSpeed: 1
+  isMimic: 0
 --- !u!65 &2349760945873368807
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -344,6 +361,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1.15, z: 2}
   m_Center: {x: 0, y: 0.2, z: 0}
+--- !u!111 &6010700976330037463
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5211964168041447258}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 20ba45000a9162648b77519a3fca026f, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 20ba45000a9162648b77519a3fca026f, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &7570626697400117754
 GameObject:
   m_ObjectHideFlags: 0

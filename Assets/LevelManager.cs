@@ -4,7 +4,18 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-	void Start()
+	public static LevelManager Instance;
+
+    public SO_LevelSpawnData SpawnData;
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else Destroy(gameObject);
+    }
+
+    void Start()
 	{
 		PlayerController.Instance.IsInDungeon = true;
 		GameManager.Instance.LoadGame();

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,13 @@ public class Enemy : MonoBehaviour
 {
     public enum EnemyState { Roaming, Targeting, Fleeing, Hiding };
     public EnemyState CurrentState;
+
+    protected event Action<Enemy> OnDead;
+
+    [SerializeField] private float maxHealth = 100;
+    private float health;
+
+    [HideInInspector] public EnemySpawnManager SpawnManager;
 
 	protected Vector3 movePoint;
 
@@ -32,12 +40,30 @@ public class Enemy : MonoBehaviour
 
         CheckSpeed();
 
+        health = maxHealth;
+
         hasDestination = false;
+    }
+
+    private void Start()
+    {
+        OnDead += SpawnManager.KillEnemy;
+    }
+
+    private void OnDisable()
+    {
+        OnDead -= SpawnManager.KillEnemy;
     }
 
     protected virtual void Update()
     {
         EnemyBehaviour();
+    }
+
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+        if (health <= 0) OnDead(this);
     }
 
     protected virtual void EnemyBehaviour()
@@ -70,7 +96,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    protected virtual void SwitchState(EnemyState newState)
+    public virtual void SwitchState(EnemyState newState)
     {
         CheckSpeed();
         hasDestination = false;
@@ -94,7 +120,7 @@ public class Enemy : MonoBehaviour
     [ContextMenu("GeneratePoint")]
     protected bool GenerateRandomNavLocation()
     {
-        Vector3 randomPosition = transform.position + Random.insideUnitSphere * Random.Range(10, randomLocationRange);
+        Vector3 randomPosition = transform.position + UnityEngine.Random.insideUnitSphere * UnityEngine.Random.Range(10, randomLocationRange);
         NavMeshHit hitData;
 
         for (int i = 0; i < validPositionAttempts; i++)
@@ -106,7 +132,7 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                randomPosition = transform.position + Random.insideUnitSphere * Random.Range(10, randomLocationRange);
+                randomPosition = transform.position + UnityEngine.Random.insideUnitSphere * UnityEngine.Random.Range(10, randomLocationRange);
             }
         }
    

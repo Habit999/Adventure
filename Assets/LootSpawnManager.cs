@@ -3,51 +3,70 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnManager : MonoBehaviour
+public class LootSpawnManager : MonoBehaviour
 {
-	public event Action OnSpawnChestLoot;
+	public event Action<Item> OnSpawnChestLoot;
 
-	[SerializeField] private SO_LevelSpawnData spawnData;
+	private LevelManager levelManager;
 
 	[SerializeField] private CustomGrid targetGrid;
 
-	private List<TreasureChest> treasureChests = new List<TreasureChest>();
+	public List<Item> LootItems = new List<Item>();
+
+    [HideInInspector] public List<GameObject> MimicObjects = new List<GameObject>();
+
+    private List<TreasureChest> treasureChests = new List<TreasureChest>();
 	private HashSet<TreasureChest> spawnedChests = new HashSet<TreasureChest>();
 
     private int chestsToSpawn;
 
+    private void OnEnable()
+    {
+        targetGrid.OnGridSpawned += SelectAndSpawnLootInGrid;
+    }
+
+    private void OnDisable()
+    {
+        targetGrid.OnGridSpawned -= SelectAndSpawnLootInGrid;
+    }
+
     private void Awake()
     {
-        chestsToSpawn = spawnData.MaxChestsInLevel;
+		levelManager = GetComponent<LevelManager>();
+        chestsToSpawn = levelManager.SpawnData.MaxChestsInLevel;
     }
-    private void SelectLootInGrid()
+    private void SelectAndSpawnLootInGrid()
 	{
 		foreach(var entity in targetGrid.GridData.OccupantPrefabs)
 		{
-			if(entity.GetComponent<TreasureChest>() != null)
+			if(entity != null && entity.GetComponent<TreasureChest>() != null)
 			{
                 treasureChests.Add(entity.GetComponent<TreasureChest>());
             }
 		}
-	}
 
-	private void SpawnRandomChests()
+		StartCoroutine(SpawnRandomChests());
+    }
+
+	private IEnumerator SpawnRandomChests()
 	{
 		int randomIndex = UnityEngine.Random.Range(0, treasureChests.Count - 1);
 		if (!spawnedChests.Contains(treasureChests[randomIndex]))
 		{
 			spawnedChests.Add(treasureChests[randomIndex]);
-			chestsToSpawn--;
+			MimicObjects.Add(treasureChests[randomIndex].gameObject);
+            OnSpawnChestLoot += treasureChests[randomIndex].SpawnLootItem;
+            chestsToSpawn--;
         }
 
-		if (chestsToSpawn > 0) SpawnRandomChests();
-		else
-		{
-			foreach(var chest in spawnedChests)
-			{
-                
-            }
-		}
+        yield return new WaitForSeconds(0.01f);
+        if (chestsToSpawn > 0) StartCoroutine(SpawnRandomChests());
+        else OnSpawnChestLoot?.Invoke(GenerateRandomLoot());
+    }
+
+	private Item GenerateRandomLoot()
+	{
+		return LootItems[UnityEngine.Random.Range(0, LootItems.Count)];
     }
 
 
