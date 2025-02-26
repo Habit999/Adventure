@@ -29,7 +29,7 @@ public class InteractionManager : MonoBehaviour
 			}
 			else if(ObjectInView.tag == "Chest")
 			{
-				//ObjectInView.GetComponent<ChestSpawnPoint>().OpenChest();
+				ObjectInView.GetComponent<TreasureChest>().OpenChest();
 			}
 			else if(ObjectInView.tag == "Exit")
 			{
@@ -57,7 +57,7 @@ public class InteractionManager : MonoBehaviour
 			if(Input.GetMouseButtonDown(GameManager.Instance.Controls.MousePrimary) && Controller.InventoryMngr.EquippedItem != null)
 			{
 				Controller.InventoryMngr.EquippedItem.GetComponent<Item>().UseItem();
-				Controller.CombatMngr._rightHandAnimator.SetTrigger(Controller.InventoryMngr.EquippedItem.GetComponent<Item>().AnimatorTriggerName);
+				Controller.CombatMngr.RightHandAnimator.SetTrigger(Controller.InventoryMngr.EquippedItem.GetComponent<Item>().AnimatorTriggerName);
 			}
 		}
 	}

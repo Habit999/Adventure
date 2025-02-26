@@ -6,7 +6,7 @@ public class CombatManager : MonoBehaviour
 {
 	protected PlayerController Controller { get { return PlayerController.Instance; } }
 	
-	public Animator _rightHandAnimator;
+	public Animator RightHandAnimator;
 	
 	[Space(5)]
 	
@@ -25,7 +25,7 @@ public class CombatManager : MonoBehaviour
 	void Update()
 	{
 		if(Input.GetMouseButtonDown(1))
-			_rightHandAnimator.SetTrigger("UseBandage");
+			RightHandAnimator.SetTrigger("UseBandage");
 	}
 	
 	public void SwingWeapon()
@@ -42,7 +42,7 @@ public class CombatManager : MonoBehaviour
 		damageAreaColldier.enabled = true;
 		yield return new WaitForSeconds(swingTime);
 		damageAreaColldier.enabled = false;
-		yield return new WaitForSeconds(_rightHandAnimator.GetCurrentAnimatorStateInfo(0).length);
+		yield return new WaitForSeconds(RightHandAnimator.GetCurrentAnimatorStateInfo(0).length);
 		isAttacking = false;
 	}
 	
@@ -55,6 +55,10 @@ public class CombatManager : MonoBehaviour
 				// Damage enemy
 				// Use "PlayerController.Instance.InventoryMngr._equippedItem.GetComponent<Item>()._damage"
 			}
-		}
+			if(col.gameObject.tag == "Chest")
+            {
+				col.gameObject.GetComponent<TreasureChest>().HitChest();
+            }
+        }
 	}
 }

@@ -111,7 +111,7 @@ public class InventoryManager : MonoBehaviour
 	
 	
 	// Add item to collected inventory
-	public bool AddItem(GameObject item, int amount)
+	public void AddItem(GameObject item, int amount)
 	{
 		foreach(GameObject invItem in CollectedItems.Keys)
 		{
@@ -120,16 +120,13 @@ public class InventoryManager : MonoBehaviour
 				if(CollectedItems[item] + amount <= item.GetComponent<Item>().ItemData.MaxItemStack)
 				{
 					CollectedItems[item] += amount;
-					return true;
 				}
 			}
 		}
 		if(CollectedItems.Count < AvailableItemSlots)
 		{
 			CollectedItems.Add(item, amount);
-			return true;
 		}
-		return false;
 	}
 	
 	// Remove item from collected inventory

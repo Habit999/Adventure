@@ -18,19 +18,20 @@ public class CustomGrid : MonoBehaviour
 	public struct GridGenerationData
 	{
 		public Vector3[,] CellPositions;
-		public GameObject[,] SpawnedCells;
+		public GridCell[,] SpawnedCells;
 		public bool[,] ActiveCells;
 		
 		public GameObject[,] CellOccupantPrefabs;
-		public GameObject[,] CellActiveOccupant;
-		
-		public Vector3[,] CellOccupantPositions;
+		public GameObject[,] CellActiveOccupants;
+		public bool[,] CellOccupantsActiveOnSpawn;
+
+        public Vector3[,] CellOccupantPositions;
 		public Vector3[,] CellOccupantEulerAngles;
 	}
 	public GridGenerationData GeneratedData = new GridGenerationData();
 	
 	public GameObject GridCellPrefab;
-	[SerializeField] SO_PrefabLibrary prefabLibrary;
+	[SerializeField] SO_ItemPrefabs prefabLibrary;
 	
 	[Header("Customise Grid")]
 	public int GridLengthX;
@@ -71,7 +72,8 @@ public class CustomGrid : MonoBehaviour
 	{
 		if(GridPreviewToggled) TogglePreviewGrid();
 		
-		LoadGridData();
+		GenerateGrid();
+        LoadGridData();
 		
 		SpawnActiveGrid();
 	}
@@ -84,8 +86,10 @@ public class CustomGrid : MonoBehaviour
 		GeneratedData.ActiveCells = new bool[GridLengthX, GridLengthZ];
 		
 		GeneratedData.CellOccupantPrefabs = new GameObject[GridLengthX, GridLengthZ];
-		
-		GeneratedData.CellOccupantPositions = new Vector3[GridLengthX, GridLengthZ];
+        GeneratedData.CellOccupantsActiveOnSpawn = new bool[GridLengthX, GridLengthZ];
+
+
+        GeneratedData.CellOccupantPositions = new Vector3[GridLengthX, GridLengthZ];
 		GeneratedData.CellOccupantEulerAngles = new Vector3[GridLengthX, GridLengthZ];
 		
 		// Make sure no left over cells are in the scene
@@ -131,23 +135,22 @@ public class CustomGrid : MonoBehaviour
 	
 	public void SpawnGrid()
 	{
-		GeneratedData.SpawnedCells = new GameObject[GridLengthX, GridLengthZ];
+		GeneratedData.SpawnedCells = new GridCell[GridLengthX, GridLengthZ];
 		
 		for(int axisX = 0; axisX < GridLengthX; axisX++)
 		{
 			for(int axisZ = 0; axisZ < GridLengthZ; axisZ++)
 			{
-				GameObject cellInstance = Instantiate(GridCellPrefab, GeneratedData.CellPositions[axisX, axisZ], Quaternion.identity);
+                GridCell cellInstance = Instantiate(GridCellPrefab, GeneratedData.CellPositions[axisX, axisZ], Quaternion.identity).GetComponent<GridCell>();
 				cellInstance.transform.parent = transform;
 				
 				// Modify cell script here
-				GridCell cellScript = cellInstance.GetComponent<GridCell>();
-				cellScript._connectedGrid = this;
-				cellScript._cellActive = GeneratedData.ActiveCells[axisX, axisZ];
-				cellScript._gridIndex = new Vector2(axisX, axisZ);
-				cellScript._occupantPrefab = GeneratedData.CellOccupantPrefabs[axisX, axisZ];
-				cellScript._occupantPosition = GeneratedData.CellOccupantPositions[axisX, axisZ];
-				cellScript._occupantEulerAngles = GeneratedData.CellOccupantEulerAngles[axisX, axisZ];
+				cellInstance.ConnectedGrid = this;
+				cellInstance.CellActive = GeneratedData.ActiveCells[axisX, axisZ];
+				cellInstance.GridIndex = new Vector2(axisX, axisZ);
+				cellInstance.OccupantPrefab = GeneratedData.CellOccupantPrefabs[axisX, axisZ];
+				cellInstance.OccupantPosition = GeneratedData.CellOccupantPositions[axisX, axisZ];
+				cellInstance.OccupantEulerAngles = GeneratedData.CellOccupantEulerAngles[axisX, axisZ];
 				
 				GeneratedData.SpawnedCells[axisX, axisZ] = cellInstance;
 			}
@@ -158,7 +161,7 @@ public class CustomGrid : MonoBehaviour
 	
 	public void SpawnActiveGrid()
 	{
-		GeneratedData.SpawnedCells = new GameObject[GridLengthX, GridLengthZ];
+		GeneratedData.SpawnedCells = new GridCell[GridLengthX, GridLengthZ];
 		
 		for(int axisX = 0; axisX < GridLengthX; axisX++)
 		{
@@ -166,17 +169,16 @@ public class CustomGrid : MonoBehaviour
 			{
 				if(GeneratedData.ActiveCells[axisX, axisZ])
 				{
-					GameObject cellInstance = Instantiate(GridCellPrefab, GeneratedData.CellPositions[axisX, axisZ], Quaternion.identity);
+                    GridCell cellInstance = Instantiate(GridCellPrefab, GeneratedData.CellPositions[axisX, axisZ], Quaternion.identity).GetComponent<GridCell>();
 					cellInstance.transform.parent = transform;
 					
 					// Modify cell script here
-					GridCell cellScript = cellInstance.GetComponent<GridCell>();
-					cellScript._connectedGrid = this;
-					cellScript._cellActive = true;
-					cellScript._gridIndex = new Vector2(axisX, axisZ);
-					cellScript._occupantPrefab = GeneratedData.CellOccupantPrefabs[axisX, axisZ];
-                    cellScript._occupantPosition = GeneratedData.CellOccupantPositions[axisX, axisZ];
-                    cellScript._occupantEulerAngles = GeneratedData.CellOccupantEulerAngles[axisX, axisZ];
+					cellInstance.ConnectedGrid = this;
+					cellInstance.CellActive = true;
+					cellInstance.GridIndex = new Vector2(axisX, axisZ);
+					cellInstance.OccupantPrefab = GeneratedData.CellOccupantPrefabs[axisX, axisZ];
+                    cellInstance.OccupantPosition = GeneratedData.CellOccupantPositions[axisX, axisZ];
+                    cellInstance.OccupantEulerAngles = GeneratedData.CellOccupantEulerAngles[axisX, axisZ];
 
                     GeneratedData.SpawnedCells[axisX, axisZ] = cellInstance;
 				}
@@ -205,9 +207,9 @@ public class CustomGrid : MonoBehaviour
 		{
 			if(CellOccupantsToggled) ToggleCellOccupants();
 			
-			foreach(GameObject cell in GeneratedData.SpawnedCells)
+			foreach(var cell in GeneratedData.SpawnedCells)
 			{
-				DestroyImmediate(cell, false);
+				DestroyImmediate(cell.gameObject, false);
 				GeneratedData.SpawnedCells = null;
 			}
 		}
@@ -219,29 +221,29 @@ public class CustomGrid : MonoBehaviour
 		
 		if(CellOccupantsToggled)
 		{
-			GeneratedData.CellActiveOccupant = new GameObject[GridLengthX, GridLengthZ];
+			GeneratedData.CellActiveOccupants = new GameObject[GridLengthX, GridLengthZ];
 			
-			foreach(GameObject cell in GeneratedData.SpawnedCells)
+			foreach(var cell in GeneratedData.SpawnedCells)
 			{
-				cell.GetComponent<GridCell>().SpawnOccupant();
+				cell.SpawnOccupant();
 				
-				if(cell.GetComponent<GridCell>()._activeOccupant != null)
+				if(cell.ActiveOccupant != null)
 				{
-					Vector2 cellIndex = cell.GetComponent<GridCell>()._gridIndex;
-					GeneratedData.CellActiveOccupant[(int) cellIndex.x, (int) cellIndex.y] = cell.GetComponent<GridCell>()._activeOccupant;
+					Vector2 cellIndex = cell.GridIndex;
+					GeneratedData.CellActiveOccupants[(int) cellIndex.x, (int) cellIndex.y] = cell.ActiveOccupant;
 				}
 			}
 		}
 		else
 		{
-			foreach(GameObject cell in GeneratedData.SpawnedCells)
+			foreach(var cell in GeneratedData.SpawnedCells)
 			{
-				if(cell != null && cell.GetComponent<GridCell>()._activeOccupant != null)
+				if(cell != null && cell.ActiveOccupant != null)
 				{
-					DestroyImmediate(cell.GetComponent<GridCell>()._activeOccupant, false);
+					DestroyImmediate(cell.ActiveOccupant, false);
 				}
 				
-				GeneratedData.CellActiveOccupant = null;
+				GeneratedData.CellActiveOccupants = null;
 			}
 		}
 	}
@@ -252,14 +254,14 @@ public class CustomGrid : MonoBehaviour
 		{
 			for(int z = 0; z < GridLengthZ; z++)
 			{
-				GridCell cell = GeneratedData.SpawnedCells[x, z].GetComponent<GridCell>();
+                GeneratedData.ActiveCells[x, z] = GeneratedData.SpawnedCells[x, z].CellActive;
+				GeneratedData.CellOccupantPrefabs[x, z] = GeneratedData.SpawnedCells[x, z].OccupantPrefab;
+				GeneratedData.CellOccupantPositions[x, z] = GeneratedData.SpawnedCells[x, z].OccupantPosition;
+				GeneratedData.CellOccupantEulerAngles[x, z] = GeneratedData.SpawnedCells[x, z].OccupantEulerAngles;
+				GeneratedData.CellOccupantsActiveOnSpawn[x, z] = GeneratedData.SpawnedCells[x, z].OccupantActiveOnSpawn;
 
-                GeneratedData.ActiveCells[x, z] = cell._cellActive;
-				GeneratedData.CellOccupantPrefabs[x, z] = cell._occupantPrefab;
-				GeneratedData.CellOccupantPositions[x, z] = cell._occupantPosition;
-				GeneratedData.CellOccupantEulerAngles[x, z] = cell._occupantEulerAngles;
-				
-				cell.UpdateOccupantTransform();
+
+                GeneratedData.SpawnedCells[x, z].UpdateOccupantTransform();
 			}
 		}
 	}
@@ -305,8 +307,11 @@ public class CustomGrid : MonoBehaviour
                 GridData.OccupantPrefabs.Add(GeneratedData.CellOccupantPrefabs[x, z]);
                 GridData.OccupantPositions.Add(GeneratedData.CellOccupantPositions[x, z]);
 				GridData.OccupantEulerAngles.Add(GeneratedData.CellOccupantEulerAngles[x, z]);
+				GridData.OccupantActiveOnSpawn.Add(GeneratedData.CellOccupantsActiveOnSpawn[x, z]);
             }
 		}
+
+		EditorUtility.SetDirty(GridData);
 
         Debug.Log("Grid data saved");
         return true;
@@ -340,8 +345,9 @@ public class CustomGrid : MonoBehaviour
 				GeneratedData.CellOccupantPrefabs[x, z] = GridData.OccupantPrefabs[dataIndex];
                 GeneratedData.CellOccupantPositions[x, z] = GridData.OccupantPositions[dataIndex];
 				GeneratedData.CellOccupantEulerAngles[x, z] = GridData.OccupantEulerAngles[dataIndex];
+                GeneratedData.CellOccupantsActiveOnSpawn[x, z] = GridData.OccupantActiveOnSpawn[dataIndex];
 
-				dataIndex++;
+                dataIndex++;
             }
 		}
 

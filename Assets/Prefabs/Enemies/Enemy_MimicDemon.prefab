@@ -48,11 +48,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentState: 0
+  maxHealth: 100
+  SpawnManager: {fileID: 0}
   roamingSpeed: 3.5
   roamingRotationSpeed: 120
   randomLocationRange: 50
   validPositionAttempts: 10
   destinationStopDistance: 1
+  MoveTarget: {fileID: 0}
+  LootManager: {fileID: 0}
+  targetingSpeed: 0
+  targetingRotationSpeed: 0
+  fleeingSpeed: 0
+  fleeingRotationSpeed: 0
+  timeToExitFlee: 0
+  damageDistance: 0
+  damage: 0
+  fieldOfViewRange: 0.2
 --- !u!136 &4566351968887562376
 CapsuleCollider:
   m_ObjectHideFlags: 0

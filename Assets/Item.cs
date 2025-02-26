@@ -38,11 +38,13 @@ public class Item : MonoBehaviour
 		{
 			case ItemDataStructure.TYPE.Weapon:
 				print("Item Collected");
-				return PlayerController.Instance.InventoryMngr.AddItem(this.gameObject, 1);
+				PlayerController.Instance.InventoryMngr.AddItem(this.gameObject, 1);
+				return true;
 				
 			case ItemDataStructure.TYPE.Consumable:
 				print("Item Collected");
-				return PlayerController.Instance.InventoryMngr.AddItem(this.gameObject, 1);
+				PlayerController.Instance.InventoryMngr.AddItem(this.gameObject, 1);
+				return true;
 				
 			case ItemDataStructure.TYPE.Experience:
 				PlayerController.Instance.SkillsMngr.AddExperience(GetRandomExperience);

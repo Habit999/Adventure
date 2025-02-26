@@ -15,11 +15,11 @@ public class E_GridCell : Editor
 	
 	public override void OnInspectorGUI()
 	{
-		if(targetCell._connectedGrid != null)
+		if(targetCell.ConnectedGrid != null)
 		{
 			if(GUILayout.Button("Update Grid"))
 			{
-				targetCell._connectedGrid.UpdateGridFromCellData();
+				targetCell.ConnectedGrid.UpdateGridFromCellData();
 			}
 		}
 		

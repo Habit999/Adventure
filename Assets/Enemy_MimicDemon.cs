@@ -2,11 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy_MimicDemon : Enemy
 {
-    [HideInInspector] public Transform MoveTarget;
-
     [HideInInspector] public LootSpawnManager LootManager;
 
     [Space(5)]
@@ -25,10 +24,9 @@ public class Enemy_MimicDemon : Enemy
     [SerializeField] private float damage;
 
     [Space(5)]
-    [SerializeField] private GameObject body;
-
-    [Space(5)]
     [SerializeField][Range(-1, 1)] private float fieldOfViewRange;
+
+    private Transform moveTarget;
 
     private PlayerController playerTarget;
 
@@ -76,21 +74,26 @@ public class Enemy_MimicDemon : Enemy
     {
         if (!hasDestination)
         {
-            if (FindClosestMimicObject())
+            bool objectFound = FindClosestMimicObject();
+            print(objectFound);
+            if (objectFound)
                 hasDestination = true;
             else
             {
                 base.Roaming();
-                return;
             }
         }
-
-        navAgent.SetDestination(MoveTarget.position);
-
-        if(Vector3.Distance(transform.position, MoveTarget.position) <= destinationStopDistance)
+        if(hasDestination && moveTarget == null)
         {
-            hasDestination = false;
-            MoveTarget.GetComponent<MimicComponent>().ActivateComponent(this);
+            base.Roaming();
+            return;
+        }
+
+        navAgent.SetDestination(movePoint);
+
+        if(Vector3.Distance(transform.position, moveTarget.position) <= destinationStopDistance)
+        {
+            moveTarget.GetComponent<MimicComponent>().ActivateComponent(this);
             SwitchState(EnemyState.Hiding);
         }
     }
@@ -99,12 +102,12 @@ public class Enemy_MimicDemon : Enemy
     {
         if (!hasDestination)
         {
-            MoveTarget = playerTarget.transform;
+            moveTarget = playerTarget.transform;
         }
 
-        navAgent.SetDestination(MoveTarget.position);
+        navAgent.SetDestination(moveTarget.position);
 
-        if(Vector3.Distance(transform.position, MoveTarget.position) <= damageDistance)
+        if(Vector3.Distance(transform.position, moveTarget.position) <= damageDistance)
         {
             playerTarget.DamagePlayer(damage);
             SwitchState(EnemyState.Fleeing);
@@ -171,23 +174,38 @@ public class Enemy_MimicDemon : Enemy
     {
         if (LootManager.MimicObjects.Count > 0)
         {
+            // Find closest mimic object
             GameObject closestMimicObject = null;
+            float closestDistance = 0;
             foreach (var mimicObj in LootManager.MimicObjects)
             {
                 if (closestMimicObject == null)
                 {
                     closestMimicObject = mimicObj;
+                    closestDistance = Vector3.Distance(transform.position, mimicObj.transform.position);
                     continue;
                 }
 
-                if (Vector3.Distance(transform.position, mimicObj.transform.position) < Vector3.Distance(transform.position, closestMimicObject.transform.position))
+                float mimicDistance = Vector3.Distance(transform.position, mimicObj.transform.position);
+                if (mimicDistance < closestDistance)
                 {
                     closestMimicObject = mimicObj;
+                    closestDistance = mimicDistance;
                 }
             }
 
-            MoveTarget = closestMimicObject.transform;
-            return true;
+            // Set move target
+            if (closestMimicObject == null) return false;
+            else
+            {
+                moveTarget = closestMimicObject.transform;
+                if (NavMesh.SamplePosition(closestMimicObject.transform.position, out NavMeshHit hitData, 10, NavMesh.AllAreas))
+                {
+                    movePoint = hitData.position;
+                    return hasDestination = true;
+                }
+                else return false;
+            }
         }
         else return false;
     }
@@ -233,6 +251,15 @@ public class Enemy_MimicDemon : Enemy
         {
             isInRange = false;
             isInView = false;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if(moveTarget != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(moveTarget.position, 1);
         }
     }
 }

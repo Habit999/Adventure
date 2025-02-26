@@ -5,21 +5,23 @@ using UnityEngine;
 
 public class GridCell : MonoBehaviour
 {
-	public CustomGrid _connectedGrid;
+	public CustomGrid ConnectedGrid;
 	
-	public bool _cellActive;
+	public bool CellActive;
 	
-	public Vector3 OccupantPosition { get { return _activeOccupant != null ? _activeOccupant.transform.position : transform.position; } }
+	[HideInInspector] public Vector2 GridIndex;
 	
-	[HideInInspector] public Vector2 _gridIndex;
-	
-	public GameObject _occupantPrefab;
-	[HideInInspector] public GameObject _activeOccupant;
+	public GameObject OccupantPrefab;
+	[HideInInspector] public GameObject ActiveOccupant;
 	
 	[Space(5)]
 	
-	public Vector3 _occupantPosition;
-	public Vector3 _occupantEulerAngles;
+	public Vector3 OccupantPosition;
+	public Vector3 OccupantEulerAngles;
+
+	[Space(5)]
+
+	public bool OccupantActiveOnSpawn;
 	
 	void OnEnable()
 	{
@@ -31,39 +33,36 @@ public class GridCell : MonoBehaviour
 		CustomGrid.SpawnCellOccupants -= SpawnOccupant;
 	}
 	
-	void Update()
-	{
-		if(Input.GetKeyDown(KeyCode.T)) SpawnOccupant();
-	}
-	
 	public void UpdateOccupantTransform()
 	{
-		if(_activeOccupant != null)
+		if(ActiveOccupant != null)
 		{
-			_activeOccupant.transform.localPosition = _occupantPosition;
-			_activeOccupant.transform.eulerAngles = _occupantEulerAngles;
+			ActiveOccupant.transform.localPosition = OccupantPosition;
+			ActiveOccupant.transform.eulerAngles = OccupantEulerAngles;
 		}
 	}
 	
 	public void SpawnOccupant()
 	{
-		if(_occupantPrefab != null)
+		if(OccupantPrefab != null)
 		{
-			if(!_connectedGrid.EnableEditorTools)
+			if(!ConnectedGrid.EnableEditorTools)
 			{
-				if(_activeOccupant != null) Destroy(_activeOccupant);
+				if(ActiveOccupant != null) Destroy(ActiveOccupant);
 			}
 			else
 			{
-				if(_activeOccupant != null) DestroyImmediate(_activeOccupant, false);
+				if(ActiveOccupant != null) DestroyImmediate(ActiveOccupant, false);
 			}
 			
-			_activeOccupant = Instantiate(_occupantPrefab, transform.position, Quaternion.identity);
-			_activeOccupant.transform.parent = transform;
+			ActiveOccupant = Instantiate(OccupantPrefab, transform.position, Quaternion.identity);
+			ActiveOccupant.transform.parent = transform;
 			
-			_activeOccupant.transform.localPosition = _occupantPosition;
-			_activeOccupant.transform.rotation = Quaternion.Euler(_occupantEulerAngles);
-		}
+			ActiveOccupant.transform.localPosition = OccupantPosition;
+			ActiveOccupant.transform.rotation = Quaternion.Euler(OccupantEulerAngles);
+
+			if(!OccupantActiveOnSpawn) ActiveOccupant.SetActive(false);
+        }
 	}
 
 #if UNITY_EDITOR
@@ -71,7 +70,7 @@ public class GridCell : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-		Gizmos.DrawWireSphere(transform.position + _occupantPosition, 0.3f);
+		Gizmos.DrawWireSphere(transform.position + OccupantPosition, 0.3f);
     }
 
 #endif

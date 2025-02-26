@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6984754148921075596}
   - component: {fileID: 3031254092024409808}
   - component: {fileID: 4994449801716238976}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 6604078004038169802}
   - component: {fileID: 242955489556128449}
   - component: {fileID: 7771012384510708482}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,7 +201,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1272739564960542880}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: CamPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +235,7 @@ GameObject:
   - component: {fileID: 2624188408872534697}
   - component: {fileID: 8706365078109568721}
   - component: {fileID: 8531192403294992613}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -328,7 +328,7 @@ GameObject:
   - component: {fileID: 4632004343421691924}
   - component: {fileID: 1338006032330170458}
   - component: {fileID: 4137940915158238119}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -482,8 +482,8 @@ MonoBehaviour:
   MaxMana: 100
   Health: 0
   Mana: 0
-  walkSpeed: 10
-  sprintSpeed: 20
+  walkSpeed: 500
+  sprintSpeed: 600
   strafeModifier: 0.76
   MouseToggled: 0
 --- !u!114 &6705436349346823103
@@ -620,7 +620,7 @@ GameObject:
   - component: {fileID: 3651268312562622015}
   - component: {fileID: 6466162278814814200}
   - component: {fileID: 7841219533132549411}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DamageArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -686,7 +686,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5996809422563159675}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TestObj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -721,7 +721,7 @@ GameObject:
   - component: {fileID: 5020995149499430937}
   - component: {fileID: 6641613512814332458}
   - component: {fileID: 4639980009828666544}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: RightHandItemSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

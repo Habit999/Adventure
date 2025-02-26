@@ -33,39 +33,46 @@ public class LootSpawnManager : MonoBehaviour
     private void Awake()
     {
 		levelManager = GetComponent<LevelManager>();
-        chestsToSpawn = levelManager.SpawnData.MaxChestsInLevel;
     }
     private void SelectAndSpawnLootInGrid()
 	{
-		foreach(var entity in targetGrid.GridData.OccupantPrefabs)
+		foreach(var entity in targetGrid.GeneratedData.SpawnedCells)
 		{
-			if(entity != null && entity.GetComponent<TreasureChest>() != null)
+			if(entity != null && entity.ActiveOccupant != null && entity.ActiveOccupant.GetComponent<TreasureChest>() != null)
 			{
-                treasureChests.Add(entity.GetComponent<TreasureChest>());
+                treasureChests.Add(entity.ActiveOccupant.GetComponent<TreasureChest>());
             }
 		}
 
-		StartCoroutine(SpawnRandomChests());
+        if (treasureChests.Count < levelManager.SpawnData.MaxChestsInLevel) chestsToSpawn = treasureChests.Count;
+		else chestsToSpawn = levelManager.SpawnData.MaxChestsInLevel;
+
+        StartCoroutine(SpawnRandomChests());
     }
 
 	private IEnumerator SpawnRandomChests()
 	{
-		int randomIndex = UnityEngine.Random.Range(0, treasureChests.Count - 1);
+		int randomIndex = UnityEngine.Random.Range(0, treasureChests.Count);
 		if (!spawnedChests.Contains(treasureChests[randomIndex]))
 		{
 			spawnedChests.Add(treasureChests[randomIndex]);
-			MimicObjects.Add(treasureChests[randomIndex].gameObject);
+			if (treasureChests[randomIndex].GetComponent<MimicComponent>() != null)
+				MimicObjects.Add(treasureChests[randomIndex].gameObject);
+
+            treasureChests[randomIndex].gameObject.SetActive(true);
             OnSpawnChestLoot += treasureChests[randomIndex].SpawnLootItem;
             chestsToSpawn--;
         }
 
         yield return new WaitForSeconds(0.01f);
+
         if (chestsToSpawn > 0) StartCoroutine(SpawnRandomChests());
-        else OnSpawnChestLoot?.Invoke(GenerateRandomLoot());
+		else OnSpawnChestLoot?.Invoke(GenerateRandomLoot());
     }
 
 	private Item GenerateRandomLoot()
 	{
+		print("Random loot spawned");
 		return LootItems[UnityEngine.Random.Range(0, LootItems.Count)];
     }
 

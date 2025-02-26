@@ -138,11 +138,4 @@ public class Enemy : MonoBehaviour
    
         return hasDestination = true;
     }
-    private void OnDrawGizmos()
-    {
-        /*if(movePoint != null)
-        {
-            Gizmos.DrawWireSphere(movePoint, 5);
-        }*/
-    }
 }

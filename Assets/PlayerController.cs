@@ -163,24 +163,24 @@ public class PlayerController : MonoBehaviour
             bool nonStrafeMovement = false;
             if (Input.GetKey(GameManager.Instance.Controls.Forward))
             {
-                moveDirection += Body.forward * (isSprinting ? sprintSpeed : walkSpeed);
+                moveDirection += Body.forward * (isSprinting ? sprintSpeed : walkSpeed) * Time.deltaTime;
                 isMoving = true;
                 nonStrafeMovement = true;
             }
             if (Input.GetKey(GameManager.Instance.Controls.Backward))
             {
-                moveDirection += -Body.forward * (isSprinting ? sprintSpeed : walkSpeed);
+                moveDirection += -Body.forward * (isSprinting ? sprintSpeed : walkSpeed) * Time.deltaTime;
                 isMoving = true;
                 nonStrafeMovement = true;
             }
             if (Input.GetKey(GameManager.Instance.Controls.Right))
             {
-                moveDirection += Body.right * (isSprinting ? sprintSpeed : walkSpeed) * (nonStrafeMovement ? strafeModifier : 1);
+                moveDirection += Body.right * (isSprinting ? sprintSpeed : walkSpeed) * (nonStrafeMovement ? strafeModifier : 1) * Time.deltaTime;
                 isMoving = true;
             }
             if (Input.GetKey(GameManager.Instance.Controls.Left))
             {
-                moveDirection += -Body.right * (isSprinting ? sprintSpeed : walkSpeed) * (nonStrafeMovement ? strafeModifier : 1);
+                moveDirection += -Body.right * (isSprinting ? sprintSpeed : walkSpeed) * (nonStrafeMovement ? strafeModifier : 1) * Time.deltaTime;
                 isMoving = true;
             }
         }

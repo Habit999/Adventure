@@ -1,42 +1,77 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TreasureChest : MonoBehaviour
 {
-	[HideInInspector] public Item ItemInChest;
+	private event Action<GameObject, int> OnGiveLoot;
 
-    private Transform itemSpawnLocation;
+    [HideInInspector] public Item ItemInChest;
+
+    [SerializeField] private Transform itemSpawnLocation;
 
     private Animation animator;
+
+	private MimicComponent mimicComponent;
 
 	private bool isOpen;
 
 	private void Awake()
     {
         animator = GetComponent<Animation>();
+        mimicComponent = GetComponent<MimicComponent>();
+    }
+
+    private void OnEnable()
+    {
+		OnGiveLoot += PlayerController.Instance.InventoryMngr.AddItem;
+    }
+
+    private void OnDisable()
+    {
+		OnGiveLoot -= PlayerController.Instance.InventoryMngr.AddItem;
     }
 
     public void SpawnLootItem(Item lootItem)
 	{
 		print(lootItem);
         ItemInChest = Instantiate(lootItem, itemSpawnLocation);
+		ItemInChest.transform.localPosition = Vector3.zero;
+        ItemInChest.transform.localRotation = Quaternion.identity;
     }
 
 	public void OpenChest()
 	{
 		if (!isOpen)
 		{
-            isOpen = true;
-			StartCoroutine(OpenRoutine());
+            if(mimicComponent != null)
+			{
+				mimicComponent.TriggerMimic();
+            }
+			else
+			{
+                isOpen = true;
+                StartCoroutine(OpenRoutine());
+            }
         }
     }
 
-	private IEnumerator OpenRoutine()
+	public void HitChest()
+	{
+		if (mimicComponent != null)
+		{
+			mimicComponent.DeactivateComponent();
+		}
+	}
+
+
+    private IEnumerator OpenRoutine()
 	{
 		animator.Play();
 		yield return new WaitForSeconds(animator.clip.length);
         itemSpawnLocation.gameObject.SetActive(false);
+		OnGiveLoot?.Invoke(ItemInChest.gameObject, 1);
     }
 
     /*public bool WillSpawn;

@@ -22,6 +22,11 @@ public class MimicComponent : MonoBehaviour
 
     private Enemy_MimicDemon hiddenMimic;
 
+    private void Awake()
+    {
+        isMimic = false;
+    }
+
     private void Update()
     {
         if (isMimic)

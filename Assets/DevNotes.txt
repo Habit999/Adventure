@@ -2,9 +2,11 @@ To-Do:
 
 - Inventory not scaled right
 
-- Write enemy scripts
+- Chests not spawning loot
 
-- Setup chests and xp with grid system
+- Speed changes with screen resolution
+
+- Mimic needs to attack player if in a chest and opened
 
 - Check all scripts for unessaccery code
 

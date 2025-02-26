@@ -14,8 +14,14 @@ public class SO_GridData : ScriptableObject
     public float OffsetX;
     public float OffsetZ;
 
+    [SerializeField]
     public List<bool> IsCellActive;
+    [SerializeField]
     public List<GameObject> OccupantPrefabs;
+    [SerializeField]
     public List<Vector3> OccupantPositions;
+    [SerializeField]
     public List<Vector3> OccupantEulerAngles;
+    [SerializeField]
+    public List<bool> OccupantActiveOnSpawn;
 }
