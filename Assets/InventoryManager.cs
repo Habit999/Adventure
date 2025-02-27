@@ -5,7 +5,7 @@ using System.Linq;
 
 public class InventoryManager : MonoBehaviour
 {
-	public PlayerController Controller { get { return gameObject.GetComponent<PlayerController>(); } }
+	[HideInInspector] public PlayerController Controller;
 	
 	public IDictionary<GameObject, int> CollectedItems = new Dictionary<GameObject, int>();
 	
@@ -32,7 +32,9 @@ public class InventoryManager : MonoBehaviour
 	
 	void Awake()
 	{
-		SelectedInvSlot = -1;
+		Controller = GetComponent<PlayerController>();
+
+        SelectedInvSlot = -1;
 	}
 	
 	public void AssignHotbarItem(int position)

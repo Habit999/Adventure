@@ -2,8 +2,6 @@ To-Do:
 
 - Inventory not scaled right
 
-- Chests not spawning loot
-
 - Speed changes with screen resolution
 
 - Mimic needs to attack player if in a chest and opened

@@ -5,66 +5,76 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
-	public InventoryManager InvManager { get { return PlayerController.Instance.InventoryMngr; } }
+	[HideInInspector] public InventoryManager InvManager;
+
+	[SerializeField] private Transform itemRegion;
 	
-	public Transform ItemIconGroup { get { return transform.GetChild(0).GetChild(0); } }
+	[HideInInspector] public List<InventoryIcon> ItemIcons = new List<InventoryIcon>();
 	
-	[HideInInspector] public List<Transform> _itemIcons = new List<Transform>();
-	
-	[HideInInspector] public Animator _invAnimator;
-	
-	[SerializeField] Color unselectedItemColor;
-	[SerializeField] Color selectedItemColor;
-	
-	void Awake()
+	public Color UnselectedItemColor;
+	public Color SelectedItemColor;
+
+	private Animator animator;
+
+	private bool isOpen;
+
+    void Awake()
 	{
-		_invAnimator = GetComponent<Animator>();
-		
-		// Set inventory icon list
-		_itemIcons.Clear();
-		for(int i = 0; i < ItemIconGroup.childCount; i++)
+		InvManager = PlayerController.Instance.InventoryMngr;
+
+        animator = GetComponent<Animator>();
+
+		isOpen = false;
+
+        // Set inventory icon list
+        for (int i = 0; i < itemRegion.childCount; i++)
 		{
-			_itemIcons.Add(ItemIconGroup.GetChild(i));
-		}
+			ItemIcons.Add(itemRegion.GetChild(i).gameObject.GetComponent<InventoryIcon>());
+			ItemIcons[i].InventoryController = this;
+        }
 	}
-	
-	void Update()
+
+    private void Update()
+    {
+        if(InvManager.Controller.PlayerState != PlayerController.PLAYERSTATE.InMenu && isOpen)
+			ToggleOpen();
+    }
+
+    public void ToggleOpen()
 	{
-		UpdateInventoryUI();
-	}
-	
-	void UpdateInventoryUI()
+        isOpen = !isOpen;
+        animator.SetBool("IsOpen", isOpen);
+    }
+
+    public void SlotClicked(int slotIndex)
 	{
-		int iconCount = 0;
-		foreach(Transform icon in _itemIcons)
+        if (slotIndex <= InvManager.CollectedItems.Count)
 		{
-			// Icon image enabling
-			icon.gameObject.SetActive(false);
-			icon.GetChild(0).gameObject.SetActive(false);
-			
-			// Setting selected item
-			if(iconCount == InvManager.SelectedInvSlot) icon.gameObject.GetComponent<Image>().color = selectedItemColor;
-			else icon.gameObject.GetComponent<Image>().color = unselectedItemColor;
-			iconCount++;
-		}
+            InvManager.SelectedInvSlot = slotIndex;
+			RefreshInventorySlots();
+        }
+    }
+	
+	void RefreshInventorySlots()
+	{
 		int invItemCount = 0;
 		for(int i = 0; i < InvManager.AvailableItemSlots; i++)
 		{
 			int itemIndex = 0;
-			_itemIcons[i].gameObject.SetActive(true);
+			ItemIcons[i].gameObject.SetActive(true);
 			foreach(GameObject invItem in InvManager.CollectedItems.Keys)
 			{
 				// Enabling active slots and setting item images
 				if(itemIndex == invItemCount)
 				{
-					_itemIcons[i].GetChild(0).gameObject.SetActive(true);
-					_itemIcons[i].GetChild(0).gameObject.GetComponent<Image>().sprite = invItem.GetComponent<Item>().ItemData.Image;
+					ItemIcons[i].UpdateItemImage(invItem.GetComponent<Item>().ItemData.Image);
 					invItemCount++;
 					break;
 				}
 				else 
 				{
-					itemIndex++;
+                    ItemIcons[i].UpdateItemImage(null);
+                    itemIndex++;
 				}
 			}
 		}
