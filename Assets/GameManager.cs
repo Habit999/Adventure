@@ -73,12 +73,11 @@ public class GameManager : MonoBehaviour
 			}
 			
 			// Player skill & level stats
-			player.SkillsMngr._playerLevel = loadedData.PlayerLevel;
-			player.SkillsMngr._skillPoints = loadedData.PlayerSkillPoints;
-			player.SkillsMngr._experienceGained = loadedData.PlayerExperience;
-			player.SkillsMngr._currentSkills.vitality = loadedData.PlayerSkillLevels[0];
-			player.SkillsMngr._currentSkills.strength = loadedData.PlayerSkillLevels[1];
-			player.SkillsMngr._currentSkills.intelligence = loadedData.PlayerSkillLevels[2];
+			player.SkillsMngr.PlayerLevel = loadedData.PlayerLevel;
+			player.SkillsMngr.SkillPoints = loadedData.PlayerSkillPoints;
+			player.SkillsMngr.ExperienceGained = loadedData.PlayerExperience;
+			player.SkillsMngr.CurrentSkills.vitality = loadedData.PlayerSkillLevels[0];
+			player.SkillsMngr.CurrentSkills.strength = loadedData.PlayerSkillLevels[1];
 			
 			GameData = loadedData;
 			print("Game Data Loaded");
@@ -112,13 +111,12 @@ public class GameManager : MonoBehaviour
 		}
 		
 		// Player skill & level stats
-		GameData.PlayerLevel = player.SkillsMngr._playerLevel;
-		GameData.PlayerSkillPoints = player.SkillsMngr._skillPoints;
-		GameData.PlayerExperience = player.SkillsMngr._experienceGained;
+		GameData.PlayerLevel = player.SkillsMngr.PlayerLevel;
+		GameData.PlayerSkillPoints = player.SkillsMngr.SkillPoints;
+		GameData.PlayerExperience = player.SkillsMngr.ExperienceGained;
 		GameData.PlayerSkillLevels = new int[3];
-		GameData.PlayerSkillLevels[0] = player.SkillsMngr._currentSkills.vitality;
-		GameData.PlayerSkillLevels[1] = player.SkillsMngr._currentSkills.strength;
-		GameData.PlayerSkillLevels[2] = player.SkillsMngr._currentSkills.intelligence;
+		GameData.PlayerSkillLevels[0] = player.SkillsMngr.CurrentSkills.vitality;
+		GameData.PlayerSkillLevels[1] = player.SkillsMngr.CurrentSkills.strength;
 		
 		// Save to json file
 		SaveGameData(GameData);
@@ -158,5 +156,5 @@ public class GameSaveData
 	public int PlayerLevel = 0;
 	public int PlayerSkillPoints = 0;
 	public float PlayerExperience = 0;
-	public int[] PlayerSkillLevels = new int[3] { 1, 1, 1 };
+	public int[] PlayerSkillLevels = new int[2] { 1, 1 };
 }

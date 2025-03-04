@@ -29890,6 +29890,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3296375011072242749, guid: ddc91007c5a73914ca68b7f618ab6bfb, type: 3}
+      propertyPath: SkillPoints
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7343080708152209228, guid: ddc91007c5a73914ca68b7f618ab6bfb, type: 3}
       propertyPath: m_Name
       value: Player_DemonHunter

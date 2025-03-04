@@ -25,7 +25,7 @@ public class InteractionManager : MonoBehaviour
 
     public void Interact()
 	{
-		if(Input.GetKeyDown(GameManager.Instance.Controls.Interact) && ObjectPresent)
+		if(Input.GetKeyDown(controller.InputControls.Interact) && ObjectPresent)
 		{
 			if(ObjectInView.tag == "Map")
 			{
@@ -59,7 +59,7 @@ public class InteractionManager : MonoBehaviour
 	{
 		if(controller.PlayerState == PlayerController.PLAYERSTATE.FreeLook && !controller.MouseToggled)
 		{
-			if(Input.GetMouseButtonDown(GameManager.Instance.Controls.MousePrimary) && controller.InventoryMngr.EquippedItem != null)
+			if(Input.GetMouseButtonDown(controller.InputControls.MousePrimary) && controller.InventoryMngr.EquippedItem != null)
 			{
 				controller.InventoryMngr.EquippedItem.GetComponent<Item>().UseItem();
 				controller.CombatMngr.RightHandAnimator.SetTrigger(controller.InventoryMngr.EquippedItem.GetComponent<Item>().AnimatorTriggerName);
@@ -69,42 +69,42 @@ public class InteractionManager : MonoBehaviour
 	
 	void HotBarInteraction()
 	{
-		if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar0))
+		if(Input.GetKeyDown(controller.InputControls.HotBar0))
 		{
 			OnSwitchHotbar?.Invoke(0);
             controller.InventoryMngr.EquipItem();
         }
-		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar1))
+		else if(Input.GetKeyDown(controller.InputControls.HotBar1))
 		{
 			OnSwitchHotbar?.Invoke(1);
 			controller.InventoryMngr.EquipItem();
 		}
-		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar2))
+		else if(Input.GetKeyDown(controller.InputControls.HotBar2))
 		{
 			OnSwitchHotbar?.Invoke(2);
 			controller.InventoryMngr.EquipItem();
 		}
-		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar3))
+		else if(Input.GetKeyDown(controller.InputControls.HotBar3))
 		{
 			OnSwitchHotbar?.Invoke(3);
 			controller.InventoryMngr.EquipItem();
 		}
-		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar4))
+		else if(Input.GetKeyDown(controller.InputControls.HotBar4))
 		{
 			OnSwitchHotbar?.Invoke(4);
 			controller.InventoryMngr.EquipItem();
 		}
-		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar5))
+		else if(Input.GetKeyDown(controller.InputControls.HotBar5))
 		{
 			OnSwitchHotbar?.Invoke(5);
 			controller.InventoryMngr.EquipItem();
 		}
-		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar6))
+		else if(Input.GetKeyDown(controller.InputControls.HotBar6))
 		{
 			OnSwitchHotbar?.Invoke(6);
 			controller.InventoryMngr.EquipItem();
 		}
-		else if(Input.GetKeyDown(GameManager.Instance.Controls.HotBar7))
+		else if(Input.GetKeyDown(controller.InputControls.HotBar7))
 		{
 			OnSwitchHotbar?.Invoke(7);
 			controller.InventoryMngr.EquipItem();

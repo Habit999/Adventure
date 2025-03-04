@@ -20,8 +20,6 @@ public class InventoryUI : MonoBehaviour
 
     void Awake()
 	{
-		InvManager = PlayerController.Instance.InventoryMngr;
-
         animator = GetComponent<Animator>();
 
 		isOpen = false;
@@ -43,7 +41,7 @@ public class InventoryUI : MonoBehaviour
     public void ToggleOpen()
 	{
         isOpen = !isOpen;
-        animator.SetBool("IsOpen", isOpen);
+        animator.SetBool("Open", isOpen);
     }
 
     public void SlotClicked(int slotIndex)
@@ -57,10 +55,15 @@ public class InventoryUI : MonoBehaviour
 	
 	void RefreshInventorySlots()
 	{
-		int invItemCount = 0;
+        foreach (var slot in ItemIcons)
+        {
+            slot.gameObject.SetActive(false);
+        }
+
+        int invItemCount = 0;
 		for(int i = 0; i < InvManager.AvailableItemSlots; i++)
 		{
-			int itemIndex = 0;
+            int itemIndex = 0;
 			ItemIcons[i].gameObject.SetActive(true);
 			foreach(GameObject invItem in InvManager.CollectedItems.Keys)
 			{

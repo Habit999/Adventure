@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6295131871512308701}
   - component: {fileID: 8435175559579639101}
   m_Layer: 5
-  m_Name: Skill
+  m_Name: SkillRow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49,10 +49,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78934221c495d5c42bc05661917371f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skillValue: 0
-  _canIncrease: 0
-  _canDecrease: 0
-  skillType: 0
+  SkillsUIController: {fileID: 0}
+  SkillValue: 0
+  CanIncrease: 0
+  CanDecrease: 0
+  SkillType: 0
   valueText: {fileID: 2218033790870912589}
   plusButton: {fileID: 1148046419607290198}
   minusButton: {fileID: 1992740581336414267}

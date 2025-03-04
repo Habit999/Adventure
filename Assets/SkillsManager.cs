@@ -9,37 +9,35 @@ public class SkillsManager : MonoBehaviour
 	public delegate void PlayerLevelUp();
 	public event PlayerLevelUp LevelUp;
 	
-	public int _playerLevel = 0;
-	public int _skillPoints = 0;
-	[HideInInspector] public int _tempSkillPoints;
+	public int PlayerLevel = 0;
+	public int SkillPoints = 0;
+	[HideInInspector] public int TempSkillPoints;
 	
-	[HideInInspector] public float _experienceGained;
-	[HideInInspector] public float _nextLevelExperience;
+	[HideInInspector] public float ExperienceGained;
+	[HideInInspector] public float NextLevelExperience;
 	
 	private static float firstLevelExperience = 10;
 	private static float levelIntervalMultiplier = 0.2f;
 	
 	// Skill variables
-	public enum SKILLTYPE { Vitality, Strength, Intelligence };
+	public enum SKILLTYPE { Vitality, Strength };
 	[System.Serializable]
 	public struct SkillsList
 	{
-		public SkillsList(int inp_vitality, int inp_strength, int inp_intelligence)
+		public SkillsList(int inp_vitality, int inp_strength)
 		{
 			vitality = inp_vitality;
 			strength = inp_strength;
-			intelligence = inp_intelligence;
 		}
 		
 		public int vitality;
 		public int strength;
-		public int intelligence;
 	}
-	public SkillsList _currentSkills = new SkillsList(1, 1, 1);
+	public SkillsList CurrentSkills = new SkillsList(1, 1);
 	
 	// Temp variables for changing skills before confirmation
-	[HideInInspector] public SkillsList _tempSkills = new SkillsList(1, 1, 1);
-	[HideInInspector] public bool _tempValuesActive;
+	[HideInInspector] public SkillsList TempSkills = new SkillsList(1, 1);
+	[HideInInspector] public bool TempValuesActive;
 	
 	bool initialSkillsCheckComplete = false;
 	
@@ -50,66 +48,60 @@ public class SkillsManager : MonoBehaviour
 	
 	public void AddExperience(float amount)
 	{
-		_experienceGained += amount;
+		ExperienceGained += amount;
 	}
 	
 	public void ChangeSkillValue(SKILLTYPE type, int amount)
 	{
-		if(!_tempValuesActive)
+		if(!TempValuesActive)
 		{
-			_tempValuesActive = true;
+			TempValuesActive = true;
 			
-			_tempSkillPoints = _skillPoints;
+			TempSkillPoints = SkillPoints;
 			
-			_tempSkills.vitality = _currentSkills.vitality;
-			_tempSkills.strength = _currentSkills.strength;
-			_tempSkills.intelligence = _currentSkills.intelligence;
+			TempSkills.vitality = CurrentSkills.vitality;
+			TempSkills.strength = CurrentSkills.strength;
 		}
 		
 		switch(type)
 		{
 			case SKILLTYPE.Vitality:
-				_tempSkills.vitality += amount;
+				TempSkills.vitality += amount;
 				break;
 				
 			case SKILLTYPE.Strength:
-				_tempSkills.strength += amount;
-				break;
-				
-			case SKILLTYPE.Intelligence:
-				_tempSkills.intelligence += amount;
+				TempSkills.strength += amount;
 				break;
 				
 			default:
 				break;
 		}
 		
-		_tempSkillPoints += -amount;
+		TempSkillPoints += -amount;
 	}
 	
 	public void ConfirmSkillChanges()
 	{
-		_tempValuesActive = false;
+		TempValuesActive = false;
 		
-		_skillPoints = _tempSkillPoints;
+		SkillPoints = TempSkillPoints;
 		
-		_currentSkills.vitality = _tempSkills.vitality;
-		_currentSkills.strength = _tempSkills.strength;
-		_currentSkills.intelligence = _tempSkills.intelligence;
+		CurrentSkills.vitality = TempSkills.vitality;
+		CurrentSkills.strength = TempSkills.strength;
 	}
 	
 	IEnumerator UpdatePlayerLevel()
 	{
 		// Experience required for next level
-		_nextLevelExperience = firstLevelExperience + ((firstLevelExperience * levelIntervalMultiplier) * _playerLevel);
+		NextLevelExperience = firstLevelExperience + ((firstLevelExperience * levelIntervalMultiplier) * PlayerLevel);
 		
 		// Checks if player has enough xp for next level
-		if(_experienceGained / _nextLevelExperience > 1)
+		if(ExperienceGained / NextLevelExperience > 1)
 		{
-			_playerLevel += 1;
-			if(initialSkillsCheckComplete) _skillPoints += 1;
+			PlayerLevel += 1;
+			if(initialSkillsCheckComplete) SkillPoints += 1;
 			
-			_experienceGained -= _nextLevelExperience;
+			ExperienceGained -= NextLevelExperience;
 			
 			// Call level up event
 			LevelUp();

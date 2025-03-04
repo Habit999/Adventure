@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
     public event Action OnDeath;
     public event Action OnVanish;
 
+    [SerializeField] public SO_Controls InputControls;
+
     [HideInInspector] public bool IsInDungeon;
 
     public Transform Camera;
@@ -60,6 +62,8 @@ public class PlayerController : MonoBehaviour
         else Destroy(gameObject);
 
         rb = GetComponent<Rigidbody>();
+
+        InputControls = GameManager.Instance.Controls;
     }
 
     private void Start()
@@ -68,12 +72,13 @@ public class PlayerController : MonoBehaviour
         Mana = MaxMana;
 
         mouseY = 0;
+
+        CheckBodyState();
     }
 
     private void Update()
     {
         PlayerBehaviour();
-        CheckBodyState();
     }
 
     private void FixedUpdate()
@@ -91,13 +96,13 @@ public class PlayerController : MonoBehaviour
 
     public void KillPlayer()
     {
-        PlayerState = PLAYERSTATE.Dead;
+        SwitchPlayerState(PLAYERSTATE.Dead);
         OnDeath();
     }
 
     public void VanishPlayer()
     {
-        PlayerState = PLAYERSTATE.Dead;
+        SwitchPlayerState(PLAYERSTATE.Dead);
         OnVanish();
     }
 
@@ -114,19 +119,25 @@ public class PlayerController : MonoBehaviour
 
     public void FreezePlayer(bool lockCamera, bool lockMovement)
     {
-        PlayerState = PLAYERSTATE.Frozen;
+        SwitchPlayerState(PLAYERSTATE.Frozen);
         canLook = lockCamera;
         canMove = lockMovement;
     }
 
     public void UnFreezePlayer()
     {
-        PlayerState = PLAYERSTATE.FreeLook;
+        SwitchPlayerState(PLAYERSTATE.FreeLook);
         canLook = true;
         canMove = true;
     }
 
     #endregion
+
+    private void SwitchPlayerState(PLAYERSTATE newState)
+    {
+        PlayerState = newState;
+        CheckBodyState();
+    }
 
     private void PlayerBehaviour()
     {
@@ -154,31 +165,31 @@ public class PlayerController : MonoBehaviour
     private void FreeMovement()
     {
         // Moving
-        if (Input.GetKey(KeyCode.LeftShift)) isSprinting = true;
+        if (Input.GetKey(InputControls.Sprint)) isSprinting = true;
         else isSprinting = false;
 
         isMoving = false;
         if (canMove)
         {
             bool nonStrafeMovement = false;
-            if (Input.GetKey(GameManager.Instance.Controls.Forward))
+            if (Input.GetKey(InputControls.Forward))
             {
                 moveDirection += Body.forward * (isSprinting ? sprintSpeed : walkSpeed) * Time.deltaTime;
                 isMoving = true;
                 nonStrafeMovement = true;
             }
-            if (Input.GetKey(GameManager.Instance.Controls.Backward))
+            if (Input.GetKey(InputControls.Backward))
             {
                 moveDirection += -Body.forward * (isSprinting ? sprintSpeed : walkSpeed) * Time.deltaTime;
                 isMoving = true;
                 nonStrafeMovement = true;
             }
-            if (Input.GetKey(GameManager.Instance.Controls.Right))
+            if (Input.GetKey(InputControls.Right))
             {
                 moveDirection += Body.right * (isSprinting ? sprintSpeed : walkSpeed) * (nonStrafeMovement ? strafeModifier : 1) * Time.deltaTime;
                 isMoving = true;
             }
-            if (Input.GetKey(GameManager.Instance.Controls.Left))
+            if (Input.GetKey(InputControls.Left))
             {
                 moveDirection += -Body.right * (isSprinting ? sprintSpeed : walkSpeed) * (nonStrafeMovement ? strafeModifier : 1) * Time.deltaTime;
                 isMoving = true;
@@ -197,9 +208,10 @@ public class PlayerController : MonoBehaviour
         }
 
         // Switch State
-        if (Input.GetKey(GameManager.Instance.Controls.ToggleUI))
-            PlayerState = PLAYERSTATE.InMenu;
-        else PlayerState = PLAYERSTATE.FreeLook;
+        if (Input.GetKeyDown(InputControls.ToggleUI))
+            SwitchPlayerState(PLAYERSTATE.InMenu);
+        else if(Input.GetKeyUp(InputControls.ToggleUI))
+            SwitchPlayerState(PLAYERSTATE.FreeLook);
     }
 
     private void CheckBodyState()

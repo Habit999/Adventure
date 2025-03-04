@@ -26,10 +26,7 @@ public class Item : MonoBehaviour
 	public float Damage;
 	public float HealthRecovery;
 	public float ManaRecovery;
-	
-	[Space(10)]
-	public SkillsManager.SkillsList MinimumStatsRequirements = new SkillsManager.SkillsList(1, 1, 1);
-	
+		
 	public float GetRandomExperience { get { return Random.Range(5, 10); } }
 	
 	public bool CollectItem()

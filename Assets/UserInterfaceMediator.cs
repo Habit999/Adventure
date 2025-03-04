@@ -7,10 +7,12 @@ public class UserInterfaceMediator : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private UserInterfaceController userInterfaceController;
     [SerializeField] private InventoryUI inventoryUI;
+    [SerializeField] private SkillsUI skillsUI;
 
     private void Awake()
     {
         inventoryUI.InvManager = playerController.InventoryMngr;
+        skillsUI.SkillsMngr = playerController.SkillsMngr;
     }
 
     private void OnEnable()

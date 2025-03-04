@@ -17,7 +17,8 @@ public class InventoryIcon : MonoBehaviour
     {
         backgroundImage = GetComponent<Image>();
 
-		itemImage.gameObject.SetActive(false);
+		if(itemImage != null)
+			itemImage.gameObject.SetActive(false);
     }
 
     public void IconClick()

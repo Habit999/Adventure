@@ -158,19 +158,19 @@ public class InventoryManager : MonoBehaviour
 	void UpdateInventoryStats()
 	{
 		// Adjust inventory slots to player level
-		if(Controller.SkillsMngr._currentSkills.strength == 1)
+		if(Controller.SkillsMngr.CurrentSkills.strength == 1)
 		{
 			AvailableItemSlots = 4;
 		}
-		else if(Controller.SkillsMngr._currentSkills.strength == 3)
+		else if(Controller.SkillsMngr.CurrentSkills.strength == 3)
 		{
 			AvailableItemSlots = 8;
 		}
-		else if(Controller.SkillsMngr._currentSkills.strength == 5)
+		else if(Controller.SkillsMngr.CurrentSkills.strength == 5)
 		{
 			AvailableItemSlots = 12;
 		}
-		else if(Controller.SkillsMngr._currentSkills.strength == 7)
+		else if(Controller.SkillsMngr.CurrentSkills.strength == 7)
 		{
 			AvailableItemSlots = 16;
 		}

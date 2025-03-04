@@ -3,69 +3,73 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 public class SkillRowUI : MonoBehaviour
 {
-	[HideInInspector] public int _skillValue;
+	[HideInInspector] public SkillsUI SkillsUIController;
+
+    [HideInInspector] public int SkillValue;
 	
-	[HideInInspector] public bool _canIncrease;
-	[HideInInspector] public bool _canDecrease;
+	[HideInInspector] public bool CanIncrease;
+	[HideInInspector] public bool CanDecrease;
 	
-	[SerializeField] SkillsManager.SKILLTYPE skillType;
+	public SkillsManager.SKILLTYPE SkillType;
 	[Space(5)]
-	[SerializeField] TextMeshProUGUI valueText;
-	[SerializeField] Button plusButton;
-	[SerializeField] Button minusButton;
-	
-	public void IncreaseValueButton()
+	[SerializeField] private TextMeshProUGUI valueText;
+	[SerializeField] private Button plusButton;
+	[SerializeField] private Button minusButton;
+
+    private void Start()
+    {
+		SkillsUIController.OnSkillPointsChanged += SetRowDisplay;
+    }
+
+    private void OnDisable()
+    {
+        SkillsUIController.OnSkillPointsChanged -= SetRowDisplay;
+    }
+
+    public void IncreaseValueButton()
 	{
-		PlayerController.Instance.SkillsMngr.ChangeSkillValue(skillType, 1);
-	}
-	
-	public void DecreaseValueButton()
+		SkillsUIController.ChangeTempSkillValue(SkillType, 1);
+    }
+
+    public void DecreaseValueButton()
 	{
-		PlayerController.Instance.SkillsMngr.ChangeSkillValue(skillType, -1);
-	}
-	
-	void Update()
+        SkillsUIController.ChangeTempSkillValue(SkillType, -1);
+    }
+
+    private void SetRowDisplay()
 	{
-		valueText.SetText(_skillValue.ToString());
-		
-		CheckSkillPoints();
-		
-		plusButton.interactable = _canIncrease;
-		minusButton.interactable = _canDecrease;
-	}
-	
-	void CheckSkillPoints()
+        valueText.SetText(SkillValue.ToString());
+        plusButton.interactable = CanIncrease;
+        minusButton.interactable = CanDecrease;
+    }
+
+    /*private void CheckSkillPoints()
 	{
-		if(PlayerController.Instance.SkillsMngr._tempValuesActive)
+		if(SkillsUIController.SkillsMngr.TempValuesActive)
 		{
 			// Enables increase button if a temp skill point is available
-			if(PlayerController.Instance.SkillsMngr._tempSkillPoints > 0)
-				_canIncrease = true;
-			else _canIncrease = false;
+			if(SkillsUIController.SkillsMngr.TempSkillPoints > 0)
+				CanIncrease = true;
+			else CanIncrease = false;
 			
 			// Enables decrease button depending on if the value has been increased or not
 			// also adjusts to the skill type
-			switch(skillType)
+			switch(SkillType)
 			{
 				case SkillsManager.SKILLTYPE.Vitality:
-					if(PlayerController.Instance.SkillsMngr._tempSkills.vitality > PlayerController.Instance.SkillsMngr._currentSkills.vitality)
-						_canDecrease = true;
-					else _canDecrease = false;
+					if(SkillsUIController.SkillsMngr.TempSkills.vitality > SkillsUIController.SkillsMngr.CurrentSkills.vitality)
+						CanDecrease = true;
+					else CanDecrease = false;
 					break;
 					
 				case SkillsManager.SKILLTYPE.Strength:
-					if(PlayerController.Instance.SkillsMngr._tempSkills.strength > PlayerController.Instance.SkillsMngr._currentSkills.strength)
-						_canDecrease = true;
-					else _canDecrease = false;
-					break;
-					
-				case SkillsManager.SKILLTYPE.Intelligence:
-					if(PlayerController.Instance.SkillsMngr._tempSkills.intelligence > PlayerController.Instance.SkillsMngr._currentSkills.intelligence)
-						_canDecrease = true;
-					else _canDecrease = false;
+					if(SkillsUIController.SkillsMngr.TempSkills.strength > SkillsUIController.SkillsMngr.CurrentSkills.strength)
+						CanDecrease = true;
+					else CanDecrease = false;
 					break;
 					
 				default:
@@ -75,11 +79,14 @@ public class SkillRowUI : MonoBehaviour
 		else 
 		{
 			// Enables increase button if an actual skill point is available
-			if(PlayerController.Instance.SkillsMngr._skillPoints > 0)
-				_canIncrease = true;
-			else _canIncrease = false;
+			if(SkillsUIController.SkillsMngr.SkillPoints > 0)
+				CanIncrease = true;
+			else CanIncrease = false;
 			
-			_canDecrease = false;
+			CanDecrease = false;
 		}
-	}
+
+        plusButton.interactable = CanIncrease;
+        minusButton.interactable = CanDecrease;
+    }*/
 }
