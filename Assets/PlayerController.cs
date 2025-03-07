@@ -21,7 +21,9 @@ public class PlayerController : MonoBehaviour
     public event Action OnDeath;
     public event Action OnVanish;
 
-    [SerializeField] public SO_Controls InputControls;
+    public event Action<float, float> OnHealthChange;
+
+    [HideInInspector] public SO_Controls InputControls;
 
     [HideInInspector] public bool IsInDungeon;
 
@@ -31,10 +33,8 @@ public class PlayerController : MonoBehaviour
 
     [Space(5)]
 
-    public float MaxHealth;
-    public float MaxMana;
-    [HideInInspector] public float Health;
-    [HideInInspector] public float Mana;
+    [SerializeField] private float maxHealth;
+    private float health;
 
     private float mouseX;
     private float mouseY;
@@ -66,10 +66,22 @@ public class PlayerController : MonoBehaviour
         InputControls = GameManager.Instance.Controls;
     }
 
+    [ContextMenu("Test Health Change")]
+    private void TestHealthChange()
+    {
+        DamagePlayer(10);
+    }
+
+    [ContextMenu("Test Experience Change")]
+    private void TestExperienceChange()
+    {
+        SkillsMngr.AddExperience(10);
+    }
+
     private void Start()
     {
-        Health = MaxHealth;
-        Mana = MaxMana;
+        health = maxHealth;
+        OnHealthChange(health, maxHealth);
 
         mouseY = 0;
 
@@ -108,13 +120,14 @@ public class PlayerController : MonoBehaviour
 
     public void DamagePlayer(float damage)
     {
-        Health -= damage;
+        health -= damage;
+        OnHealthChange(health, maxHealth);
     }
 
-    public void HealPlayer(float healing, float manaRecovery)
+    public void HealPlayer(float healing)
     {
-        Health += healing;
-        Mana += manaRecovery;
+        health += healing;
+        OnHealthChange(health, maxHealth);
     }
 
     public void FreezePlayer(bool lockCamera, bool lockMovement)

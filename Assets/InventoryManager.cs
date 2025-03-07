@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -10,9 +11,12 @@ public class InventoryManager : MonoBehaviour
 	public IDictionary<GameObject, int> CollectedItems = new Dictionary<GameObject, int>();
 	
 	[HideInInspector] public int AvailableItemSlots = 4;
-	
-	// To be used
-	[HideInInspector] public IDictionary<GameObject, int> HotbarItemOrder = new Dictionary<GameObject, int>();
+
+	public event Action OnInventoryChange;
+	public event Action OnHotbarChange;
+
+    // To be used
+    public IDictionary<GameObject, int> HotbarItemOrder = new Dictionary<GameObject, int>();
 	
 	[HideInInspector] public int SelectedInvSlot;
 	
@@ -35,7 +39,10 @@ public class InventoryManager : MonoBehaviour
 		Controller = GetComponent<PlayerController>();
 
         SelectedInvSlot = -1;
-	}
+
+		UpdateInventoryStats();
+
+    }
 	
 	public void AssignHotbarItem(int position)
 	{
@@ -56,7 +63,9 @@ public class InventoryManager : MonoBehaviour
 		if(HotbarItemOrder.ContainsKey(CollectedItems.Keys.ElementAt(SelectedInvSlot))) 
 			HotbarItemOrder[CollectedItems.Keys.ElementAt(SelectedInvSlot)] = position;
 		else HotbarItemOrder.Add(CollectedItems.Keys.ElementAt(SelectedInvSlot), position);
-	}
+
+		OnHotbarChange?.Invoke();
+    }
 
     public void EquipItem()
 	{
@@ -122,14 +131,18 @@ public class InventoryManager : MonoBehaviour
 				if(CollectedItems[item] + amount <= item.GetComponent<Item>().ItemData.MaxItemStack)
 				{
 					CollectedItems[item] += amount;
-				}
-			}
+                    print("Item Added");
+                }
+            }
 		}
 		if(CollectedItems.Count < AvailableItemSlots)
 		{
 			CollectedItems.Add(item, amount);
+			print("New Item Added");
 		}
-	}
+
+		OnInventoryChange?.Invoke();
+    }
 	
 	// Remove item from collected inventory
 	public GameObject RemoveItem(GameObject item, int amount)
@@ -141,14 +154,16 @@ public class InventoryManager : MonoBehaviour
 				if(CollectedItems[item] - amount > 0)
 				{
 					CollectedItems[item] -= amount;
-					return item;
+                    OnInventoryChange?.Invoke();
+                    return item;
 				}
 				else if(CollectedItems[item] - amount == 0)
 				{
 					CollectedItems.Remove(item);
 					HotbarItemOrder.Remove(item);
 					if(item == EquippedItem) RemoveItemFromHand();
-					return item;
+                    OnInventoryChange?.Invoke();
+                    return item;
 				}
 			}
 		}

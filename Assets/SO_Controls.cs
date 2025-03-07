@@ -25,7 +25,6 @@ public class SO_Controls : ScriptableObject
 	
 	public KeyCode ToggleUI = KeyCode.Tab;
 	
-	public KeyCode HotBar0 = KeyCode.Alpha0;
 	public KeyCode HotBar1 = KeyCode.Alpha1;
 	public KeyCode HotBar2 = KeyCode.Alpha2;
 	public KeyCode HotBar3 = KeyCode.Alpha3;
@@ -53,7 +52,6 @@ public class SO_Controls : ScriptableObject
 		
 		ToggleUI = KeyCode.Space;
 		
-		HotBar0 = KeyCode.Alpha0;
 		HotBar1 = KeyCode.Alpha1;
 		HotBar2 = KeyCode.Alpha2;
 		HotBar3 = KeyCode.Alpha3;

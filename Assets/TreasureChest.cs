@@ -15,7 +15,7 @@ public class TreasureChest : MonoBehaviour
 
 	private MimicComponent mimicComponent;
 
-	private bool isOpen;
+	[HideInInspector] public bool IsOpen;
 
 	private void Awake()
     {
@@ -23,14 +23,9 @@ public class TreasureChest : MonoBehaviour
         mimicComponent = GetComponent<MimicComponent>();
     }
 
-    private void OnEnable()
+    private void Start()
     {
 		OnGiveLoot += PlayerController.Instance.InventoryMngr.AddItem;
-    }
-
-    private void OnDisable()
-    {
-		OnGiveLoot -= PlayerController.Instance.InventoryMngr.AddItem;
     }
 
     public void SpawnLootItem(Item lootItem)
@@ -43,15 +38,15 @@ public class TreasureChest : MonoBehaviour
 
 	public void OpenChest()
 	{
-		if (!isOpen)
+		if (!IsOpen)
 		{
-            if(mimicComponent != null)
+            if(mimicComponent != null && mimicComponent.isMimic)
 			{
 				mimicComponent.TriggerMimic();
             }
 			else
 			{
-                isOpen = true;
+                IsOpen = true;
                 StartCoroutine(OpenRoutine());
             }
         }

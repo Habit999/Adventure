@@ -8,15 +8,13 @@ public class InventoryIcon : MonoBehaviour
 	public enum ICONTYPE { ItemSlot, HotbarButton };
 	[SerializeField] ICONTYPE IconType;
 
-	[HideInInspector] public InventoryUI InventoryController;
+	public InventoryUI InventoryUIController;
 
 	[SerializeField] private Image itemImage;
-	private Image backgroundImage;
+    public Image BackgroundImage;
 
     private void Awake()
     {
-        backgroundImage = GetComponent<Image>();
-
 		if(itemImage != null)
 			itemImage.gameObject.SetActive(false);
     }
@@ -26,12 +24,12 @@ public class InventoryIcon : MonoBehaviour
 		switch(IconType)
 		{
 			case ICONTYPE.ItemSlot:
-				InventoryController.SlotClicked(transform.GetSiblingIndex());
+				InventoryUIController.SlotClicked(transform.GetSiblingIndex());
                 break;
 			
 			case ICONTYPE.HotbarButton:
 				if(PlayerController.Instance.InventoryMngr.SelectedInvSlot >= 0 && PlayerController.Instance.InventoryMngr.SelectedInvSlot < PlayerController.Instance.InventoryMngr.CollectedItems.Count)
-					PlayerController.Instance.InventoryMngr.AssignHotbarItem(transform.GetSiblingIndex() + 1);
+					PlayerController.Instance.InventoryMngr.AssignHotbarItem(transform.GetSiblingIndex());
 				break;
 			
 			default:
@@ -45,12 +43,10 @@ public class InventoryIcon : MonoBehaviour
 		{
 			itemImage.sprite = image;
 			itemImage.gameObject.SetActive(true);
-			backgroundImage.color = InventoryController.SelectedItemColor;
         }
 		else
 		{
 			itemImage.gameObject.SetActive(false);
-            backgroundImage.color = InventoryController.UnselectedItemColor;
         }
     }
 }

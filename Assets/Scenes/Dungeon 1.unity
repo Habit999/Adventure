@@ -30104,6 +30104,17 @@ Transform:
   - {fileID: 1439805216}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1781959739 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6207930082081544520, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
+  m_PrefabInstance: {fileID: 762466445248120214}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32b16dee61f34874a91a85296feafabc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1957037636
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30471,6 +30482,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 738937815678256141, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
+      propertyPath: InventoryUIController
+      value: 
+      objectReference: {fileID: 1781959739}
     - target: {fileID: 1043988505205643870, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -30487,6 +30502,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1050701710037460320, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
+      propertyPath: InventoryUIController
+      value: 
+      objectReference: {fileID: 1781959739}
+    - target: {fileID: 1169334193228619670, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
+      propertyPath: InventoryUIController
+      value: 
+      objectReference: {fileID: 1781959739}
     - target: {fileID: 1372164852043372332, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -30543,6 +30566,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1961727764178965321, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
+      propertyPath: InventoryUIController
+      value: 
+      objectReference: {fileID: 1781959739}
     - target: {fileID: 2080683547718104344, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -30671,6 +30698,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3091707639908746875, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
+      propertyPath: InventoryUIController
+      value: 
+      objectReference: {fileID: 1781959739}
     - target: {fileID: 3322313008555396422, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
       propertyPath: m_Name
       value: GUI
@@ -30699,6 +30730,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3502120957861282382, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
+      propertyPath: InventoryUIController
+      value: 
+      objectReference: {fileID: 1781959739}
     - target: {fileID: 3575441089425688416, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -30723,6 +30758,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3576808663696386448, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
+      propertyPath: InventoryUIController
+      value: 
+      objectReference: {fileID: 1781959739}
     - target: {fileID: 4341564176693815488, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -30747,6 +30786,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4414892486547041774, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
+      propertyPath: InventoryUIController
+      value: 
+      objectReference: {fileID: 1781959739}
     - target: {fileID: 4429639251579699998, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -30771,6 +30814,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4662318650898712438, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
+      propertyPath: InventoryUIController
+      value: 
+      objectReference: {fileID: 1781959739}
     - target: {fileID: 5345761812129629139, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -30907,6 +30954,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5932308251615097491, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
+      propertyPath: InventoryUIController
+      value: 
+      objectReference: {fileID: 1781959739}
     - target: {fileID: 6239583120160173313, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -30935,6 +30986,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6608657169696320945, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
+      propertyPath: InventoryUIController
+      value: 
+      objectReference: {fileID: 1781959739}
     - target: {fileID: 6790638028480790275, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -30983,6 +31038,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7211527327221636409, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
+      propertyPath: InventoryUIController
+      value: 
+      objectReference: {fileID: 1781959739}
     - target: {fileID: 7278763925548537690, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -30999,6 +31058,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7366518208729535391, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
+      propertyPath: InventoryUIController
+      value: 
+      objectReference: {fileID: 1781959739}
     - target: {fileID: 7552008861858789303, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -31063,6 +31126,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8088456783970407540, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
+      propertyPath: InventoryUIController
+      value: 
+      objectReference: {fileID: 1781959739}
+    - target: {fileID: 8225451426161550728, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
+      propertyPath: InventoryUIController
+      value: 
+      objectReference: {fileID: 1781959739}
     - target: {fileID: 8480246884012242935, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
       propertyPath: playerController
       value: 
@@ -31091,6 +31162,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8865391409822097932, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
+      propertyPath: InventoryUIController
+      value: 
+      objectReference: {fileID: 1781959739}
     - target: {fileID: 8999781392313695994, guid: 2ecff834c95c42947849eda28cf94e2f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

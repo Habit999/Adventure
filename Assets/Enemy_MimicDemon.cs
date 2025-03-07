@@ -74,9 +74,7 @@ public class Enemy_MimicDemon : Enemy
     {
         if (!hasDestination)
         {
-            bool objectFound = FindClosestMimicObject();
-            print(objectFound);
-            if (objectFound)
+            if (FindClosestMimicObject())
                 hasDestination = true;
             else
             {
@@ -89,7 +87,13 @@ public class Enemy_MimicDemon : Enemy
             return;
         }
 
-        navAgent.SetDestination(movePoint);
+        if (moveTarget.GetComponent<TreasureChest>().IsOpen)
+        {
+            FindClosestMimicObject();
+            return;
+        }
+
+            navAgent.SetDestination(movePoint);
 
         if(Vector3.Distance(transform.position, moveTarget.position) <= destinationStopDistance)
         {
@@ -179,6 +183,9 @@ public class Enemy_MimicDemon : Enemy
             float closestDistance = 0;
             foreach (var mimicObj in LootManager.MimicObjects)
             {
+                if (mimicObj.GetComponent<TreasureChest>().IsOpen)
+                    continue;
+
                 if (closestMimicObject == null)
                 {
                     closestMimicObject = mimicObj;

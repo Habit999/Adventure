@@ -69,12 +69,7 @@ public class InteractionManager : MonoBehaviour
 	
 	void HotBarInteraction()
 	{
-		if(Input.GetKeyDown(controller.InputControls.HotBar0))
-		{
-			OnSwitchHotbar?.Invoke(0);
-            controller.InventoryMngr.EquipItem();
-        }
-		else if(Input.GetKeyDown(controller.InputControls.HotBar1))
+		if(Input.GetKeyDown(controller.InputControls.HotBar1))
 		{
 			OnSwitchHotbar?.Invoke(1);
 			controller.InventoryMngr.EquipItem();

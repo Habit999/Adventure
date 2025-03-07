@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
-	[HideInInspector] public InventoryManager InvManager;
+	[HideInInspector] public InventoryManager InventoryMngr;
 
 	[SerializeField] private Transform itemRegion;
 	
@@ -18,6 +18,11 @@ public class InventoryUI : MonoBehaviour
 
 	private bool isOpen;
 
+    private void Start()
+    {
+        RefreshInventorySlots();
+    }
+
     void Awake()
 	{
         animator = GetComponent<Animator>();
@@ -28,13 +33,13 @@ public class InventoryUI : MonoBehaviour
         for (int i = 0; i < itemRegion.childCount; i++)
 		{
 			ItemIcons.Add(itemRegion.GetChild(i).gameObject.GetComponent<InventoryIcon>());
-			ItemIcons[i].InventoryController = this;
+			ItemIcons[i].InventoryUIController = this;
         }
-	}
+    }
 
     private void Update()
     {
-        if(InvManager.Controller.PlayerState != PlayerController.PLAYERSTATE.InMenu && isOpen)
+        if(InventoryMngr.Controller.PlayerState != PlayerController.PLAYERSTATE.InMenu && isOpen)
 			ToggleOpen();
     }
 
@@ -46,40 +51,50 @@ public class InventoryUI : MonoBehaviour
 
     public void SlotClicked(int slotIndex)
 	{
-        if (slotIndex <= InvManager.CollectedItems.Count)
+        if (slotIndex <= InventoryMngr.CollectedItems.Count)
 		{
-            InvManager.SelectedInvSlot = slotIndex;
+            InventoryMngr.SelectedInvSlot = slotIndex;
 			RefreshInventorySlots();
         }
     }
-	
-	void RefreshInventorySlots()
-	{
-        foreach (var slot in ItemIcons)
-        {
-            slot.gameObject.SetActive(false);
-        }
 
-        int invItemCount = 0;
-		for(int i = 0; i < InvManager.AvailableItemSlots; i++)
+	public void RefreshInventorySlots()
+	{
+		foreach (var slot in ItemIcons)
 		{
-            int itemIndex = 0;
+			slot.gameObject.SetActive(false);
+		}
+
+		int invItemCount = 0;
+		for (int i = 0; i < InventoryMngr.AvailableItemSlots; i++)
+		{
+			int itemIndex = 0;
 			ItemIcons[i].gameObject.SetActive(true);
-			foreach(GameObject invItem in InvManager.CollectedItems.Keys)
+			foreach (GameObject invItem in InventoryMngr.CollectedItems.Keys)
 			{
 				// Enabling active slots and setting item images
-				if(itemIndex == invItemCount)
+				if (itemIndex == invItemCount)
 				{
 					ItemIcons[i].UpdateItemImage(invItem.GetComponent<Item>().ItemData.Image);
 					invItemCount++;
 					break;
 				}
-				else 
+				else
 				{
-                    ItemIcons[i].UpdateItemImage(null);
-                    itemIndex++;
+					ItemIcons[i].UpdateItemImage(null);
+					itemIndex++;
 				}
 			}
-		}
+
+			// Set selected icon colour
+			if(i == InventoryMngr.SelectedInvSlot)
+            {
+                ItemIcons[i].BackgroundImage.color = SelectedItemColor;
+            }
+            else
+            {
+                ItemIcons[i].BackgroundImage.color = UnselectedItemColor;
+            }
+        }
 	}
 }

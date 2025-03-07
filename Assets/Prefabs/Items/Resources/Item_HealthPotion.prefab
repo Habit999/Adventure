@@ -128,20 +128,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e4914979633aa74b801d5bbec003a4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemData:
+  ItemData:
     Type: 1
     Name: HealthPotion
     Image: {fileID: 21300000, guid: 5bb8602b04b0b77418b1a59d504a106e, type: 3}
-    MaxItemStack: 1
-  _levelRequired: 0
-  _animatorTriggerName: 
-  _damage: 0
-  _healthRecovery: 50
-  _manaRecovery: 0
-  _minimumStatsRequirements:
-    vitality: 1
-    strength: 1
-    intelligence: 2
+    MaxItemStack: 3
+  AnimatorTriggerName: 
+  Damage: 0
+  HealthRecovery: 50
 --- !u!1 &3822869214510350617
 GameObject:
   m_ObjectHideFlags: 0

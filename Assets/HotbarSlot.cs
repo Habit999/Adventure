@@ -11,13 +11,15 @@ public class HotbarSlot : MonoBehaviour
     [Space(5)]
 
     [SerializeField] private Image backgroundImage;
-    [SerializeField] private Image foregroundImage;
+    public Image ForegroundImage;
 
-    [HideInInspector] public Sprite ItemImage;
+    private void Start()
+    {
+        ForegroundImage.gameObject.SetActive(false);
+    }
 
     public void ToggleActive(bool isActive)
     {
         backgroundImage.color = isActive ? activeHotbarColor : inactiveHotbarColor;
-        foregroundImage.sprite = isActive ? ItemImage : null;
     }
 }

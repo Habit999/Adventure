@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7982693592163033683}
   - component: {fileID: 5475027035894813727}
   - component: {fileID: 6011673848403927277}
+  - component: {fileID: 2628833139096013571}
   m_Layer: 5
   m_Name: HotbarSlot
   m_TagString: Untagged
@@ -76,6 +77,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2628833139096013571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4817610680827984054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42be106613f00f544874cb9efe873876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activeHotbarColor: {r: 0.5188679, g: 0, b: 0, a: 1}
+  inactiveHotbarColor: {r: 0.39607847, g: 0.39607847, b: 0.39607847, a: 1}
+  backgroundImage: {fileID: 6011673848403927277}
+  ForegroundImage: {fileID: 1946998952606832737}
 --- !u!1 &4845656766431573095
 GameObject:
   m_ObjectHideFlags: 0

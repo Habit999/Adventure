@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,8 +9,10 @@ public class SkillsManager : MonoBehaviour
 	
 	public delegate void PlayerLevelUp();
 	public event PlayerLevelUp LevelUp;
-	
-	public int PlayerLevel = 0;
+
+    public event Action<float, float> OnExperienceChange;
+
+    public int PlayerLevel = 0;
 	public int SkillPoints = 0;
 	[HideInInspector] public int TempSkillPoints;
 	
@@ -49,7 +52,8 @@ public class SkillsManager : MonoBehaviour
 	public void AddExperience(float amount)
 	{
 		ExperienceGained += amount;
-	}
+		OnExperienceChange(ExperienceGained, NextLevelExperience);
+    }
 	
 	public void ChangeSkillValue(SKILLTYPE type, int amount)
 	{
@@ -90,7 +94,7 @@ public class SkillsManager : MonoBehaviour
 		CurrentSkills.strength = TempSkills.strength;
 	}
 	
-	IEnumerator UpdatePlayerLevel()
+	private IEnumerator UpdatePlayerLevel()
 	{
 		// Experience required for next level
 		NextLevelExperience = firstLevelExperience + ((firstLevelExperience * levelIntervalMultiplier) * PlayerLevel);

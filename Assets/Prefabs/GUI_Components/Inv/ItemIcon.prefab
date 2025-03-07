@@ -258,5 +258,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IconType: 0
-  InventoryController: {fileID: 0}
+  InventoryUIController: {fileID: 0}
   itemImage: {fileID: 6398319728864760605}
+  BackgroundImage: {fileID: 4094614236496950076}

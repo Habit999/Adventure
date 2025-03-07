@@ -1,10 +1,8 @@
 To-Do:
 
-- Inventory not scaled right
+- Cant assign item to hotbar, throws an error
 
-- Speed changes with screen resolution
-
-- Mimic needs to attack player if in a chest and opened
+- Health and experience bar not working
 
 - Check all scripts for unessaccery code
 

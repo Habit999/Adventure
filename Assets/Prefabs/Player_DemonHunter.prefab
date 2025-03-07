@@ -474,14 +474,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerState: 0
+  InputControls: {fileID: 0}
   IsInDungeon: 0
   Camera: {fileID: 2624188408872534697}
   Body: {fileID: 6984754148921075596}
   damageArea: {fileID: 7515552356548293980}
-  MaxHealth: 100
-  MaxMana: 100
-  Health: 0
-  Mana: 0
+  maxHealth: 100
   walkSpeed: 500
   sprintSpeed: 600
   strafeModifier: 0.76
@@ -513,6 +511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2f832467db207f4d992be2153f846fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Controller: {fileID: 0}
   AvailableItemSlots: 4
   SelectedInvSlot: 0
   EquippedItem: {fileID: 0}
@@ -529,20 +528,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2158a3a32059c6c469ef0eab1e7c8cac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerLevel: 1
-  _skillPoints: 0
-  _tempSkillPoints: 0
-  _experienceGained: 0
-  _nextLevelExperience: 10
-  _currentSkills:
+  PlayerLevel: 0
+  SkillPoints: 0
+  TempSkillPoints: 0
+  ExperienceGained: 0
+  NextLevelExperience: 0
+  CurrentSkills:
     vitality: 1
     strength: 1
-    intelligence: 1
-  _tempSkills:
+  TempSkills:
     vitality: 1
     strength: 1
-    intelligence: 1
-  _tempValuesActive: 0
+  TempValuesActive: 0
 --- !u!54 &3262189669786413659
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -654,7 +651,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80418d65fb500a34e935219d3d96f5e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rightHandAnimator: {fileID: 6641613512814332458}
+  RightHandAnimator: {fileID: 0}
   swingTime: 0.3
 --- !u!65 &7841219533132549411
 BoxCollider:

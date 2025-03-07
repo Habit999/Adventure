@@ -25,7 +25,6 @@ public class Item : MonoBehaviour
 	[Space(10)]
 	public float Damage;
 	public float HealthRecovery;
-	public float ManaRecovery;
 		
 	public float GetRandomExperience { get { return Random.Range(5, 10); } }
 	
@@ -62,7 +61,7 @@ public class Item : MonoBehaviour
 				return true;
 				
 			case ItemDataStructure.TYPE.Consumable:
-				PlayerController.Instance.HealPlayer(HealthRecovery, ManaRecovery);
+				PlayerController.Instance.HealPlayer(HealthRecovery);
 				return true;
 				
 			default:

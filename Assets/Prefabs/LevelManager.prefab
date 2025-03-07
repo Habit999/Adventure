@@ -63,7 +63,6 @@ MonoBehaviour:
   LootItems:
   - {fileID: 5545886559243170454, guid: 0c1686f86b4d1b748a063896505f97fe, type: 3}
   - {fileID: 5615628024804230624, guid: f9e925efbe7968a46ba48eb9bd9fcd65, type: 3}
-  - {fileID: 5306003610079311760, guid: 0edc2447c28f6974e9233210d4c1b424, type: 3}
   - {fileID: 7182479860754735293, guid: e05a0e1db993a6b4885a5754cf498744, type: 3}
   MimicObjects: []
 --- !u!114 &4659140451648223350
@@ -79,3 +78,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LevelMngr: {fileID: 0}
+  VoidsInLevel: 0
+  ThievesInLevel: 0
+  MimicsInLevel: 0

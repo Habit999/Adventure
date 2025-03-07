@@ -45,19 +45,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e4914979633aa74b801d5bbec003a4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemData:
+  ItemData:
     Type: 1
     Name: Bandage
     Image: {fileID: 21300000, guid: 618aa03529778df46ab55f6940bd5349, type: 3}
-    MaxItemStack: 3
-  _animatorTriggerName: UseBandage
-  _damage: 0
-  _healthRecovery: 25
-  _manaRecovery: 0
-  _minimumStatsRequirements:
-    vitality: 1
-    strength: 1
-    intelligence: 1
+    MaxItemStack: 5
+  AnimatorTriggerName: UseBandage
+  Damage: 0
+  HealthRecovery: 30
 --- !u!1 &5366103689008818788
 GameObject:
   m_ObjectHideFlags: 0

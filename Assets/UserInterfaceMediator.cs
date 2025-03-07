@@ -11,21 +11,30 @@ public class UserInterfaceMediator : MonoBehaviour
 
     private void Awake()
     {
-        inventoryUI.InvManager = playerController.InventoryMngr;
+        inventoryUI.InventoryMngr = playerController.InventoryMngr;
+        userInterfaceController.InventoryMngr = playerController.InventoryMngr;
         skillsUI.SkillsMngr = playerController.SkillsMngr;
     }
 
     private void OnEnable()
     {
+        playerController.InventoryMngr.OnHotbarChange += userInterfaceController.UpdateHotbarItemImages;
+        playerController.InventoryMngr.OnInventoryChange += inventoryUI.RefreshInventorySlots;
         playerController.InteractionMngr.OnSwitchHotbar += userInterfaceController.ChangeActiveHotbar;
         playerController.OnVanish += userInterfaceController.Vanished;
         playerController.OnDeath += userInterfaceController.Died;
+        playerController.OnHealthChange += userInterfaceController.SetHealthBar;
+        playerController.SkillsMngr.OnExperienceChange += userInterfaceController.SetExperienceBar;
     }
 
     private void OnDisable()
     {
+        playerController.InventoryMngr.OnHotbarChange -= userInterfaceController.UpdateHotbarItemImages;
+        playerController.InventoryMngr.OnInventoryChange -= inventoryUI.RefreshInventorySlots;
         playerController.InteractionMngr.OnSwitchHotbar -= userInterfaceController.ChangeActiveHotbar;
-        playerController.OnVanish += userInterfaceController.Vanished;
-        playerController.OnDeath += userInterfaceController.Died;
+        playerController.OnVanish -= userInterfaceController.Vanished;
+        playerController.OnDeath -= userInterfaceController.Died;
+        playerController.OnHealthChange -= userInterfaceController.SetHealthBar;
+        playerController.SkillsMngr.OnExperienceChange -= userInterfaceController.SetExperienceBar;
     }
 }
