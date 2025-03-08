@@ -184,8 +184,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b16dee61f34874a91a85296feafabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InvManager: {fileID: 0}
+  InventoryMngr: {fileID: 0}
   itemRegion: {fileID: 503377094788080527}
+  hotbarAssignmentRegion: {fileID: 711441632126002140}
   ItemIcons: []
   UnselectedItemColor: {r: 0.4156863, g: 0.4156863, b: 0.4156863, a: 1}
   SelectedItemColor: {r: 0.509434, g: 0, b: 0, a: 1}

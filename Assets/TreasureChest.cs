@@ -21,6 +21,8 @@ public class TreasureChest : MonoBehaviour
     {
         animator = GetComponent<Animation>();
         mimicComponent = GetComponent<MimicComponent>();
+
+        IsOpen = false;
     }
 
     private void Start()

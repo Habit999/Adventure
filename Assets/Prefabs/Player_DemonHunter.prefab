@@ -482,7 +482,7 @@ MonoBehaviour:
   maxHealth: 100
   walkSpeed: 500
   sprintSpeed: 600
-  strafeModifier: 0.76
+  strafeModifier: 0.75
   MouseToggled: 0
 --- !u!114 &6705436349346823103
 MonoBehaviour:

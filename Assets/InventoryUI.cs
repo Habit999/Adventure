@@ -8,6 +8,7 @@ public class InventoryUI : MonoBehaviour
 	[HideInInspector] public InventoryManager InventoryMngr;
 
 	[SerializeField] private Transform itemRegion;
+	[SerializeField] private Transform hotbarAssignmentRegion;
 	
 	[HideInInspector] public List<InventoryIcon> ItemIcons = new List<InventoryIcon>();
 	
@@ -30,10 +31,14 @@ public class InventoryUI : MonoBehaviour
 		isOpen = false;
 
         // Set inventory icon list
-        for (int i = 0; i < itemRegion.childCount; i++)
+        foreach(var itemIcon in itemRegion.GetComponentsInChildren<InventoryIcon>())
 		{
-			ItemIcons.Add(itemRegion.GetChild(i).gameObject.GetComponent<InventoryIcon>());
-			ItemIcons[i].InventoryUIController = this;
+			ItemIcons.Add(itemIcon);
+        }
+
+		foreach(var hotbarAssignmentButton in hotbarAssignmentRegion.GetComponentsInChildren<InventoryIcon>())
+		{
+            hotbarAssignmentButton.InventoryUIController = this;
         }
     }
 

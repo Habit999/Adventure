@@ -28,8 +28,8 @@ public class InventoryIcon : MonoBehaviour
                 break;
 			
 			case ICONTYPE.HotbarButton:
-				if(PlayerController.Instance.InventoryMngr.SelectedInvSlot >= 0 && PlayerController.Instance.InventoryMngr.SelectedInvSlot < PlayerController.Instance.InventoryMngr.CollectedItems.Count)
-					PlayerController.Instance.InventoryMngr.AssignHotbarItem(transform.GetSiblingIndex());
+                if (InventoryUIController.InventoryMngr.SelectedInvSlot >= 0 && InventoryUIController.InventoryMngr.SelectedInvSlot < InventoryUIController.InventoryMngr.CollectedItems.Count)
+					InventoryUIController.InventoryMngr.AssignHotbarItem(transform.GetSiblingIndex());
 				break;
 			
 			default:

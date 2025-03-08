@@ -26,9 +26,8 @@ public class Enemy_MimicDemon : Enemy
     [Space(5)]
     [SerializeField][Range(-1, 1)] private float fieldOfViewRange;
 
-    private Transform moveTarget;
-
     private PlayerController playerTarget;
+    private TreasureChest chestTarget;
 
     private SphereCollider sphereCollider;
 
@@ -79,39 +78,39 @@ public class Enemy_MimicDemon : Enemy
             else
             {
                 base.Roaming();
+                print("three");
+
             }
         }
-        if(hasDestination && moveTarget == null)
+        if(hasDestination && chestTarget == null)
         {
             base.Roaming();
+            print("two");
+
             return;
         }
 
-        if (moveTarget.GetComponent<TreasureChest>().IsOpen)
+        if (chestTarget.IsOpen)
         {
             FindClosestMimicObject();
+            print("one");
             return;
         }
 
-            navAgent.SetDestination(movePoint);
+        navAgent.SetDestination(movePoint);
 
-        if(Vector3.Distance(transform.position, moveTarget.position) <= destinationStopDistance)
+        if(Vector3.Distance(transform.position, chestTarget.transform.position) <= destinationStopDistance)
         {
-            moveTarget.GetComponent<MimicComponent>().ActivateComponent(this);
+            chestTarget.GetComponent<MimicComponent>().ActivateComponent(this);
             SwitchState(EnemyState.Hiding);
         }
     }
 
     private void Targeting()
     {
-        if (!hasDestination)
-        {
-            moveTarget = playerTarget.transform;
-        }
+        navAgent.SetDestination(playerTarget.transform.position);
 
-        navAgent.SetDestination(moveTarget.position);
-
-        if(Vector3.Distance(transform.position, moveTarget.position) <= damageDistance)
+        if(Vector3.Distance(transform.position, playerTarget.transform.position) <= damageDistance)
         {
             playerTarget.DamagePlayer(damage);
             SwitchState(EnemyState.Fleeing);
@@ -184,20 +183,22 @@ public class Enemy_MimicDemon : Enemy
             foreach (var mimicObj in LootManager.MimicObjects)
             {
                 if (mimicObj.GetComponent<TreasureChest>().IsOpen)
-                    continue;
-
-                if (closestMimicObject == null)
                 {
-                    closestMimicObject = mimicObj;
-                    closestDistance = Vector3.Distance(transform.position, mimicObj.transform.position);
-                    continue;
-                }
+                    print("five");
 
-                float mimicDistance = Vector3.Distance(transform.position, mimicObj.transform.position);
-                if (mimicDistance < closestDistance)
-                {
-                    closestMimicObject = mimicObj;
-                    closestDistance = mimicDistance;
+                    if (closestMimicObject == null)
+                    {
+                        closestMimicObject = mimicObj;
+                        closestDistance = Vector3.Distance(transform.position, mimicObj.transform.position);
+                        continue;
+                    }
+
+                    float mimicDistance = Vector3.Distance(transform.position, mimicObj.transform.position);
+                    if (mimicDistance < closestDistance)
+                    {
+                        closestMimicObject = mimicObj;
+                        closestDistance = mimicDistance;
+                    }
                 }
             }
 
@@ -205,7 +206,7 @@ public class Enemy_MimicDemon : Enemy
             if (closestMimicObject == null) return false;
             else
             {
-                moveTarget = closestMimicObject.transform;
+                chestTarget = closestMimicObject.GetComponent<TreasureChest>();
                 if (NavMesh.SamplePosition(closestMimicObject.transform.position, out NavMeshHit hitData, 10, NavMesh.AllAreas))
                 {
                     movePoint = hitData.position;
@@ -258,15 +259,6 @@ public class Enemy_MimicDemon : Enemy
         {
             isInRange = false;
             isInView = false;
-        }
-    }
-
-    private void OnDrawGizmos()
-    {
-        if(moveTarget != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(moveTarget.position, 1);
         }
     }
 }

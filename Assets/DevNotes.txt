@@ -1,8 +1,8 @@
 To-Do:
 
-- Cant assign item to hotbar, throws an error
+- Hotbar image now showing
 
-- Health and experience bar not working
+- ~2 more dungions and 1 boss
 
 - Check all scripts for unessaccery code
 

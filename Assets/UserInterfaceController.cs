@@ -32,15 +32,19 @@ public class UserInterfaceController : MonoBehaviour
 
     public void UpdateHotbarItemImages()
     {
-        for (int i = 0; i < hotbarSpaces.Count; i++)
+        HashSet<int> slotsLeft = new HashSet<int>()
         {
-            foreach (var hotbarItem in InventoryMngr.HotbarItemOrder.Keys)
-            {
-                if (InventoryMngr.HotbarItemOrder[hotbarItem] == i)
-                {
-                         hotbarSpaces[i].ForegroundImage.sprite = hotbarItem.GetComponent<Item>().ItemData.Image;
-                }
-            }
+            0, 1, 2, 3, 4, 5, 6
+        };
+        foreach (var hotbarItem in InventoryMngr.HotbarItemOrder.Keys)
+        {
+            hotbarSpaces[InventoryMngr.HotbarItemOrder[hotbarItem]].ForegroundImage.sprite = hotbarItem.GetComponent<Item>().ItemData.Image;
+            hotbarSpaces[InventoryMngr.HotbarItemOrder[hotbarItem]].ForegroundImage.gameObject.SetActive(true);
+            slotsLeft.Remove(InventoryMngr.HotbarItemOrder[hotbarItem]);
+        }
+        foreach(var slot in slotsLeft)
+        {
+            hotbarSpaces[slot].ForegroundImage.gameObject.SetActive(false);
         }
     }
 
