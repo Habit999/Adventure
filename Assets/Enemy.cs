@@ -45,12 +45,12 @@ public class Enemy : MonoBehaviour
         hasDestination = false;
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         OnDead += SpawnManager.KillEnemy;
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         OnDead -= SpawnManager.KillEnemy;
     }
@@ -58,6 +58,13 @@ public class Enemy : MonoBehaviour
     protected virtual void Update()
     {
         EnemyBehaviour();
+    }
+
+    [ContextMenu("Kill Enemy")]
+    public void KillEnemy()
+    {
+        OnDead(this);
+        Destroy(gameObject);
     }
 
     public void TakeDamage(float damage)
