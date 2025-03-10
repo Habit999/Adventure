@@ -15,10 +15,6 @@ public class GameManager : MonoBehaviour
 	public GameSaveData GameData;
 
 	public SO_Controls Controls;
-
-	[Space(5)]
-
-	public int CurrentLevel;
 	
 	void Awake()
 	{
@@ -28,8 +24,7 @@ public class GameManager : MonoBehaviour
 		if(LoadGameData() == null)
 		{
             GameManager.Instance.Controls.LoadDefaults();
-			
-			CurrentLevel = 1;
+
 		}
 		else
 		{
@@ -62,8 +57,6 @@ public class GameManager : MonoBehaviour
 		}
 		else
 		{
-			CurrentLevel = loadedData.CurrentLevel;
-			
 			PlayerController player = PlayerController.Instance;
 			// Player inventory
 			for(int i = 0; i < loadedData.PlayerItems.Length; i++)
@@ -88,8 +81,6 @@ public class GameManager : MonoBehaviour
 	public void SaveGame()
 	{
 		GameData = new GameSaveData();
-		
-		GameData.CurrentLevel = CurrentLevel;
 		
 		PlayerController player = PlayerController.Instance;
 		// Player inventory
@@ -148,8 +139,6 @@ public class GameManager : MonoBehaviour
 
 public class GameSaveData
 {
-	public int CurrentLevel;
-	
 	public int[] PlayerItems;
 	public int[] PlayerItemAmounts;
 	

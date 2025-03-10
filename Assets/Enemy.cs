@@ -70,7 +70,7 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
-        if (health <= 0) OnDead(this);
+        if (health <= 0) KillEnemy();
     }
 
     protected virtual void EnemyBehaviour()

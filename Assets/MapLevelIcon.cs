@@ -8,30 +8,35 @@ using TMPro;
 
 public class MapLevelIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
-	[HideInInspector] public string _progressionStatus;
-	
-	public SO_LevelDetails _levelDetails;
+	[SerializeField] private int levelBuildIndex;
 	[Space(5)]
-	[SerializeField] GameObject description;
-	
-	void Start()
-	{
-		description.SetActive(false);
-	}
+    [SerializeField] private TextMeshProUGUI levelText;
+	[SerializeField] private string levelName;
+	[Space(5)]
+    [SerializeField] private GameObject lockedMessage;
+    public bool isLocked;
 
-	public void OnPointerEnter(PointerEventData enterEventData)
+    void Start()
 	{
-		description.GetComponent<TextMeshProUGUI>().SetText($"{_levelDetails.LevelName}\n\n\"{_levelDetails.LevelBrief}\"\n\n{_progressionStatus}");
-		description.SetActive(true);
+		lockedMessage.SetActive(false);
+        levelText.SetText(levelName);
+    }
+
+    public void OnPointerEnter(PointerEventData enterEventData)
+	{
+		if(isLocked)
+			lockedMessage.SetActive(true);
 	}
 	
 	public void OnPointerExit(PointerEventData exitEventData)
 	{
-		description.SetActive(false);
-	}
+        if (isLocked)
+            lockedMessage.SetActive(false);
+    }
 	
 	public void OnPointerDown(PointerEventData downEventData)
 	{
-		SceneManager.LoadScene(_levelDetails.LevelBuildIndex);
+		if(!isLocked)
+			SceneManager.LoadScene(levelBuildIndex);
 	}
 }

@@ -25,7 +25,11 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] public SO_Controls InputControls;
 
-    [HideInInspector] public bool IsInDungeon;
+    [Space(5)]
+
+    public bool IsInDungeon;
+
+    [Space(5)]
 
     public Transform Camera;
     public Transform Body;
@@ -81,7 +85,8 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         health = maxHealth;
-        OnHealthChange(health, maxHealth);
+        if(IsInDungeon)
+            OnHealthChange(health, maxHealth);
 
         mouseY = 0;
 

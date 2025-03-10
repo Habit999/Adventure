@@ -78,14 +78,12 @@ public class Enemy_MimicDemon : Enemy
             else
             {
                 base.Roaming();
-                print("three");
 
             }
         }
         if(hasDestination && chestTarget == null)
         {
             base.Roaming();
-            print("two");
 
             return;
         }
@@ -93,7 +91,6 @@ public class Enemy_MimicDemon : Enemy
         if (chestTarget.IsOpen)
         {
             FindClosestMimicObject();
-            print("one");
             return;
         }
 
@@ -184,8 +181,6 @@ public class Enemy_MimicDemon : Enemy
             {
                 if (mimicObj.GetComponent<TreasureChest>().IsOpen)
                 {
-                    print("five");
-
                     if (closestMimicObject == null)
                     {
                         closestMimicObject = mimicObj;

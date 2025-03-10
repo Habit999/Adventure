@@ -133,17 +133,6 @@ public class Enemy_BossDemon : Enemy
         }
     }
 
-    private IEnumerator EnemyAttackRoutine()
-    {
-        yield return new WaitForSeconds(attackAnimation.length);
-        if (Vector3.Distance(transform.position, playerTarget.transform.position) < distanceToDamage)
-        {
-            playerTarget.DamagePlayer(10);
-        }
-        isAttacking = false;
-        UpdateAnimator();
-    }
-
     private void UpdateAnimator()
     {
         animator.SetBool("Moving", isMoving);

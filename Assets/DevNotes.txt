@@ -6,4 +6,6 @@ To-Do:
 
 - Check all scripts for unessaccery code
 
+- settings not working
+
 - Get rid of any .GetChildren / .parent unreliable code

@@ -4,39 +4,24 @@ using UnityEngine;
 
 public class LevelMap : MonoBehaviour
 {
-	[HideInInspector] public List<bool> LevelCompleted = new List<bool>();
-	
-	[SerializeField] GameObject mapCamera;
-	[SerializeField] Transform mapUI;
-	
-	List<MapLevelIcon> levelIcons = new List<MapLevelIcon>();
+	[SerializeField] private GameObject mapCamera;
+
+	private PlayerController playerController;
 	
 	void Start()
 	{
 		mapCamera.SetActive(false);
-		
-		foreach(Transform element in mapUI)
-		{
-			if(element.gameObject.GetComponent<MapLevelIcon>() != null)
-				levelIcons.Add(element.gameObject.GetComponent<MapLevelIcon>());
-		}
-		for(int i = 0; i < levelIcons.Count; i++)
-		{
-			if(levelIcons[i]._levelDetails.LevelNumber < GameManager.Instance.CurrentLevel)
-				levelIcons[i]._progressionStatus = "Completed";
-			else if(levelIcons[i]._levelDetails.LevelNumber == GameManager.Instance.CurrentLevel)
-				levelIcons[i]._progressionStatus = "Incompleted";
-			else levelIcons[i]._progressionStatus = "???";
-		}
 	}
 	
 	void Update()
 	{
-		if(Input.GetKeyDown(GameManager.Instance.Controls.Back)) CloseMap();
+		if(playerController != null && Input.GetKeyDown(playerController.InputControls.Back)) CloseMap();
 	}
 	
-	public void OpenMap()
+	public void OpenMap(PlayerController player)
 	{
+		playerController = player;
+		player.Camera.gameObject.SetActive(false);
 		mapCamera.SetActive(true);
 		Cursor.visible = true;
 		Cursor.lockState = CursorLockMode.None;
@@ -45,6 +30,7 @@ public class LevelMap : MonoBehaviour
 	void CloseMap()
 	{
 		mapCamera.SetActive(false);
-		PlayerController.Instance.UnFreezePlayer();
+		playerController.Camera.gameObject.SetActive(true);
+		playerController.UnFreezePlayer();
 	}
 }

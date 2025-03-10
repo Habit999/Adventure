@@ -30,7 +30,7 @@ public class InteractionManager : MonoBehaviour
 			if(ObjectInView.tag == "Map")
 			{
 				controller.FreezePlayer(true, true);
-				ObjectInView.GetComponent<LevelMap>().OpenMap();
+				ObjectInView.GetComponent<LevelMap>().OpenMap(controller);
 			}
 			else if(ObjectInView.tag == "Chest")
 			{

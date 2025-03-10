@@ -474,7 +474,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerState: 0
   InputControls: {fileID: 0}
-  IsInDungeon: 0
+  IsInDungeon: 1
   Camera: {fileID: 2624188408872534697}
   Body: {fileID: 6984754148921075596}
   damageArea: {fileID: 7515552356548293980}
