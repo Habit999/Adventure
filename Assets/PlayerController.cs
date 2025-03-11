@@ -66,8 +66,6 @@ public class PlayerController : MonoBehaviour
         else Destroy(gameObject);
 
         rb = GetComponent<Rigidbody>();
-
-        InputControls = GameManager.Instance.Controls;
     }
 
     [ContextMenu("Test Health Change")]
@@ -89,6 +87,8 @@ public class PlayerController : MonoBehaviour
             OnHealthChange(health, maxHealth);
 
         mouseY = 0;
+
+        InputControls = GameManager.Instance.Controls;
 
         CheckBodyState();
     }
