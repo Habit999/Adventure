@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-	[SerializeField] private TMP_Dropdown screenResolution;
+	[SerializeField] private TextMeshProUGUI fullscreenButton;
 
 	public void StartGame()
 	{
@@ -19,10 +19,9 @@ public class MainMenu : MonoBehaviour
 		Application.Quit();
 	}
 
-	public void ChangeResolution()
+	public void ChangeFullscreenOption()
 	{
-		string selectedOption = screenResolution.captionText.ToString();
-		string[] resolution = selectedOption.Split('x', ' ');
-		Screen.SetResolution(int.Parse(resolution[0]), int.Parse(resolution[1]), true);
+		GameManager.Instance.ChangeWindowMode();
+		fullscreenButton.SetText(GameManager.Instance.IsFullscreen ? "X" : "");
 	}
 }

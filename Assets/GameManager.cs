@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
 	public GameSaveData GameData;
 
 	public SO_Controls Controls;
+
+	[HideInInspector] public bool IsFullscreen = true;
 	
 	void Awake()
 	{
@@ -39,8 +41,14 @@ public class GameManager : MonoBehaviour
 		if(Input.GetKeyDown(KeyCode.L)) SaveGame();
 		#endregion
 	}
-	
-	public void ReturnToMapRoom()
+
+    public void ChangeWindowMode()
+    {
+		IsFullscreen = !IsFullscreen;
+        Screen.SetResolution(Screen.width, Screen.height, IsFullscreen);
+    }
+
+    public void ReturnToMapRoom()
 	{
 		SceneManager.LoadScene(1);
 	}
