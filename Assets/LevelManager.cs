@@ -8,11 +8,20 @@ public class LevelManager : MonoBehaviour
 
     public SO_LevelSpawnData SpawnData;
 
+    [SerializeField] private Transform levelTorches;
+
+    [HideInInspector] public List<Torch> Torches = new List<Torch>();
+
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
         else Destroy(gameObject);
+
+        foreach(var torch in levelTorches.gameObject.GetComponentsInChildren<Torch>())
+        {
+            Torches.Add(torch);
+        }
     }
 
     void Start()

@@ -27,6 +27,7 @@ public class EnemySpawnManager : MonoBehaviour
             spawnedEnemies.Remove(enemy);
             Destroy(enemy.gameObject);
         }
+        deadEnemies.Clear();
     }
 
     public void NewEnemy(Enemy newEnemy)
@@ -36,6 +37,7 @@ public class EnemySpawnManager : MonoBehaviour
         if (newEnemy is Enemy_VoidDemon)
         {
             VoidsInLevel++;
+            newEnemy.GetComponent<Enemy_VoidDemon>().LevelMngr = LevelMngr;
         }
         else if (newEnemy is Enemy_ThiefDemon)
         {

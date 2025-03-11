@@ -6,14 +6,27 @@ public class Enemy_VoidDemon : Enemy
 {
     [Space(5)]
     [SerializeField] private float gravityForce;
+    [SerializeField] private float minDistanceToDimLight;
+    [SerializeField] private float maxDistanceToDimLight;
 
     private SphereCollider sphereCollider;
 
     private PlayerController playerController;
 
+    [HideInInspector] public LevelManager LevelMngr;
+
     private void Start()
     {
+        base.Start();
+
         sphereCollider = GetComponent<SphereCollider>();
+    }
+
+    protected override void Roaming()
+    {
+        base.Roaming();
+
+        CalculateLightDimming();
     }
 
     private void OnTriggerStay(Collider trigger)
@@ -68,5 +81,18 @@ public class Enemy_VoidDemon : Enemy
         float flippedPercentage = 1 - distanceInRange;
         print(flippedPercentage);
         return gravityForce * flippedPercentage;
+    }
+
+    private void CalculateLightDimming()
+    {
+        foreach(var light in LevelMngr.Torches)
+        {
+            float distance = Vector3.Distance(transform.position, light.transform.position);
+            if(distance < maxDistanceToDimLight)
+            {
+                float percentage = Mathf.Clamp01((distance - minDistanceToDimLight) / (maxDistanceToDimLight - distance));
+                light.AdjustLightIntensity(percentage);
+            }
+        }
     }
 }
