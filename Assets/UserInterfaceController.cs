@@ -55,7 +55,7 @@ public class UserInterfaceController : MonoBehaviour
 
     public void SetExperienceBar(float currentXP, float maxXP)
     {
-        healthBar.UpdateProgressBar(currentXP / maxXP);
+        experienceBar.UpdateProgressBar(currentXP / maxXP);
     }
 
     public void ChangeActiveHotbar(int newTarget)

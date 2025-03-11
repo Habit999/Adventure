@@ -47,9 +47,9 @@ public class SkillsManager : MonoBehaviour
 	void Start()
 	{
 		StartCoroutine(UpdatePlayerLevel());
-	}
-	
-	public void AddExperience(float amount)
+    }
+
+    public void AddExperience(float amount)
 	{
 		ExperienceGained += amount;
 		OnExperienceChange(ExperienceGained, NextLevelExperience);
@@ -114,5 +114,6 @@ public class SkillsManager : MonoBehaviour
 		
 		yield return new WaitForSeconds(0.01f);
 		StartCoroutine(UpdatePlayerLevel());
-	}
+        OnExperienceChange(ExperienceGained, NextLevelExperience);
+    }
 }
