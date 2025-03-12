@@ -1,7 +1,5 @@
 To-Do:
 
-- void demon not dimming lights properly
-
 - items not being equipped
 
 - Set up all dungeons with loot and enemy spawners

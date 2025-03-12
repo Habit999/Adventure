@@ -69,55 +69,12 @@ public class InventoryManager : MonoBehaviour
 
     public void EquipItem()
 	{
-		//UserInterfaceController controllerUI = UserInterfaceController.Instance;
-		/*if(UserInterfaceController.ActiveHotbarSlot > 0 && UserInterfaceController.ActiveHotbarSlot <= UserInterfaceController.MaxActionKeysInRow)
+		if(EquippedItem != null)
 		{
-			if(EquippedItem == null)
-			{
-				foreach(GameObject item in HotbarItemOrder.Keys)
-				{
-					if(HotbarItemOrder[item] == UserInterfaceController.Instance.ActiveHotbarSlot)
-					{
-						EquippedItem = item;
-						EquippedItem.transform.parent = rightHandSpot;
-						EquippedItem.transform.localPosition = Vector3.zero;
-						EquippedItem.transform.localRotation = Quaternion.identity;
-						EquippedItem.SetActive(true);
-						break;
-					}
-				}
-			}
-			else
-			{
-				EquippedItem.SetActive(false);
-				EquippedItem.transform.parent = null;
-				EquippedItem = null;
-				EquipItemRight();
-			}
+			RemoveItemFromHand();
+			AddItemToHand();
 		}
-		else
-		{
-			if(EquippedItem != null)
-			{
-				EquippedItem.SetActive(false);
-				EquippedItem.transform.parent = null;
-				EquippedItem = null;
-			}
-		}*/
-
-		if(UserInterfaceController.ActiveHotbarSlot == 0)
-		{
-			if(EquippedItem != null) RemoveItemFromHand();
-		}
-		else
-		{
-			if(EquippedItem != null)
-			{
-				RemoveItemFromHand();
-				AddItemToHand();
-			}
-			else AddItemToHand();
-		}
+		else AddItemToHand();
 	}
 	
 	
@@ -196,21 +153,26 @@ public class InventoryManager : MonoBehaviour
         EquippedItem.SetActive(false);
         EquippedItem.transform.parent = null;
         EquippedItem = null;
+        print(3);
+
     }
 
     private void AddItemToHand()
     {
         foreach (GameObject item in HotbarItemOrder.Keys)
         {
-            if (HotbarItemOrder[item] == UserInterfaceController.ActiveHotbarSlot)
+            if (HotbarItemOrder[item] == UserInterfaceController.ActiveHotbarSlot - 1)
             {
                 EquippedItem = item;
                 item.transform.parent = rightHandSpot;
                 item.transform.localPosition = Vector3.zero;
                 item.transform.localRotation = Quaternion.identity;
                 item.SetActive(true);
-                break;
+				print(1);
+				return;
             }
         }
+        print(2);
+
     }
 }

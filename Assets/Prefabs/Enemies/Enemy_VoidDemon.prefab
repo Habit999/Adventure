@@ -57,8 +57,8 @@ MonoBehaviour:
   validPositionAttempts: 10
   destinationStopDistance: 1
   gravityForce: 50
-  minDistanceToDimLight: 2
-  maxDistanceToDimLight: 10
+  minDistanceToDimLight: 5
+  maxDistanceToDimLight: 20
   LevelMngr: {fileID: 0}
 --- !u!195 &2026596716541910812
 NavMeshAgent:

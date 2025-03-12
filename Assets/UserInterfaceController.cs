@@ -28,6 +28,8 @@ public class UserInterfaceController : MonoBehaviour
         {
             hotbarSpaces.Add(slot);
         }
+
+        ActiveHotbarSlot = 1;
     }
 
     public void UpdateHotbarItemImages()
@@ -60,9 +62,9 @@ public class UserInterfaceController : MonoBehaviour
 
     public void ChangeActiveHotbar(int newTarget)
     {
-        hotbarSpaces[ActiveHotbarSlot].ToggleActive(false);
+        hotbarSpaces[ActiveHotbarSlot - 1].ToggleActive(false);
         hotbarSpaces[newTarget - 1].ToggleActive(true);
-        ActiveHotbarSlot = newTarget - 1;
+        ActiveHotbarSlot = newTarget;
     }
 
     public void Died()
