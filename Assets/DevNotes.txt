@@ -1,11 +1,11 @@
 To-Do:
 
-- Hotbar image now showing
+- void demon not dimming lights properly
 
-- ~2 more dungions and 1 boss
+- items not being equipped
+
+- Set up all dungeons with loot and enemy spawners
 
 - Check all scripts for unessaccery code
-
-- settings not working
 
 - Get rid of any .GetChildren / .parent unreliable code

@@ -90,7 +90,7 @@ public class Enemy_VoidDemon : Enemy
             float distance = Vector3.Distance(transform.position, light.transform.position);
             if(distance < maxDistanceToDimLight)
             {
-                float percentage = Mathf.Clamp01((distance - minDistanceToDimLight) / (maxDistanceToDimLight - distance));
+                float percentage = (distance - minDistanceToDimLight) / (maxDistanceToDimLight - minDistanceToDimLight);
                 light.AdjustLightIntensity(percentage);
             }
         }

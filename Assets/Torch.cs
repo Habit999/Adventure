@@ -8,6 +8,11 @@ public class Torch : MonoBehaviour
 
     private float startLightIntensity;
 
+    private void Start()
+    {
+        startLightIntensity = lightSource.intensity;
+    }
+
     public void AdjustLightIntensity(float dimPercentage)
     {
         lightSource.intensity = startLightIntensity * dimPercentage;
