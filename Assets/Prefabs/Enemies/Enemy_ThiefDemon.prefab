@@ -471,12 +471,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentState: 0
-  randomObject: {fileID: 0}
+  maxHealth: 100
+  SpawnManager: {fileID: 0}
   roamingSpeed: 3.5
   roamingRotationSpeed: 120
   randomLocationRange: 50
   validPositionAttempts: 10
   destinationStopDistance: 1
+  isStuckTime: 5
   targetingSpeed: 2
   targetingRotationSpeed: 150
   fleeingSpeed: 5

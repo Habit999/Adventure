@@ -13,7 +13,7 @@ public class MimicComponent : MonoBehaviour
     [SerializeField] private float spawnRadius;
     [SerializeField] private float floatUpSpeed;
 
-    [HideInInspector] public bool isMimic;
+    [HideInInspector] public bool IsMimic;
 
     private List<GameObject> spawnedParticles = new List<GameObject>();
     private List<GameObject> particlesToDestroy = new List<GameObject>();
@@ -24,17 +24,17 @@ public class MimicComponent : MonoBehaviour
 
     private void Awake()
     {
-        isMimic = false;
+        IsMimic = false;
     }
 
     private void Update()
     {
-        if (isMimic)
+        if (IsMimic)
         {
             ParticleBehaviour();
             DestroyInactiveParticles();
         }
-        else if (!isMimic && (spawnedParticles.Count > 0 || particlesToDestroy.Count > 0))
+        else if (!IsMimic && (spawnedParticles.Count > 0 || particlesToDestroy.Count > 0))
         {
             foreach (var particle in spawnedParticles)
             {
@@ -47,7 +47,7 @@ public class MimicComponent : MonoBehaviour
 
     public void ActivateComponent(Enemy_MimicDemon mimic)
     {
-        isMimic = true;
+        IsMimic = true;
         particleTimer = timeBetweenParticleSpawns;
         hiddenMimic = mimic;
     }
@@ -58,15 +58,16 @@ public class MimicComponent : MonoBehaviour
         ReleaseMimic();
     }
 
-    public void TriggerMimic()
+    public void TriggerMimic(PlayerController player)
     {
         hiddenMimic.SwitchState(Enemy.EnemyState.Targeting);
+        hiddenMimic.PlayerTarget = player;
         ReleaseMimic();
     }
 
     private void ReleaseMimic()
     {
-        isMimic = false;
+        IsMimic = false;
         hiddenMimic.transform.position = transform.position + Vector3.up;
         hiddenMimic.transform.eulerAngles = transform.forward;
         gameObject.SetActive(false);

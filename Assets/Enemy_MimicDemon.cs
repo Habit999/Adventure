@@ -26,7 +26,7 @@ public class Enemy_MimicDemon : Enemy
     [Space(5)]
     [SerializeField][Range(-1, 1)] private float fieldOfViewRange;
 
-    private PlayerController playerTarget;
+    [HideInInspector] public PlayerController PlayerTarget;
     private TreasureChest chestTarget;
 
     private SphereCollider sphereCollider;
@@ -74,17 +74,13 @@ public class Enemy_MimicDemon : Enemy
         if (!hasDestination)
         {
             if (FindClosestMimicObject())
-                hasDestination = true;
-            else
             {
-                base.Roaming();
-
+                hasDestination = true;
             }
         }
-        if(hasDestination && chestTarget == null)
+        if(chestTarget == null)
         {
             base.Roaming();
-
             return;
         }
 
@@ -99,17 +95,21 @@ public class Enemy_MimicDemon : Enemy
         if(Vector3.Distance(transform.position, chestTarget.transform.position) <= destinationStopDistance)
         {
             chestTarget.GetComponent<MimicComponent>().ActivateComponent(this);
+            chestTarget = null;
+            hasDestination = false;
             SwitchState(EnemyState.Hiding);
         }
+
+        CheckIfStuck();
     }
 
     private void Targeting()
     {
-        navAgent.SetDestination(playerTarget.transform.position);
+        navAgent.SetDestination(PlayerTarget.transform.position);
 
-        if(Vector3.Distance(transform.position, playerTarget.transform.position) <= damageDistance)
+        if(Vector3.Distance(transform.position, PlayerTarget.transform.position) <= damageDistance)
         {
-            playerTarget.DamagePlayer(damage);
+            PlayerTarget.DamagePlayer(damage);
             SwitchState(EnemyState.Fleeing);
         }
     }
@@ -118,15 +118,17 @@ public class Enemy_MimicDemon : Enemy
     {
         if (!hasDestination)
         {
-            if (!GenerateRandomNavLocation())
+            if (GenerateRandomNavLocation())
             {
                 fleeExitTimer = timeToExitFlee;
                 return;
             }
+            else return;
         }
         if (isInView)
         {
             fleeExitTimer = timeToExitFlee;
+            GenerateRandomNavLocation();
         }
 
         fleeExitTimer -= Time.deltaTime;
@@ -177,9 +179,10 @@ public class Enemy_MimicDemon : Enemy
             // Find closest mimic object
             GameObject closestMimicObject = null;
             float closestDistance = 0;
+            chestTarget = null;
             foreach (var mimicObj in LootManager.MimicObjects)
             {
-                if (mimicObj.GetComponent<TreasureChest>().IsOpen)
+                if (!mimicObj.GetComponent<TreasureChest>().IsOpen)
                 {
                     if (closestMimicObject == null)
                     {
@@ -207,7 +210,7 @@ public class Enemy_MimicDemon : Enemy
                     movePoint = hitData.position;
                     return hasDestination = true;
                 }
-                else return false;
+                else return hasDestination = false;
             }
         }
         else return false;
@@ -215,13 +218,12 @@ public class Enemy_MimicDemon : Enemy
 
     private void CheckPlayerInView()
     {
-        Vector3 playerDirection = (playerTarget.transform.position - transform.position).normalized;
+        Vector3 playerDirection = (PlayerTarget.transform.position - transform.position).normalized;
         if (Vector3.Dot(transform.forward, playerDirection) >= fieldOfViewRange)
         {
             if (Physics.Raycast(transform.position, playerDirection, out RaycastHit hit, sphereCollider.radius))
             {
-
-                if (hit.collider.transform == playerTarget.transform)
+                if (hit.collider.transform == PlayerTarget.transform)
                 {
                     isInView = true;
                     return;
@@ -236,7 +238,7 @@ public class Enemy_MimicDemon : Enemy
         if (enterTrigger.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             isInRange = true;
-            if (playerTarget == null) playerTarget = enterTrigger.gameObject.GetComponent<PlayerController>();
+            if (PlayerTarget == null) PlayerTarget = enterTrigger.gameObject.GetComponent<PlayerController>();
         }
     }
 

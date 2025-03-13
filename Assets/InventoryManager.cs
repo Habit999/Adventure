@@ -24,19 +24,16 @@ public class InventoryManager : MonoBehaviour
 	
 	[SerializeField] private Transform rightHandSpot;
 	
-	void OnEnable()
-	{
-		Controller.SkillsMngr.LevelUp += UpdateInventoryStats;
-	}
-	
 	void OnDisable()
 	{
 		Controller.SkillsMngr.LevelUp -= UpdateInventoryStats;
 	}
 	
-	void Awake()
+	void Start()
 	{
 		Controller = GetComponent<PlayerController>();
+
+        Controller.SkillsMngr.LevelUp += UpdateInventoryStats;
 
         SelectedInvSlot = -1;
 
@@ -88,14 +85,12 @@ public class InventoryManager : MonoBehaviour
 				if(CollectedItems[item] + amount <= item.GetComponent<Item>().ItemData.MaxItemStack)
 				{
 					CollectedItems[item] += amount;
-                    print("Item Added");
                 }
             }
 		}
 		if(CollectedItems.Count < AvailableItemSlots)
 		{
 			CollectedItems.Add(item, amount);
-			print("New Item Added");
 		}
 
 		OnInventoryChange?.Invoke();
@@ -153,8 +148,6 @@ public class InventoryManager : MonoBehaviour
         EquippedItem.SetActive(false);
         EquippedItem.transform.parent = null;
         EquippedItem = null;
-        print(3);
-
     }
 
     private void AddItemToHand()
@@ -168,11 +161,8 @@ public class InventoryManager : MonoBehaviour
                 item.transform.localPosition = Vector3.zero;
                 item.transform.localRotation = Quaternion.identity;
                 item.SetActive(true);
-				print(1);
 				return;
             }
         }
-        print(2);
-
     }
 }

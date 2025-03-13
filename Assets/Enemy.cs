@@ -29,8 +29,12 @@ public class Enemy : MonoBehaviour
     [Space(5)]
 
     [SerializeField] protected float destinationStopDistance;
+    [SerializeField] protected float isStuckTime;
+    protected float stuckTimer;
 
 	protected NavMeshAgent navAgent;
+
+    protected Vector3 lastLocation;
 
     protected bool hasDestination;
 
@@ -43,6 +47,9 @@ public class Enemy : MonoBehaviour
         health = maxHealth;
 
         hasDestination = false;
+
+        stuckTimer = isStuckTime;
+        lastLocation = transform.position;
     }
 
     protected virtual void Start()
@@ -101,6 +108,8 @@ public class Enemy : MonoBehaviour
         {
             hasDestination = false;
         }
+
+        CheckIfStuck();
     }
 
     public virtual void SwitchState(EnemyState newState)
@@ -144,5 +153,19 @@ public class Enemy : MonoBehaviour
         }
    
         return hasDestination = true;
+    }
+
+    protected void CheckIfStuck()
+    {
+        if (lastLocation == transform.position)
+        {
+            stuckTimer -= Time.deltaTime;
+            if (stuckTimer <= 0) GenerateRandomNavLocation();
+        }
+        else
+        {
+            stuckTimer = isStuckTime;
+            lastLocation = transform.position;
+        }
     }
 }

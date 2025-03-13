@@ -555,6 +555,7 @@ MonoBehaviour:
   randomLocationRange: 50
   validPositionAttempts: 10
   destinationStopDistance: 5
+  isStuckTime: 8
   RoomManager: {fileID: 0}
   targetingSpeed: 2.5
   targetingRotationSpeed: 120

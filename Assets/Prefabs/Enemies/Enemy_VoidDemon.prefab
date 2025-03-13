@@ -56,6 +56,7 @@ MonoBehaviour:
   randomLocationRange: 50
   validPositionAttempts: 10
   destinationStopDistance: 1
+  isStuckTime: 5
   gravityForce: 50
   minDistanceToDimLight: 5
   maxDistanceToDimLight: 20

@@ -55,15 +55,17 @@ MonoBehaviour:
   randomLocationRange: 50
   validPositionAttempts: 10
   destinationStopDistance: 1
+  isStuckTime: 5
   LootManager: {fileID: 0}
   targetingSpeed: 5
   targetingRotationSpeed: 200
   fleeingSpeed: 5
   fleeingRotationSpeed: 200
-  timeToExitFlee: 10
+  timeToExitFlee: 20
   damageDistance: 1
   damage: 25
   fieldOfViewRange: 0.2
+  PlayerTarget: {fileID: 0}
 --- !u!136 &4566351968887562376
 CapsuleCollider:
   m_ObjectHideFlags: 0

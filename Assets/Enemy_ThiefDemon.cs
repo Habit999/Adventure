@@ -93,6 +93,8 @@ public class Enemy_ThiefDemon : Enemy
         {
             SwitchState(EnemyState.Fleeing);
         }
+
+        CheckIfStuck();
     }
 
     private void Fleeing()
@@ -118,6 +120,8 @@ public class Enemy_ThiefDemon : Enemy
         {
             SwitchState(EnemyState.Roaming);
         }
+
+        CheckIfStuck();
     }
 
     private bool StealItem()

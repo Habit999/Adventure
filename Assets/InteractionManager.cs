@@ -34,7 +34,7 @@ public class InteractionManager : MonoBehaviour
 			}
 			else if(ObjectInView.tag == "Chest")
 			{
-				ObjectInView.GetComponent<TreasureChest>().OpenChest();
+				ObjectInView.GetComponent<TreasureChest>().OpenChest(controller);
 			}
 			else if(ObjectInView.tag == "Exit")
 			{

@@ -38,13 +38,14 @@ public class TreasureChest : MonoBehaviour
         ItemInChest.transform.localRotation = Quaternion.identity;
     }
 
-	public void OpenChest()
+	public void OpenChest(PlayerController player)
 	{
 		if (!IsOpen)
 		{
-            if(mimicComponent != null && mimicComponent.isMimic)
+            if(mimicComponent != null && mimicComponent.IsMimic)
 			{
-				mimicComponent.TriggerMimic();
+				mimicComponent.TriggerMimic(player);
+				IsOpen = true;
             }
 			else
 			{

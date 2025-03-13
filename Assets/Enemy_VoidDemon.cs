@@ -79,7 +79,6 @@ public class Enemy_VoidDemon : Enemy
         float playerDistance = Vector3.Distance(target.position, transform.position);
         float distanceInRange = playerDistance / sphereCollider.radius;
         float flippedPercentage = 1 - distanceInRange;
-        print(flippedPercentage);
         return gravityForce * flippedPercentage;
     }
 
