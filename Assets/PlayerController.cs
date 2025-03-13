@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
 
     public SkillsManager SkillsMngr { get { return gameObject.GetComponent<SkillsManager>(); } }
 
-    public CombatManager CombatMngr { get { return damageArea.GetComponent<CombatManager>(); } }
+    public CombatManager CombatMngr;
 
     public event Action OnDeath;
     public event Action OnVanish;
@@ -33,7 +33,6 @@ public class PlayerController : MonoBehaviour
 
     public Transform Camera;
     public Transform Body;
-    [SerializeField] GameObject damageArea;
 
     [Space(5)]
 

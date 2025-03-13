@@ -72,7 +72,6 @@ public class LootSpawnManager : MonoBehaviour
 
 	private Item GenerateRandomLoot()
 	{
-		print("Random loot spawned");
 		return LootItems[UnityEngine.Random.Range(0, LootItems.Count)];
     }
 

@@ -33,12 +33,10 @@ public class Item : MonoBehaviour
 		switch(ItemData.Type)
 		{
 			case ItemDataStructure.TYPE.Weapon:
-				print("Item Collected");
 				PlayerController.Instance.InventoryMngr.AddItem(this.gameObject, 1);
 				return true;
 				
 			case ItemDataStructure.TYPE.Consumable:
-				print("Item Collected");
 				PlayerController.Instance.InventoryMngr.AddItem(this.gameObject, 1);
 				return true;
 				
@@ -47,7 +45,7 @@ public class Item : MonoBehaviour
 				return true;
 				
 			default:
-				print("Default Collection ItemStatus");
+				Debug.LogWarning("No item collected - Type error");
 				return false;
 		}
 	}

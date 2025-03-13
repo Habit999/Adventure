@@ -32,8 +32,13 @@ public class GridCell : MonoBehaviour
 	{
 		CustomGrid.SpawnCellOccupants -= SpawnOccupant;
 	}
-	
-	public void UpdateOccupantTransform()
+
+    private void Start()
+    {
+		GetComponent<MeshRenderer>().enabled = false;
+    }
+
+    public void UpdateOccupantTransform()
 	{
 		if(ActiveOccupant != null)
 		{

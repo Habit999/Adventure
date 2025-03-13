@@ -10,11 +10,11 @@ public class CombatManager : MonoBehaviour
 	
 	[Space(5)]
 	
-	[SerializeField] float swingTime;
+	[SerializeField] private float swingTime;
 	
-	BoxCollider damageAreaColldier;
+	private BoxCollider damageAreaColldier;
 	
-	bool isAttacking;
+	private bool isAttacking;
 	
 	void Start()
 	{
@@ -24,8 +24,8 @@ public class CombatManager : MonoBehaviour
 	
 	void Update()
 	{
-		if(Input.GetMouseButtonDown(1))
-			RightHandAnimator.SetTrigger("UseBandage");
+		//if(Input.GetMouseButtonDown(1))
+			//RightHandAnimator.SetTrigger("UseBandage");
 	}
 	
 	public void SwingWeapon()

@@ -112,13 +112,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 371669557457143404}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0.0000014751396, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.18, y: 0.18, z: 0.18}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5996809422563159675}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6604078004038169802
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -473,11 +473,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerState: 0
+  InteractionMngr: {fileID: 0}
+  InventoryMngr: {fileID: 0}
+  SkillsMngr: {fileID: 0}
+  CombatMngr: {fileID: 6466162278814814200}
   InputControls: {fileID: 0}
   IsInDungeon: 1
   Camera: {fileID: 2624188408872534697}
   Body: {fileID: 6984754148921075596}
-  damageArea: {fileID: 7515552356548293980}
   maxHealth: 100
   walkSpeed: 1000
   sprintSpeed: 2000
@@ -634,7 +637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80418d65fb500a34e935219d3d96f5e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RightHandAnimator: {fileID: 0}
+  RightHandAnimator: {fileID: 6641613512814332458}
   swingTime: 0.3
 --- !u!65 &7841219533132549411
 BoxCollider:

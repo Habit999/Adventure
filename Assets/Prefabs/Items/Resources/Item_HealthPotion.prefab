@@ -133,7 +133,7 @@ MonoBehaviour:
     Name: HealthPotion
     Image: {fileID: 21300000, guid: 5bb8602b04b0b77418b1a59d504a106e, type: 3}
     MaxItemStack: 3
-  AnimatorTriggerName: 
+  AnimatorTriggerName: UsePotion
   Damage: 0
   HealthRecovery: 50
 --- !u!1 &3822869214510350617
