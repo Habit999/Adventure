@@ -527,7 +527,8 @@ PrefabInstance:
       value: MenuUI
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1916977887284694888, guid: 28c1b4d9f286f724795ed31af64464cf, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 28c1b4d9f286f724795ed31af64464cf, type: 3}

@@ -19,6 +19,9 @@ public class BossRoomExit : MonoBehaviour
     private void OnTriggerEnter(Collider enterTrigger)
     {
         if(enterTrigger.gameObject.tag == "Player")
+        {
             StartCoroutine(EndRoutine());
+            GameManager.Instance.CurrentGameState = GameManager.GameStates.MainMenu;
+        }
     }
 }

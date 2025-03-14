@@ -534,10 +534,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 5.86
       objectReference: {fileID: 0}
-    - target: {fileID: 5852057628840629119, guid: c4f6e89d5c5699c4dbfd64b35f7ba8e4, type: 3}
-      propertyPath: camTransitionSpeed
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

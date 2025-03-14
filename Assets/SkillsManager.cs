@@ -46,7 +46,13 @@ public class SkillsManager : MonoBehaviour
 	
 	void Start()
 	{
-		StartCoroutine(UpdatePlayerLevel());
+		if(Controller.IsInDungeon)
+			StartCoroutine(UpdatePlayerLevel());
+    }
+
+    private void OnDisable()
+    {
+        OnExperienceChange = null;
     }
 
     public void AddExperience(float amount)

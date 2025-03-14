@@ -67,6 +67,13 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    private void OnDisable()
+    {
+        OnDeath = null;
+        OnVanish = null;
+        OnHealthChange = null;
+    }
+
     [ContextMenu("Test Health Change")]
     private void TestHealthChange()
     {
@@ -84,8 +91,6 @@ public class PlayerController : MonoBehaviour
         health = maxHealth;
         if(IsInDungeon)
             OnHealthChange(health, maxHealth);
-
-        mouseY = 0;
 
         InputControls = GameManager.Instance.Controls;
 

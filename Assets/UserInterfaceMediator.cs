@@ -26,15 +26,4 @@ public class UserInterfaceMediator : MonoBehaviour
         playerController.OnHealthChange += userInterfaceController.SetHealthBar;
         playerController.SkillsMngr.OnExperienceChange += userInterfaceController.SetExperienceBar;
     }
-
-    private void OnDisable()
-    {
-        playerController.InventoryMngr.OnHotbarChange -= userInterfaceController.UpdateHotbarItemImages;
-        playerController.InventoryMngr.OnInventoryChange -= inventoryUI.RefreshInventorySlots;
-        playerController.InteractionMngr.OnSwitchHotbar -= userInterfaceController.ChangeActiveHotbar;
-        playerController.OnVanish -= userInterfaceController.Vanished;
-        playerController.OnDeath -= userInterfaceController.Died;
-        playerController.OnHealthChange -= userInterfaceController.SetHealthBar;
-        playerController.SkillsMngr.OnExperienceChange -= userInterfaceController.SetExperienceBar;
-    }
 }

@@ -21,7 +21,7 @@ public class SO_Controls : ScriptableObject
 	
 	public KeyCode Interact = KeyCode.E;
 	
-	public KeyCode Back = KeyCode.Escape;
+	public KeyCode Escape = KeyCode.Escape;
 	
 	public KeyCode ToggleUI = KeyCode.Tab;
 	
@@ -48,7 +48,7 @@ public class SO_Controls : ScriptableObject
 		
 		Interact = KeyCode.E;
 		
-		Back = KeyCode.Escape;
+		Escape = KeyCode.Escape;
 		
 		ToggleUI = KeyCode.Space;
 		

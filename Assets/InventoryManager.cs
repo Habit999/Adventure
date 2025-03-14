@@ -27,7 +27,9 @@ public class InventoryManager : MonoBehaviour
 	void OnDisable()
 	{
 		Controller.SkillsMngr.LevelUp -= UpdateInventoryStats;
-	}
+		OnHotbarChange = null;
+        OnInventoryChange = null;
+    }
 	
 	void Start()
 	{

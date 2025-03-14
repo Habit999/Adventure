@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Text;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,37 +15,81 @@ public class GameManager : MonoBehaviour
 	
 	public GameSaveData GameData;
 
+	public enum GameStates 
+	{ 
+		MainMenu,
+		InGame,
+		Paused
+	};
+	public GameStates CurrentGameState;
+
 	public SO_Controls Controls;
 
-	[HideInInspector] public bool IsFullscreen = true;
+	[SerializeField] private GameObject pauseMenu;
+    [SerializeField] private TextMeshProUGUI fullscreenButton;
+
+    [HideInInspector] public bool IsFullscreen = true;
 	
-	void Awake()
+	private void Awake()
 	{
 		if(Instance == null) Instance = this;
 		else Destroy(this.gameObject);
-		
-		if(LoadGameData() == null)
-		{
-            GameManager.Instance.Controls.LoadDefaults();
 
-		}
-		else
-		{
-			GameManager.Instance.Controls.LoadDefaults();
-		}
+		DontDestroyOnLoad(this.gameObject);
+
+		LoadGameData();
+        GameManager.Instance.Controls.LoadDefaults();
 	}
-	
-	void Update()
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(Controls.Escape))
+        {
+            if (CurrentGameState == GameStates.InGame)
+            {
+                PauseGame();
+            }
+        }
+    }
+
+    public void ClearGameData()
 	{
-		// Dev inputs for testing (DELETE FOR BUILD VERSIONS)
-		#region Developer Inputs
-		if(Input.GetKeyDown(KeyCode.L)) SaveGame();
-		#endregion
+		if(File.Exists(GameSaveDataPath)) File.Delete(GameSaveDataPath);
+		GameData = null;
 	}
+
+	public void ResumeGame()
+	{
+		CurrentGameState = GameStates.InGame;
+        PlayerController.Instance.UnFreezePlayer();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        Time.timeScale = 1;
+		pauseMenu.SetActive(false);
+    }
+
+	public void PauseGame()
+	{
+		CurrentGameState = GameStates.Paused;
+		PlayerController.Instance.FreezePlayer(true, true);
+        Cursor.lockState = CursorLockMode.Confined;
+		Cursor.visible = true;
+        Time.timeScale = 0;
+		pauseMenu.SetActive(true);
+    }
+
+	public void ReturnToMenu()
+	{
+		CurrentGameState = GameStates.MainMenu;
+        Time.timeScale = 1;
+		pauseMenu.SetActive(false);
+        SceneManager.LoadScene(0);
+    }
 
     public void ChangeWindowMode()
     {
 		IsFullscreen = !IsFullscreen;
+        fullscreenButton.SetText(IsFullscreen ? "X" : "");
         Screen.SetResolution(Screen.width, Screen.height, IsFullscreen);
     }
 

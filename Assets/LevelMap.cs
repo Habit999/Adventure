@@ -15,7 +15,7 @@ public class LevelMap : MonoBehaviour
 	
 	void Update()
 	{
-		if(playerController != null && Input.GetKeyDown(playerController.InputControls.Back)) CloseMap();
+		if(playerController != null && Input.GetKeyDown(playerController.InputControls.Escape)) CloseMap();
 	}
 	
 	public void OpenMap(PlayerController player)

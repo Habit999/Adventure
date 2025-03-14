@@ -1,7 +1,5 @@
 To-Do:
 
-- items not being equipped
-
 - Set up all dungeons with loot and enemy spawners
 
 - Check all scripts for unessaccery code

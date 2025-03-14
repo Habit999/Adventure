@@ -41,7 +41,8 @@ public class DungeonExit : MonoBehaviour
 	{
 		if(_canExit)
 		{
-			PlayerController.Instance.gameObject.SetActive(false);
+			GameManager.Instance.CurrentGameState = GameManager.GameStates.Paused;
+            PlayerController.Instance.gameObject.SetActive(false);
 			exitCam.gameObject.SetActive(true);
 			isLeaving = true;
 		}
@@ -72,6 +73,7 @@ public class DungeonExit : MonoBehaviour
 	void ExitDungeon()
 	{
 		GameManager.Instance.SaveGame();
-		GameManager.Instance.ReturnToMapRoom();
+		GameManager.Instance.CurrentGameState = GameManager.GameStates.InGame;
+        GameManager.Instance.ReturnToMapRoom();
 	}
 }

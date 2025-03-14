@@ -1,27 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-	[SerializeField] private TextMeshProUGUI fullscreenButton;
+	[SerializeField] private Button continueButton;
+	[SerializeField] private GameObject areYouSurePanel;
 
-	public void StartGame()
+    private void Start()
+    {
+        if (GameManager.Instance.GameData == null) continueButton.interactable = false;
+		else continueButton.interactable = true;
+
+		areYouSurePanel.SetActive(false);
+    }
+
+    public void StartGame()
 	{
-		SceneManager.LoadScene(1);
+		GameManager.Instance.CurrentGameState = GameManager.GameStates.InGame;
+        SceneManager.LoadScene(1);
 	}
-	
-	public void ExitGame()
+
+	public void NewGame()
+	{
+		if(GameManager.Instance.GameData != null)
+		{
+			areYouSurePanel.SetActive(true);
+        }
+		else
+		{
+			StartGame();
+        }
+    }
+
+	public void NewGameWipe()
+	{
+		GameManager.Instance.ClearGameData();
+        StartGame();
+    }
+
+    public void ExitGame()
 	{
 		Application.Quit();
-	}
-
-	public void ChangeFullscreenOption()
-	{
-		GameManager.Instance.ChangeWindowMode();
-		fullscreenButton.SetText(GameManager.Instance.IsFullscreen ? "X" : "");
 	}
 }

@@ -23,6 +23,11 @@ public class InteractionManager : MonoBehaviour
         controller = gameObject.GetComponent<PlayerController>();
     }
 
+    private void OnDisable()
+    {
+        OnSwitchHotbar = null;
+    }
+
     public void Interact()
 	{
 		if(Input.GetKeyDown(controller.InputControls.Interact) && ObjectPresent)
