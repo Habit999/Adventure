@@ -96,3 +96,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c96c2e5edcb42c4f91540840ffdc13b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ConnectedGrid: {fileID: 0}
+  CellActive: 0
+  GridIndex: {x: 0, y: 0}
+  OccupantPrefab: {fileID: 0}
+  ActiveOccupant: {fileID: 0}
+  OccupantPosition: {x: 0, y: 0, z: 0}
+  OccupantEulerAngles: {x: 0, y: 0, z: 0}
+  OccupantActiveOnSpawn: 1

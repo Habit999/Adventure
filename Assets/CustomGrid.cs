@@ -88,7 +88,6 @@ public class CustomGrid : MonoBehaviour
 		GeneratedData.CellOccupantPrefabs = new GameObject[GridLengthX, GridLengthZ];
         GeneratedData.CellOccupantsActiveOnSpawn = new bool[GridLengthX, GridLengthZ];
 
-
         GeneratedData.CellOccupantPositions = new Vector3[GridLengthX, GridLengthZ];
 		GeneratedData.CellOccupantEulerAngles = new Vector3[GridLengthX, GridLengthZ];
 		
@@ -100,6 +99,7 @@ public class CustomGrid : MonoBehaviour
 			{
 				DestroyImmediate(transform.GetChild(0).gameObject, false);
                 GridPreviewToggled = false;
+                CellOccupantsToggled = false;
                 GeneratedData.SpawnedCells = null;
             }
 		}
@@ -151,8 +151,9 @@ public class CustomGrid : MonoBehaviour
 				cellInstance.OccupantPrefab = GeneratedData.CellOccupantPrefabs[axisX, axisZ];
 				cellInstance.OccupantPosition = GeneratedData.CellOccupantPositions[axisX, axisZ];
 				cellInstance.OccupantEulerAngles = GeneratedData.CellOccupantEulerAngles[axisX, axisZ];
-				
-				GeneratedData.SpawnedCells[axisX, axisZ] = cellInstance;
+                cellInstance.OccupantActiveOnSpawn = GeneratedData.CellOccupantsActiveOnSpawn[axisX, axisZ];
+
+                GeneratedData.SpawnedCells[axisX, axisZ] = cellInstance;
 			}
 		}
 		
@@ -179,6 +180,7 @@ public class CustomGrid : MonoBehaviour
 					cellInstance.OccupantPrefab = GeneratedData.CellOccupantPrefabs[axisX, axisZ];
                     cellInstance.OccupantPosition = GeneratedData.CellOccupantPositions[axisX, axisZ];
                     cellInstance.OccupantEulerAngles = GeneratedData.CellOccupantEulerAngles[axisX, axisZ];
+					cellInstance.OccupantActiveOnSpawn = GeneratedData.CellOccupantsActiveOnSpawn[axisX, axisZ];
 
                     GeneratedData.SpawnedCells[axisX, axisZ] = cellInstance;
 				}
@@ -231,9 +233,10 @@ public class CustomGrid : MonoBehaviour
 				{
 					Vector2 cellIndex = cell.GridIndex;
 					GeneratedData.CellActiveOccupants[(int) cellIndex.x, (int) cellIndex.y] = cell.ActiveOccupant;
-				}
-			}
-		}
+                    print(GeneratedData.CellActiveOccupants[(int)cellIndex.x, (int)cellIndex.y]);
+                }
+            }
+        }
 		else
 		{
 			foreach(var cell in GeneratedData.SpawnedCells)

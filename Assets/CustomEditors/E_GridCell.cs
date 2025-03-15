@@ -20,7 +20,7 @@ public class E_GridCell : Editor
 			if(GUILayout.Button("Update Grid"))
 			{
 				targetCell.ConnectedGrid.UpdateGridFromCellData();
-			}
+            }
 		}
 		
 		EditorGUILayout.Space(5);
