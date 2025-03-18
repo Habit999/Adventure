@@ -38,12 +38,15 @@ public class LootSpawnManager : MonoBehaviour
 	{
 		foreach(var entity in targetGrid.GeneratedData.SpawnedCells)
 		{
-			TreasureChest chest = entity.ActiveOccupant.GetComponent<TreasureChest>();
-
-            if (entity != null && entity.ActiveOccupant != null && chest != null)
+			if(entity != null && entity.ActiveOccupant != null)
 			{
-                treasureChests.Add(chest);
-				chest.LootMngr = this;
+                TreasureChest chest = entity.ActiveOccupant.GetComponent<TreasureChest>();
+
+                if (chest != null)
+                {
+                    treasureChests.Add(chest);
+                    chest.LootMngr = this;
+                }
             }
 		}
 
