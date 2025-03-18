@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.AddForce(moveDirection);
+        rb.velocity =  moveDirection;
         moveDirection = Vector3.zero;
     }
 

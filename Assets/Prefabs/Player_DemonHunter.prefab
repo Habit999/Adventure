@@ -473,17 +473,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerState: 0
-  InteractionMngr: {fileID: 0}
-  InventoryMngr: {fileID: 0}
-  SkillsMngr: {fileID: 0}
   CombatMngr: {fileID: 6466162278814814200}
   InputControls: {fileID: 0}
   IsInDungeon: 1
   Camera: {fileID: 2624188408872534697}
   Body: {fileID: 6984754148921075596}
   maxHealth: 100
-  walkSpeed: 1000
-  sprintSpeed: 2000
+  walkSpeed: 200
+  sprintSpeed: 400
   strafeModifier: 0.75
   MouseToggled: 0
 --- !u!114 &6705436349346823103
