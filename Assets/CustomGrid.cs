@@ -227,13 +227,13 @@ public class CustomGrid : MonoBehaviour
 			
 			foreach(var cell in GeneratedData.SpawnedCells)
 			{
-				cell.SpawnOccupant();
+                Vector2 cellIndex = cell.GridIndex;
+                cell.OccupantActiveOnSpawn = GeneratedData.CellOccupantsActiveOnSpawn[(int)cellIndex.x, (int)cellIndex.y];
+                cell.SpawnOccupant();
 				
 				if(cell.ActiveOccupant != null)
 				{
-					Vector2 cellIndex = cell.GridIndex;
 					GeneratedData.CellActiveOccupants[(int) cellIndex.x, (int) cellIndex.y] = cell.ActiveOccupant;
-                    print(GeneratedData.CellActiveOccupants[(int)cellIndex.x, (int)cellIndex.y]);
                 }
             }
         }
@@ -300,6 +300,7 @@ public class CustomGrid : MonoBehaviour
         GridData.OccupantPrefabs = new List<GameObject>();
         GridData.OccupantPositions = new List<Vector3>();
         GridData.OccupantEulerAngles = new List<Vector3>();
+		GridData.OccupantActiveOnSpawn = new List<bool>();
 
         for (int x = 0; x < GridLengthX; x++)
 		{
