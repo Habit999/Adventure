@@ -95,6 +95,8 @@ public class InventoryManager : MonoBehaviour
 			CollectedItems.Add(item, amount);
 		}
 
+		item.SetActive(false);
+
 		OnInventoryChange?.Invoke();
     }
 	

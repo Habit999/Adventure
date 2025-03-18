@@ -39,6 +39,7 @@ public class TreasureChest : MonoBehaviour
         ItemInChest = Instantiate(item, itemSpawnLocation);
 		ItemInChest.transform.localPosition = Vector3.zero;
         ItemInChest.transform.localRotation = Quaternion.identity;
+		ItemInChest.gameObject.SetActive(false);
     }
 
 	public void OpenChest(PlayerController player)
