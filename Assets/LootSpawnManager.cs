@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class LootSpawnManager : MonoBehaviour
 {
-	public event Action<Item> OnSpawnChestLoot;
+	public event Action OnSpawnChestLoot;
 
 	private LevelManager levelManager;
 
@@ -38,9 +38,12 @@ public class LootSpawnManager : MonoBehaviour
 	{
 		foreach(var entity in targetGrid.GeneratedData.SpawnedCells)
 		{
-			if(entity != null && entity.ActiveOccupant != null && entity.ActiveOccupant.GetComponent<TreasureChest>() != null)
+			TreasureChest chest = entity.ActiveOccupant.GetComponent<TreasureChest>();
+
+            if (entity != null && entity.ActiveOccupant != null && chest != null)
 			{
-                treasureChests.Add(entity.ActiveOccupant.GetComponent<TreasureChest>());
+                treasureChests.Add(chest);
+				chest.LootMngr = this;
             }
 		}
 
@@ -67,10 +70,10 @@ public class LootSpawnManager : MonoBehaviour
         yield return new WaitForSeconds(0.01f);
 
         if (chestsToSpawn > 0) StartCoroutine(SpawnRandomChests());
-		else OnSpawnChestLoot?.Invoke(GenerateRandomLoot());
+		else OnSpawnChestLoot?.Invoke();
     }
 
-	private Item GenerateRandomLoot()
+	public Item GenerateRandomLoot()
 	{
 		return LootItems[UnityEngine.Random.Range(0, LootItems.Count)];
     }

@@ -7,6 +7,8 @@ public class TreasureChest : MonoBehaviour
 {
 	private event Action<GameObject, int> OnGiveLoot;
 
+	[SerializeField] public LootSpawnManager LootMngr;
+
     [HideInInspector] public Item ItemInChest;
 
     [SerializeField] private Transform itemSpawnLocation;
@@ -30,10 +32,11 @@ public class TreasureChest : MonoBehaviour
 		OnGiveLoot += PlayerController.Instance.InventoryMngr.AddItem;
     }
 
-    public void SpawnLootItem(Item lootItem)
+    public void SpawnLootItem()
 	{
-		print(lootItem);
-        ItemInChest = Instantiate(lootItem, itemSpawnLocation);
+		Item item = LootMngr.GenerateRandomLoot();
+		print(item);
+        ItemInChest = Instantiate(item, itemSpawnLocation);
 		ItemInChest.transform.localPosition = Vector3.zero;
         ItemInChest.transform.localRotation = Quaternion.identity;
     }
