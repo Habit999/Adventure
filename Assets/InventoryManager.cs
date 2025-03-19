@@ -80,13 +80,16 @@ public class InventoryManager : MonoBehaviour
 	// Add item to collected inventory
 	public void AddItem(GameObject item, int amount)
 	{
-		foreach(GameObject invItem in CollectedItems.Keys)
+		Item itemToAdd = item.GetComponent<Item>();
+
+        foreach (GameObject invItem in CollectedItems.Keys)
 		{
-			if(item == invItem)
+			if(itemToAdd.ItemData.Name == invItem.GetComponent<Item>().ItemData.Name)
 			{
-				if(CollectedItems[item] + amount <= item.GetComponent<Item>().ItemData.MaxItemStack)
+				if(CollectedItems[invItem] + amount <= itemToAdd.ItemData.MaxItemStack)
 				{
-					CollectedItems[item] += amount;
+					CollectedItems[invItem] += amount;
+					break;
                 }
             }
 		}
@@ -98,6 +101,27 @@ public class InventoryManager : MonoBehaviour
 		item.SetActive(false);
 
 		OnInventoryChange?.Invoke();
+    }
+
+    // Check if there is space for item in inventory
+    public bool CheckSpaceForItem(Item item)
+	{
+
+        foreach (GameObject invItem in CollectedItems.Keys)
+        {
+            if (item.ItemData.Name == invItem.GetComponent<Item>().ItemData.Name)
+            {
+                if (CollectedItems[invItem] + 1 <= item.ItemData.MaxItemStack)
+                {
+                    return true;
+                }
+            }
+        }
+        if (CollectedItems.Count < AvailableItemSlots)
+        {
+            return true;
+        }
+        return false;
     }
 	
 	// Remove item from collected inventory

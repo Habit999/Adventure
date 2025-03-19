@@ -7,7 +7,7 @@ public class TreasureChest : MonoBehaviour
 {
 	private event Action<GameObject, int> OnGiveLoot;
 
-	[SerializeField] public LootSpawnManager LootMngr;
+	[HideInInspector] public LootSpawnManager LootMngr;
 
     [HideInInspector] public Item ItemInChest;
 
@@ -19,17 +19,31 @@ public class TreasureChest : MonoBehaviour
 
 	[HideInInspector] public bool IsOpen;
 
-	private void Awake()
+	[Space(5)]
+
+	[SerializeField] private GameObject noSpaceMessage;
+	[SerializeField] private float noSpaceMessageDuration;
+	private float noSpaceMessageTimer;
+
+    private void Awake()
     {
         animator = GetComponent<Animation>();
         mimicComponent = GetComponent<MimicComponent>();
 
         IsOpen = false;
+
+		noSpaceMessageTimer = 0;
     }
 
     private void Start()
     {
 		OnGiveLoot += PlayerController.Instance.InventoryMngr.AddItem;
+    }
+
+    private void Update()
+    {
+        if (noSpaceMessageTimer > 0) noSpaceMessageTimer -= Time.deltaTime;
+		else noSpaceMessage.SetActive(false);
     }
 
     public void SpawnLootItem()
@@ -39,22 +53,28 @@ public class TreasureChest : MonoBehaviour
         ItemInChest = Instantiate(item, itemSpawnLocation);
 		ItemInChest.transform.localPosition = Vector3.zero;
         ItemInChest.transform.localRotation = Quaternion.identity;
-		ItemInChest.gameObject.SetActive(false);
     }
 
 	public void OpenChest(PlayerController player)
 	{
 		if (!IsOpen)
 		{
-            if(mimicComponent != null && mimicComponent.IsMimic)
+            if (mimicComponent != null && mimicComponent.IsMimic)
 			{
 				mimicComponent.TriggerMimic(player);
 				IsOpen = true;
             }
 			else
 			{
-                IsOpen = true;
-                StartCoroutine(OpenRoutine());
+				if(player.InventoryMngr.CheckSpaceForItem(ItemInChest))
+				{
+                    IsOpen = true;
+                    StartCoroutine(OpenRoutine());
+                    return;
+                }
+
+                noSpaceMessage.SetActive(true);
+                noSpaceMessageTimer = noSpaceMessageDuration;
             }
         }
     }

@@ -61,7 +61,7 @@ MonoBehaviour:
   targetingRotationSpeed: 200
   fleeingSpeed: 5
   fleeingRotationSpeed: 200
-  timeToExitFlee: 20
+  timeToExitFlee: 7
   damageDistance: 1
   damage: 25
   fieldOfViewRange: 0.2

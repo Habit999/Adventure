@@ -37,8 +37,9 @@ public class GameManager : MonoBehaviour
 
 		DontDestroyOnLoad(this.gameObject);
 
-		LoadGameData();
-        GameManager.Instance.Controls.LoadDefaults();
+		if(File.Exists(GameSaveDataPath))
+			LoadGame();
+        Controls.LoadDefaults();
 	}
 
     private void Update()
