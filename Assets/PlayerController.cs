@@ -93,6 +93,7 @@ public class PlayerController : MonoBehaviour
             OnHealthChange(health, maxHealth);
 
         InputControls = GameManager.Instance.Controls;
+        mouseX = transform.eulerAngles.y;
 
         CheckBodyState();
     }
