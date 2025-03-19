@@ -15,7 +15,6 @@ public class InventoryManager : MonoBehaviour
 	public event Action OnInventoryChange;
 	public event Action OnHotbarChange;
 
-    // To be used
     public IDictionary<GameObject, int> HotbarItemOrder = new Dictionary<GameObject, int>();
 	
 	[HideInInspector] public int SelectedInvSlot;
@@ -63,7 +62,9 @@ public class InventoryManager : MonoBehaviour
 			HotbarItemOrder[CollectedItems.Keys.ElementAt(SelectedInvSlot)] = position;
 		else HotbarItemOrder.Add(CollectedItems.Keys.ElementAt(SelectedInvSlot), position);
 
-		OnHotbarChange?.Invoke();
+		if(SelectedInvSlot == position) EquipItem();
+
+        OnHotbarChange?.Invoke();
     }
 
     public void EquipItem()
