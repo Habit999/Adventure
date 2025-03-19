@@ -186,6 +186,8 @@ public class PlayerController : MonoBehaviour
 
     private void FreeMovement()
     {
+        moveDirection.y = rb.velocity.y;
+
         // Moving
         if (Input.GetKey(InputControls.Sprint)) isSprinting = true;
         else isSprinting = false;
@@ -196,24 +198,32 @@ public class PlayerController : MonoBehaviour
             bool nonStrafeMovement = false;
             if (Input.GetKey(InputControls.Forward))
             {
-                moveDirection += Body.forward * (isSprinting ? sprintSpeed : walkSpeed) * Time.deltaTime;
+                Vector3 newDirection = Body.forward * (isSprinting ? sprintSpeed : walkSpeed) * Time.deltaTime;
+                newDirection.y = 0;
+                moveDirection += newDirection;
                 isMoving = true;
                 nonStrafeMovement = true;
             }
             if (Input.GetKey(InputControls.Backward))
             {
-                moveDirection += -Body.forward * (isSprinting ? sprintSpeed : walkSpeed) * Time.deltaTime;
+                Vector3 newDirection = -Body.forward * (isSprinting ? sprintSpeed : walkSpeed) * Time.deltaTime;
+                newDirection.y = 0;
+                moveDirection += newDirection;
                 isMoving = true;
                 nonStrafeMovement = true;
             }
             if (Input.GetKey(InputControls.Right))
             {
-                moveDirection += Body.right * (isSprinting ? sprintSpeed : walkSpeed) * (nonStrafeMovement ? strafeModifier : 1) * Time.deltaTime;
+                Vector3 newDirection = Body.right * (isSprinting ? sprintSpeed : walkSpeed) * (nonStrafeMovement ? strafeModifier : 1) * Time.deltaTime;
+                newDirection.y = 0;
+                moveDirection += newDirection;
                 isMoving = true;
             }
             if (Input.GetKey(InputControls.Left))
             {
-                moveDirection += -Body.right * (isSprinting ? sprintSpeed : walkSpeed) * (nonStrafeMovement ? strafeModifier : 1) * Time.deltaTime;
+                Vector3 newDirection = -Body.right * (isSprinting ? sprintSpeed : walkSpeed) * (nonStrafeMovement ? strafeModifier : 1) * Time.deltaTime;
+                newDirection.y = 0;
+                moveDirection += newDirection;
                 isMoving = true;
             }
         }
