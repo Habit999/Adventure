@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemData:
-    Type: 1
+    Type: 0
     Name: 
     Image: {fileID: 0}
     MaxItemStack: 0
