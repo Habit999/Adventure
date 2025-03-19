@@ -67,7 +67,6 @@ public class GridCell : MonoBehaviour
 			ActiveOccupant.transform.rotation = Quaternion.Euler(OccupantEulerAngles);
 
 			if(!OccupantActiveOnSpawn) ActiveOccupant.SetActive(false);
-			print("something");
         }
 	}
 

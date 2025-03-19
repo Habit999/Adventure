@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -63,6 +64,17 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
+	public void DropButton()
+	{
+        if (InventoryMngr.SelectedInvSlot >= 0 && InventoryMngr.SelectedInvSlot < InventoryMngr.CollectedItems.Count)
+        {
+            GameObject itemToDrop = InventoryMngr.CollectedItems.Keys.ElementAt(InventoryMngr.SelectedInvSlot);
+            InventoryMngr.RemoveItem(itemToDrop, 1);
+            InventoryMngr.SelectedInvSlot = -1;
+            RefreshInventorySlots();
+        }
+    }
+
 	public void RefreshInventorySlots()
 	{
 		foreach (var slot in ItemIcons)
@@ -81,13 +93,15 @@ public class InventoryUI : MonoBehaviour
 				if (itemIndex == invItemCount)
 				{
 					ItemIcons[i].UpdateItemImage(invItem.GetComponent<Item>().ItemData.Image);
-					invItemCount++;
+                    ItemIcons[i].UpdateItemAmount(InventoryMngr.CollectedItems[invItem]);
+                    invItemCount++;
 					break;
 				}
 				else
 				{
 					ItemIcons[i].UpdateItemImage(null);
-					itemIndex++;
+					ItemIcons[i].UpdateItemAmount(0);
+                    itemIndex++;
 				}
 			}
 
