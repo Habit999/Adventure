@@ -21,6 +21,7 @@ public class MimicComponent : MonoBehaviour
     private float particleTimer;
 
     private Enemy_MimicDemon hiddenMimic;
+    [HideInInspector] public Enemy_MimicDemon TargettingMimic;
 
     private void Awake()
     {

@@ -15,7 +15,7 @@ public class TreasureChest : MonoBehaviour
 
     private Animation animator;
 
-	private MimicComponent mimicComponent;
+	[HideInInspector] public MimicComponent MimicHideout;
 
 	[HideInInspector] public bool IsOpen;
 
@@ -28,7 +28,7 @@ public class TreasureChest : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animation>();
-        mimicComponent = GetComponent<MimicComponent>();
+        MimicHideout = GetComponent<MimicComponent>();
 
         IsOpen = false;
 
@@ -59,9 +59,9 @@ public class TreasureChest : MonoBehaviour
 	{
 		if (!IsOpen)
 		{
-            if (mimicComponent != null && mimicComponent.IsMimic)
+            if (MimicHideout != null && MimicHideout.IsMimic)
 			{
-				mimicComponent.TriggerMimic(player);
+				MimicHideout.TriggerMimic(player);
 				IsOpen = true;
             }
 			else
@@ -81,9 +81,9 @@ public class TreasureChest : MonoBehaviour
 
 	public void HitChest()
 	{
-		if (mimicComponent != null)
+		if (MimicHideout != null)
 		{
-			mimicComponent.DeactivateComponent();
+			MimicHideout.DeactivateComponent();
 		}
 	}
 

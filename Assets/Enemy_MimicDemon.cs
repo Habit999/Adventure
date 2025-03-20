@@ -84,7 +84,7 @@ public class Enemy_MimicDemon : Enemy
             return;
         }
 
-        if (chestTarget.IsOpen)
+        if (chestTarget.IsOpen || chestTarget.MimicHideout.IsMimic || chestTarget.MimicHideout.TargettingMimic != this)
         {
             FindClosestMimicObject();
             return;
@@ -182,7 +182,8 @@ public class Enemy_MimicDemon : Enemy
             chestTarget = null;
             foreach (var mimicObj in LootManager.MimicObjects)
             {
-                if (!mimicObj.GetComponent<TreasureChest>().IsOpen)
+                TreasureChest chest = mimicObj.GetComponent<TreasureChest>();
+                if (!chest.IsOpen && !chest.MimicHideout.IsMimic && chest.MimicHideout.TargettingMimic == null)
                 {
                     if (closestMimicObject == null)
                     {
@@ -205,6 +206,7 @@ public class Enemy_MimicDemon : Enemy
             else
             {
                 chestTarget = closestMimicObject.GetComponent<TreasureChest>();
+                chestTarget.MimicHideout.TargettingMimic = this;
                 if (NavMesh.SamplePosition(closestMimicObject.transform.position, out NavMeshHit hitData, 10, NavMesh.AllAreas))
                 {
                     movePoint = hitData.position;
