@@ -15,9 +15,16 @@ public class EnemySpawnManager : MonoBehaviour
     [HideInInspector] public int ThievesInLevel;
     [HideInInspector] public int MimicsInLevel;
 
+    [SerializeField] private GameObject enemySpawners;
+
     private void Awake()
     {
         LevelMngr = GetComponent<LevelManager>();
+
+        foreach(var spawner in enemySpawners.GetComponentsInChildren<EnemySpawner>())
+        {
+            spawner.SpawnMngr = this;
+        }
     }
 
     private void Update()
@@ -28,6 +35,23 @@ public class EnemySpawnManager : MonoBehaviour
             Destroy(enemy.gameObject);
         }
         deadEnemies.Clear();
+    }
+
+    public void SpawnNewEnemy(Enemy enemy, Vector3 position)
+    {
+        if (enemy is Enemy_VoidDemon && VoidsInLevel >= SpawnData.MaxVoidsInLevel)
+            return;
+        else if (enemy is Enemy_ThiefDemon && ThievesInLevel >= SpawnData.MaxThievesInLevel)
+            return;
+        else if (enemy is Enemy_MimicDemon && MimicsInLevel >= SpawnData.MaxMimicsInLevel)
+            return;
+
+        Enemy enemyInstance = Instantiate(enemy, position, Quaternion.identity);
+        enemyInstance.SpawnManager = this;
+        if (enemyInstance is Enemy_MimicDemon)
+            enemyInstance.GetComponent<Enemy_MimicDemon>().LootManager = GetComponent<LootSpawnManager>();
+
+        NewEnemy(enemyInstance);
     }
 
     public void NewEnemy(Enemy newEnemy)

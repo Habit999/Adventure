@@ -5,9 +5,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public event Action<Enemy> OnSpawnEnemy;
-
-    [SerializeField] private EnemySpawnManager spawnManager;
+    [HideInInspector] public EnemySpawnManager SpawnMngr;
 
     [SerializeField] private List<Enemy> enemiesToSpawn;
 
@@ -17,13 +15,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
-        OnSpawnEnemy += spawnManager.NewEnemy;
-        spawnTimer = timeBetweenSpawns;
-    }
-
-    private void Start()
-    {
-        SpawnEnemy();
+        spawnTimer = 0;
     }
 
     private void Update()
@@ -41,18 +33,6 @@ public class EnemySpawner : MonoBehaviour
     {
         int randomIndex = UnityEngine.Random.Range(0, enemiesToSpawn.Count);
 
-        if (enemiesToSpawn[randomIndex] is Enemy_VoidDemon && spawnManager.VoidsInLevel >= spawnManager.SpawnData.MaxVoidsInLevel)
-            return;
-        else if (enemiesToSpawn[randomIndex] is Enemy_ThiefDemon && spawnManager.ThievesInLevel >= spawnManager.SpawnData.MaxThievesInLevel)
-            return;
-        else if (enemiesToSpawn[randomIndex] is Enemy_MimicDemon && spawnManager.MimicsInLevel >= spawnManager.SpawnData.MaxMimicsInLevel)
-            return;
-
-        Enemy newEnemy = Instantiate(enemiesToSpawn[randomIndex], transform.position, Quaternion.identity);
-        if(newEnemy is Enemy_MimicDemon) 
-            newEnemy.GetComponent<Enemy_MimicDemon>().LootManager = spawnManager.GetComponent<LootSpawnManager>();
-
-        newEnemy.SpawnManager = spawnManager;
-        OnSpawnEnemy?.Invoke(newEnemy);
+        SpawnMngr.SpawnNewEnemy(enemiesToSpawn[randomIndex], transform.position);
     }
 }

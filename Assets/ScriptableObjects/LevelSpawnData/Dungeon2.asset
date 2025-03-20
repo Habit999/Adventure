@@ -15,5 +15,5 @@ MonoBehaviour:
   MaxChestsInLevel: 5
   MaxExperienceInLevel: 13
   MaxMimicsInLevel: 1
-  MaxVoidsInLevel: 1
+  MaxVoidsInLevel: 3
   MaxThievesInLevel: 1
