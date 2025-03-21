@@ -20,6 +20,8 @@ public class MapLevelIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 	{
 		lockedMessage.SetActive(false);
         levelText.SetText(levelName);
+		if(PlayerController.Instance.SkillsMngr.PlayerLevel >= 3) isLocked = false;
+		else isLocked = true;
     }
 
     public void OnPointerEnter(PointerEventData enterEventData)
