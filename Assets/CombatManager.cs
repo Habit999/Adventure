@@ -22,12 +22,6 @@ public class CombatManager : MonoBehaviour
 		damageAreaColldier.enabled = false;
 	}
 	
-	void Update()
-	{
-		//if(Input.GetMouseButtonDown(1))
-			//RightHandAnimator.SetTrigger("UseBandage");
-	}
-	
 	public void SwingWeapon()
 	{
 		if(!isAttacking)
@@ -53,8 +47,9 @@ public class CombatManager : MonoBehaviour
 			if(col.gameObject.tag == "Enemy")
 			{
 				// Damage enemy
-				// Use "PlayerController.Instance.InventoryMngr._equippedItem.GetComponent<Item>()._damage"
-			}
+				float calculatedDamage = Controller.InventoryMngr.EquippedItem.GetComponent<Item>().Damage * (1 + (Controller.SkillsMngr.CurrentSkills.strength / 100));
+                col.gameObject.GetComponent<Enemy>().TakeDamage(calculatedDamage);
+            }
 			if(col.gameObject.tag == "Chest")
             {
 				col.gameObject.GetComponent<TreasureChest>().HitChest();

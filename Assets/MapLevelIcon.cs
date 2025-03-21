@@ -14,14 +14,13 @@ public class MapLevelIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 	[SerializeField] private string levelName;
 	[Space(5)]
     [SerializeField] private GameObject lockedMessage;
-    public bool isLocked;
+    [SerializeField] private bool isLocked;
 
     void Start()
 	{
 		lockedMessage.SetActive(false);
         levelText.SetText(levelName);
 		if(PlayerController.Instance.SkillsMngr.PlayerLevel >= 3) isLocked = false;
-		else isLocked = true;
     }
 
     public void OnPointerEnter(PointerEventData enterEventData)
