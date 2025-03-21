@@ -1,6 +1,6 @@
 To-Do:
 
-- Set up all dungeons with loot and enemy spawners
+- Set up xp spawns for all maps
 
 - Check all scripts for unessaccery code
 
