@@ -136,6 +136,7 @@ public class InventoryManager : MonoBehaviour
 				{
 					CollectedItems[item] -= amount;
                     OnInventoryChange?.Invoke();
+					OnHotbarChange?.Invoke();
                     return item;
 				}
 				else if(CollectedItems[item] - amount == 0)
@@ -144,6 +145,7 @@ public class InventoryManager : MonoBehaviour
 					HotbarItemOrder.Remove(item);
 					if(item == EquippedItem) RemoveItemFromHand();
                     OnInventoryChange?.Invoke();
+                    OnHotbarChange?.Invoke();
                     return item;
 				}
 			}
