@@ -57,7 +57,7 @@ MonoBehaviour:
   validPositionAttempts: 10
   destinationStopDistance: 1
   isStuckTime: 5
-  gravityForce: 50
+  gravityForce: 10
   minDistanceToDimLight: 5
   maxDistanceToDimLight: 20
   LevelMngr: {fileID: 0}
