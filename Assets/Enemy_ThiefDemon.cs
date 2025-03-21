@@ -49,6 +49,20 @@ public class Enemy_ThiefDemon : Enemy
         isInView = false;
     }
 
+    public override void TakeDamage(float damage)
+    {
+        base.TakeDamage(damage);
+
+        if(stolenItem != null)
+        {
+            playerTarget.InventoryMngr.AddItem(stolenItem, 1);
+            stolenItem.transform.parent = null;
+            stolenItem = null;
+        }
+
+        SwitchState(EnemyState.Fleeing);
+    }
+
     protected override void EnemyBehaviour()
     {
         switch (CurrentState)
@@ -74,7 +88,7 @@ public class Enemy_ThiefDemon : Enemy
     {
         base.Roaming();
 
-        if(isInView) SwitchState(EnemyState.Targeting);
+        if(stolenItem == null && isInView) SwitchState(EnemyState.Targeting);
     }
 
     private void Targeting()
