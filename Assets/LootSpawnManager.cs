@@ -34,6 +34,14 @@ public class LootSpawnManager : MonoBehaviour
     {
 		levelManager = GetComponent<LevelManager>();
     }
+
+    /*private void Update()
+    {
+		if (Input.GetKeyDown(KeyCode.Alpha1)) PlayerController.Instance.InventoryMngr.AddItem(Instantiate(LootItems[0].gameObject, Vector3.zero, Quaternion.identity), 1);
+		if (Input.GetKeyDown(KeyCode.Alpha2)) PlayerController.Instance.InventoryMngr.AddItem(Instantiate(LootItems[1].gameObject, Vector3.zero, Quaternion.identity), 1);
+		if (Input.GetKeyDown(KeyCode.Alpha3)) PlayerController.Instance.InventoryMngr.AddItem(Instantiate(LootItems[2].gameObject, Vector3.zero, Quaternion.identity), 1);
+    }*/
+
     private void SelectAndSpawnLootInGrid()
 	{
 		foreach(var entity in targetGrid.GeneratedData.SpawnedCells)
