@@ -48,6 +48,13 @@ public class Enemy_MimicDemon : Enemy
         isInView = false;
     }
 
+    public override void TakeDamage(float damage)
+    {
+        base.TakeDamage(damage);
+
+        SwitchState(EnemyState.Fleeing);
+    }
+
     protected override void EnemyBehaviour()
     {
         switch (CurrentState)
