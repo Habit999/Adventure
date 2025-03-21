@@ -71,12 +71,14 @@ public class Enemy : MonoBehaviour
     public void KillEnemy()
     {
         OnDead(this);
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         health -= damage;
+        Debug.Log("Enemy hit for " + damage);
+        Debug.Log("Remaining health " + health);
         if (health <= 0) KillEnemy();
     }
 
@@ -114,9 +116,9 @@ public class Enemy : MonoBehaviour
 
     public virtual void SwitchState(EnemyState newState)
     {
-        CheckSpeed();
         hasDestination = false;
         CurrentState = newState;
+        CheckSpeed();
     }
 
     protected virtual void CheckSpeed()
