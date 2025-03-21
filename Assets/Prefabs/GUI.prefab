@@ -753,7 +753,7 @@ GameObject:
   - component: {fileID: 2848195646161128529}
   - component: {fileID: 5381798694048067441}
   m_Layer: 5
-  m_Name: VanishScreen
+  m_Name: DeathScreens
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
