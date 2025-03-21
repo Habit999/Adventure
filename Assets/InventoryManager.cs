@@ -82,6 +82,7 @@ public class InventoryManager : MonoBehaviour
 	public void AddItem(GameObject item, int amount)
 	{
 		Item itemToAdd = item.GetComponent<Item>();
+		bool alreadyAdded = false;
 
         foreach (GameObject invItem in CollectedItems.Keys)
 		{
@@ -90,11 +91,12 @@ public class InventoryManager : MonoBehaviour
 				if(CollectedItems[invItem] + amount <= itemToAdd.ItemData.MaxItemStack)
 				{
 					CollectedItems[invItem] += amount;
-					break;
+                    alreadyAdded = true;
+                    break;
                 }
             }
 		}
-		if(CollectedItems.Count < AvailableItemSlots)
+		if(!alreadyAdded && CollectedItems.Count < AvailableItemSlots)
 		{
 			CollectedItems.Add(item, amount);
 		}
