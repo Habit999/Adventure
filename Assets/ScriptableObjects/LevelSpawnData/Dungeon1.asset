@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Dungeon1
   m_EditorClassIdentifier: 
   MaxChestsInLevel: 5
-  MaxExperienceInLevel: 13
+  MaxExperienceInLevel: 5
   MaxMimicsInLevel: 2
   MaxVoidsInLevel: 1
   MaxThievesInLevel: 1

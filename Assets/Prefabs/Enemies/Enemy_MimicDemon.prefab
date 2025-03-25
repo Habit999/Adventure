@@ -421,7 +421,7 @@ MonoBehaviour:
   roamingRotationSpeed: 120
   randomLocationRange: 50
   validPositionAttempts: 10
-  destinationStopDistance: 1
+  destinationStopDistance: 2
   isStuckTime: 5
   LootManager: {fileID: 0}
   targetingSpeed: 5
