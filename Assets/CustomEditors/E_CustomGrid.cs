@@ -85,6 +85,8 @@ public class E_CustomGrid : Editor
                             targetGrid.SaveGridData();
                         }
 
+						EditorGUILayout.Space(10);
+
                         if (GUILayout.Button("Load Grid Data"))
 						{
 							targetGrid.GenerateGrid();

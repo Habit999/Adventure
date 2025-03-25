@@ -23,7 +23,7 @@ public class GridCell : MonoBehaviour
 
 	public bool OccupantActiveOnSpawn;
 	
-	void OnEnable()
+	void Awake()
 	{
 		CustomGrid.SpawnCellOccupants += SpawnOccupant;
 	}
