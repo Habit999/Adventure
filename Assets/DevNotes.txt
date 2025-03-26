@@ -1,7 +1,5 @@
 To-Do:
 
-- Set up xp spawns for all maps
-
 - Level 2 doesnt have an exit
 
 - Level 1 stairs are too bright and need material

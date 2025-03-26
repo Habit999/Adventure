@@ -426,7 +426,7 @@ MonoBehaviour:
   LootManager: {fileID: 0}
   targetingSpeed: 5
   targetingRotationSpeed: 200
-  fleeingSpeed: 15
+  fleeingSpeed: 10
   fleeingRotationSpeed: 400
   timeToExitFlee: 7
   damageDistance: 1
