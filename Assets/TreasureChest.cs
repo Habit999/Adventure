@@ -49,7 +49,6 @@ public class TreasureChest : MonoBehaviour
     public void SpawnLootItem()
 	{
 		Item item = LootMngr.GenerateRandomLoot();
-		print(item);
         ItemInChest = Instantiate(item, itemSpawnLocation);
 		ItemInChest.transform.localPosition = Vector3.zero;
         ItemInChest.transform.localRotation = Quaternion.identity;

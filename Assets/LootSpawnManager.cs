@@ -44,11 +44,9 @@ public class LootSpawnManager : MonoBehaviour
         {
             if (entity != null && entity.ActiveOccupant != null)
             {
-                print(entity.ActiveOccupant);
                 if (entity.ActiveOccupant.GetComponent<TreasureChest>() != null)
                 {
                     TreasureChest chest = entity.ActiveOccupant.GetComponent<TreasureChest>();
-                    print("chest");
 
                     if (chest != null)
                     {
@@ -59,7 +57,6 @@ public class LootSpawnManager : MonoBehaviour
                 else if (entity.ActiveOccupant.GetComponent<Experience>() != null)
                 {
                     Experience xp = entity.ActiveOccupant.GetComponent<Experience>();
-                    print("xp");
 
                     if (xp != null)
                     {
@@ -108,8 +105,6 @@ public class LootSpawnManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.01f);
-
-		print(experienceToSpawn + " " + chestsToSpawn);
 
         if (chestsToSpawn > 0 || experienceToSpawn > 0) StartCoroutine(SpawnRandomLoot());
         else OnSpawnChestLoot?.Invoke();

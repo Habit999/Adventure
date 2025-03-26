@@ -42,11 +42,13 @@ public class SkillsManager : MonoBehaviour
 	[HideInInspector] public SkillsList TempSkills = new SkillsList(1, 1);
 	[HideInInspector] public bool TempValuesActive;
 	
-	bool initialSkillsCheckComplete = false;
+	private bool skillsCheckComplete = false;
+	private bool initialSkillsCheckComplete = false;
 	
 	void Start()
 	{
-		if(Controller.IsInDungeon)
+        initialSkillsCheckComplete = false;
+        if (Controller.IsInDungeon)
 			StartCoroutine(UpdatePlayerLevel());
     }
 
@@ -58,7 +60,8 @@ public class SkillsManager : MonoBehaviour
     public void AddExperience(float amount)
 	{
 		ExperienceGained += amount;
-		OnExperienceChange(ExperienceGained, NextLevelExperience);
+		if(skillsCheckComplete)
+			StartCoroutine(UpdatePlayerLevel());
     }
 	
 	public void ChangeSkillValue(SKILLTYPE type, int amount)
@@ -109,17 +112,24 @@ public class SkillsManager : MonoBehaviour
 		if(ExperienceGained / NextLevelExperience > 1)
 		{
 			PlayerLevel += 1;
-			if(initialSkillsCheckComplete) SkillPoints += 1;
+			if(initialSkillsCheckComplete)
+                SkillPoints += 1;
 			
 			ExperienceGained -= NextLevelExperience;
 			
 			// Call level up event
 			LevelUp();
 		}
-		else initialSkillsCheckComplete = true;
-		
+		else skillsCheckComplete = true;
+
 		yield return new WaitForSeconds(0.01f);
-		StartCoroutine(UpdatePlayerLevel());
-        OnExperienceChange(ExperienceGained, NextLevelExperience);
+
+        if (!skillsCheckComplete)
+		{
+			StartCoroutine(UpdatePlayerLevel());
+		}
+		else initialSkillsCheckComplete = true;
+
+        OnExperienceChange?.Invoke(ExperienceGained, NextLevelExperience);
     }
 }

@@ -64,7 +64,8 @@ public class SkillsUI : MonoBehaviour
     public void ToggleOpen()
     {
         isOpen = !isOpen;
-        if(isOpen) UpdateSkillsWindow();
+        if (isOpen)
+            ResetSkills();
         animator.SetBool("Open", isOpen);
     }
 
