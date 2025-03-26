@@ -52,15 +52,18 @@ public class Enemy_ThiefDemon : Enemy
     public override void TakeDamage(float damage)
     {
         base.TakeDamage(damage);
-
-        if(stolenItem != null)
+        
+        if (stolenItem != null)
         {
             playerTarget.InventoryMngr.AddItem(stolenItem, 1);
             stolenItem.transform.parent = null;
             stolenItem = null;
         }
 
-        SwitchState(EnemyState.Fleeing);
+        if (!isDead)
+        {
+            SwitchState(EnemyState.Fleeing);
+        }
     }
 
     protected override void EnemyBehaviour()

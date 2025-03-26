@@ -38,6 +38,8 @@ public class Enemy : MonoBehaviour
 
     protected bool hasDestination;
 
+    protected bool isDead;
+
     protected virtual void Awake()
     {
         navAgent = GetComponent<NavMeshAgent>();
@@ -47,6 +49,8 @@ public class Enemy : MonoBehaviour
         health = maxHealth;
 
         hasDestination = false;
+
+        isDead = false;
 
         stuckTimer = isStuckTime;
         lastLocation = transform.position;
@@ -67,11 +71,15 @@ public class Enemy : MonoBehaviour
         EnemyBehaviour();
     }
 
+#if UNITY_EDITOR
     [ContextMenu("Kill Enemy")]
+#endif
     public void KillEnemy()
     {
-        OnDead(this);
+        isDead = true;
+        OnDead?.Invoke(this);
         gameObject.SetActive(false);
+        print("EnemyDead");
     }
 
     public virtual void TakeDamage(float damage)
@@ -135,7 +143,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     [ContextMenu("GeneratePoint")]
+#endif
     protected bool GenerateRandomNavLocation()
     {
         Vector3 randomPosition = transform.position + UnityEngine.Random.insideUnitSphere * UnityEngine.Random.Range(10, randomLocationRange);
