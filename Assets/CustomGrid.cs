@@ -268,11 +268,12 @@ public class CustomGrid : MonoBehaviour
 			}
 		}
 	}
-	
+
 	#endregion
-	
+
 	#region Saving & Loading
-	
+
+#if UNITY_EDITOR
 	public bool SaveGridData()
 	{
 		if (!GenerationComplete)
@@ -320,7 +321,8 @@ public class CustomGrid : MonoBehaviour
         Debug.Log("Grid data saved");
         return true;
 	}
-	
+#endif
+
 	public bool LoadGridData()
 	{
 		if(GridData == null)

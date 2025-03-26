@@ -2,6 +2,14 @@ To-Do:
 
 - Set up xp spawns for all maps
 
+- Level 2 doesnt have an exit
+
+- Level 1 stairs are too bright and need material
+
+- Mimic wasnt dying
+
+- non assigned hotbar 1 equips if item is placed in it
+
 - Check all scripts for unessaccery code
 
 - Get rid of any .GetChildren / .parent unreliable code
