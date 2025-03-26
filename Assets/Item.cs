@@ -59,7 +59,7 @@ public class Item : MonoBehaviour
 				return true;
 				
 			case ItemDataStructure.TYPE.Consumable:
-				PlayerController.Instance.HealPlayer(HealthRecovery);
+				StartCoroutine(PlayerController.Instance.HealPlayer(this, HealthRecovery));
 				return true;
 				
 			default:

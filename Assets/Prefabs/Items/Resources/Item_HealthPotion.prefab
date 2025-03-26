@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemData:
-    Type: 0
+    Type: 1
     Name: HealthPotion
     Image: {fileID: 21300000, guid: 5bb8602b04b0b77418b1a59d504a106e, type: 3}
     MaxItemStack: 3

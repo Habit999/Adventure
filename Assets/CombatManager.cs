@@ -13,23 +13,38 @@ public class CombatManager : MonoBehaviour
 	[SerializeField] private float swingTime;
 	
 	private BoxCollider damageAreaColldier;
+
+	private float animationTimer;
 	
-	private bool isAttacking;
+	[HideInInspector] public bool IsAnimating;
 	
-	void Start()
+	private void Start()
 	{
 		damageAreaColldier = GetComponent<BoxCollider>();
 		damageAreaColldier.enabled = false;
 	}
-	
-	public void SwingWeapon()
+
+    private void Update()
+    {
+        if(animationTimer > 0) animationTimer -= Time.deltaTime;
+		else IsAnimating = false;
+    }
+
+    public void SwingWeapon()
 	{
-		if(!isAttacking)
+		if(!IsAnimating)
 		{
-			isAttacking = true;
+			IsAnimating = true;
 			StartCoroutine(AttackTiming());
 		}
 	}
+
+	public void TriggerAnimator(string triggerName)
+	{
+        IsAnimating = true;
+		RightHandAnimator.SetTrigger(triggerName);
+        animationTimer = RightHandAnimator.GetCurrentAnimatorStateInfo(0).length;
+    }
 	
 	IEnumerator AttackTiming()
 	{
@@ -37,7 +52,7 @@ public class CombatManager : MonoBehaviour
 		yield return new WaitForSeconds(swingTime);
 		damageAreaColldier.enabled = false;
 		yield return new WaitForSeconds(RightHandAnimator.GetCurrentAnimatorStateInfo(0).length);
-		isAttacking = false;
+		IsAnimating = false;
 	}
 	
 	void OnTriggerEnter(Collider col)

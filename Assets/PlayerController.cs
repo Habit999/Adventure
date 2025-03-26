@@ -59,6 +59,18 @@ public class PlayerController : MonoBehaviour
     private bool isMoving;
     private bool isSprinting;
 
+    [ContextMenu("Test Health Change")]
+    private void TestHealthChange()
+    {
+        DamagePlayer(10);
+    }
+
+    [ContextMenu("Test Experience Change")]
+    private void TestExperienceChange()
+    {
+        SkillsMngr.AddExperience(10);
+    }
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -72,18 +84,6 @@ public class PlayerController : MonoBehaviour
         OnDeath = null;
         OnVanish = null;
         OnHealthChange = null;
-    }
-
-    [ContextMenu("Test Health Change")]
-    private void TestHealthChange()
-    {
-        DamagePlayer(10);
-    }
-
-    [ContextMenu("Test Experience Change")]
-    private void TestExperienceChange()
-    {
-        SkillsMngr.AddExperience(10);
     }
 
     private void Start()
@@ -134,10 +134,21 @@ public class PlayerController : MonoBehaviour
         OnHealthChange(health, maxHealth);
     }
 
-    public void HealPlayer(float healing)
+    public IEnumerator HealPlayer(Item item, float healing)
     {
-        health += healing;
+        yield return new WaitWhile(() => CombatMngr.IsAnimating);
+
+        health = Mathf.Clamp(health + healing, 0, maxHealth);
         OnHealthChange(health, maxHealth);
+
+        foreach(var collectedItem in InventoryMngr.CollectedItems.Keys)
+        {
+            if (collectedItem.GetComponent<Item>().ItemData.Name == item.ItemData.Name)
+            {
+                InventoryMngr.RemoveItem(collectedItem, 1);
+                break;
+            }
+        }
     }
 
     public void FreezePlayer(bool lockCamera, bool lockMovement)

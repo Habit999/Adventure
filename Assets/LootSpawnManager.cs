@@ -45,6 +45,10 @@ public class LootSpawnManager : MonoBehaviour
 		{
 			PlayerController.Instance.InventoryMngr.AddItem(Instantiate(LootItems[2].gameObject, Vector3.zero, Quaternion.identity), 1);
         }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            PlayerController.Instance.InventoryMngr.AddItem(Instantiate(LootItems[0].gameObject, Vector3.zero, Quaternion.identity), 1);
+        }
     }
 
     private void SelectAndSpawnLootInGrid()

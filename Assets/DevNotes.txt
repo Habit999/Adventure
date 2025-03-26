@@ -6,7 +6,7 @@ To-Do:
 
 - non assigned hotbar 1 equips if item is placed in it
 
-- Consumables arent removed when used
+- Player doesnt die when touching void
 
 - Check all scripts for unessaccery code
 
