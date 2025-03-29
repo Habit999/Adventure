@@ -6,8 +6,6 @@ To-Do:
 
 - non assigned hotbar 1 equips if item is placed in it
 
-- Player doesnt die when touching void
-
 - Check all scripts for unessaccery code
 
 - Get rid of any .GetChildren / .parent unreliable code
