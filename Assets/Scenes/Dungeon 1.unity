@@ -1871,11 +1871,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 571590c7ba3ad1a45aadf5372f843d76, type: 3}
---- !u!4 &702045252 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8122189131782093524, guid: 571590c7ba3ad1a45aadf5372f843d76, type: 3}
-  m_PrefabInstance: {fileID: 702045251}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &707373851
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35021,7 +35016,7 @@ PrefabInstance:
     - target: {fileID: 2592279792706228827, guid: d3474ea4038446044991de5d756d9d00, type: 3}
       propertyPath: levelTorches
       value: 
-      objectReference: {fileID: 702045252}
+      objectReference: {fileID: 1201455065}
     - target: {fileID: 4659140451648223350, guid: d3474ea4038446044991de5d756d9d00, type: 3}
       propertyPath: enemySpawners
       value: 

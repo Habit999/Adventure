@@ -2,8 +2,6 @@ To-Do:
 
 - Level 2 doesnt have an exit
 
-- Level 1 stairs are too bright and need material
-
 - non assigned hotbar 1 equips if item is placed in it
 
 - dungeon exit msg needs to be changed
