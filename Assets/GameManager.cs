@@ -32,14 +32,20 @@ public class GameManager : MonoBehaviour
 	
 	private void Awake()
 	{
-		if(Instance == null) Instance = this;
-		else Destroy(this.gameObject);
+		if(Instance == null || Instance == this) Instance = this;
+		else
+		{
+            Destroy(this.gameObject);
+			return;
+        }
 
-		DontDestroyOnLoad(this.gameObject);
+        if (File.Exists(GameSaveDataPath))
+            LoadGame();
+		if(CurrentGameState == GameStates.InGame) GivePlayerData();
 
-		if(File.Exists(GameSaveDataPath))
-			LoadGame();
         Controls.LoadDefaults();
+
+        DontDestroyOnLoad(this.gameObject);
 	}
 
     private void Update()
@@ -111,26 +117,29 @@ public class GameManager : MonoBehaviour
 		}
 		else
 		{
-			PlayerController player = PlayerController.Instance;
-			// Player inventory
-			for(int i = 0; i < loadedData.PlayerItems.Length; i++)
-			{
-				GameObject itemInstance = Instantiate(PrefabLibrary.ItemPrefabID[loadedData.PlayerItems[i]], Vector3.zero, Quaternion.identity);
-				player.InventoryMngr.AddItem(itemInstance, loadedData.PlayerItemAmounts[i]);
-			}
-			
-			// Player skill & level stats
-			player.SkillsMngr.PlayerLevel = loadedData.PlayerLevel;
-			player.SkillsMngr.SkillPoints = loadedData.PlayerSkillPoints;
-			player.SkillsMngr.ExperienceGained = loadedData.PlayerExperience;
-			player.SkillsMngr.CurrentSkills.vitality = loadedData.PlayerSkillLevels[0];
-			player.SkillsMngr.CurrentSkills.strength = loadedData.PlayerSkillLevels[1];
-			
 			GameData = loadedData;
 			print("Game Data Loaded");
 			return true;
 		}
 	}
+
+	private void GivePlayerData()
+	{
+        PlayerController player = PlayerController.Instance;
+        // Player inventory
+        for (int i = 0; i < GameData.PlayerItems.Length; i++)
+        {
+            GameObject itemInstance = Instantiate(PrefabLibrary.ItemPrefabID[GameData.PlayerItems[i]], Vector3.zero, Quaternion.identity);
+            player.InventoryMngr.AddItem(itemInstance, GameData.PlayerItemAmounts[i]);
+        }
+
+        // Player skill & level stats
+        player.SkillsMngr.PlayerLevel = GameData.PlayerLevel;
+        player.SkillsMngr.SkillPoints = GameData.PlayerSkillPoints;
+        player.SkillsMngr.ExperienceGained = GameData.PlayerExperience;
+        player.SkillsMngr.CurrentSkills.vitality = GameData.PlayerSkillLevels[0];
+        player.SkillsMngr.CurrentSkills.strength = GameData.PlayerSkillLevels[1];
+    }
 	
 	public void SaveGame()
 	{

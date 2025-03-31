@@ -6,6 +6,8 @@ To-Do:
 
 - non assigned hotbar 1 equips if item is placed in it
 
+- dungeon exit msg needs to be changed
+
 - Check all scripts for unessaccery code
 
 - Get rid of any .GetChildren / .parent unreliable code
