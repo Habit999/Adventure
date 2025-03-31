@@ -15,7 +15,7 @@ public class Enemy_VoidDemon : Enemy
 
     [HideInInspector] public LevelManager LevelMngr;
 
-    private void Start()
+    protected override void Start()
     {
         base.Start();
 
