@@ -9,7 +9,7 @@ public class InventoryIcon : MonoBehaviour
 	public enum ICONTYPE { ItemSlot, HotbarButton };
 	[SerializeField] ICONTYPE IconType;
 
-	public InventoryUI InventoryUIController;
+	[HideInInspector] public InventoryUI InventoryUIController;
 
 	[SerializeField] private Image itemImage;
     public Image BackgroundImage;

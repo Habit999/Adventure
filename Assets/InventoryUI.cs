@@ -35,9 +35,10 @@ public class InventoryUI : MonoBehaviour
         foreach(var itemIcon in itemRegion.GetComponentsInChildren<InventoryIcon>())
 		{
 			ItemIcons.Add(itemIcon);
+            itemIcon.InventoryUIController = this;
         }
 
-		foreach(var hotbarAssignmentButton in hotbarAssignmentRegion.GetComponentsInChildren<InventoryIcon>())
+        foreach (var hotbarAssignmentButton in hotbarAssignmentRegion.GetComponentsInChildren<InventoryIcon>())
 		{
             hotbarAssignmentButton.InventoryUIController = this;
         }
