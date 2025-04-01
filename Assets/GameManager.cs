@@ -41,8 +41,7 @@ public class GameManager : MonoBehaviour
 
         if (File.Exists(GameSaveDataPath))
             LoadGame();
-		if(CurrentGameState == GameStates.InGame) GivePlayerData();
-
+		
         Controls.LoadDefaults();
 
         DontDestroyOnLoad(this.gameObject);
@@ -123,7 +122,7 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	private void GivePlayerData()
+	public void GivePlayerData()
 	{
         PlayerController player = PlayerController.Instance;
         // Player inventory

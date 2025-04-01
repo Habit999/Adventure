@@ -27,6 +27,6 @@ public class LevelManager : MonoBehaviour
     void Start()
 	{
 		PlayerController.Instance.IsInDungeon = true;
-		GameManager.Instance.LoadGame();
-	}
+        GameManager.Instance.GivePlayerData();
+    }
 }
