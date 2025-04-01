@@ -124,6 +124,8 @@ public class GameManager : MonoBehaviour
 
 	public void GivePlayerData()
 	{
+		if (GameData == null) LoadGame();
+
         PlayerController player = PlayerController.Instance;
         // Player inventory
         for (int i = 0; i < GameData.PlayerItems.Length; i++)
@@ -201,8 +203,8 @@ public class GameManager : MonoBehaviour
 
 public class GameSaveData
 {
-	public int[] PlayerItems;
-	public int[] PlayerItemAmounts;
+	public int[] PlayerItems = new int[0];
+	public int[] PlayerItemAmounts = new int[0];
 	
 	public int PlayerLevel = 0;
 	public int PlayerSkillPoints = 0;
