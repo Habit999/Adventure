@@ -682,8 +682,8 @@ MonoBehaviour:
   isStuckTime: 5
   targetingSpeed: 2
   targetingRotationSpeed: 150
-  fleeingSpeed: 15
-  fleeingRotationSpeed: 400
+  fleeingSpeed: 10
+  fleeingRotationSpeed: 300
   timeToExitFlee: 10
   distanceToSteal: 1.5
   hands: {fileID: 8901436295906851637}
