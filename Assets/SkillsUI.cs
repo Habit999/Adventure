@@ -16,6 +16,7 @@ public class SkillsUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playerLevelDisplay;
 
     public event Action OnSkillPointsChanged;
+    public event Action OnStatChange;
 
     private List<SkillRowUI> skillRowUIs = new List<SkillRowUI>();
 
@@ -36,6 +37,11 @@ public class SkillsUI : MonoBehaviour
             skillRowUIs.Add(skillRow);
             skillRow.SkillsUIController = this;
         }
+    }
+
+    private void OnDisable()
+    {
+        OnStatChange = null;
     }
 
     private void Start()
@@ -75,6 +81,7 @@ public class SkillsUI : MonoBehaviour
         SkillsMngr.CurrentSkills.strength = tempSkillsList.strength;
         SkillsMngr.SkillPoints = tempSkillPoints;
         UpdateSkillsWindow();
+        OnStatChange?.Invoke();
     }
 
     private void UpdateSkillsWindow()

@@ -7,8 +7,6 @@ public class SkillsManager : MonoBehaviour
 {
 	public PlayerController Controller { get { return gameObject.GetComponent<PlayerController>(); } }
 	
-	public event Action OnStatShange;
-
     public event Action<float, float> OnExperienceChange;
 
     public int PlayerLevel = 0;
@@ -91,18 +89,6 @@ public class SkillsManager : MonoBehaviour
 		
 		TempSkillPoints += -amount;
 	}
-	
-	public void ConfirmSkillChanges()
-	{
-		TempValuesActive = false;
-		
-		SkillPoints = TempSkillPoints;
-		
-		CurrentSkills.vitality = TempSkills.vitality;
-		CurrentSkills.strength = TempSkills.strength;
-
-        OnStatShange();
-    }
 
     private IEnumerator UpdatePlayerLevel()
 	{

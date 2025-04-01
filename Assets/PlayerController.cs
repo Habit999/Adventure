@@ -98,8 +98,6 @@ public class PlayerController : MonoBehaviour
         InputControls = GameManager.Instance.Controls;
         mouseX = transform.eulerAngles.y;
 
-        SkillsMngr.OnStatShange += UpdateMaxHealth;
-
         CheckBodyState();
     }
 
@@ -301,9 +299,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void UpdateMaxHealth()
+    public void UpdateMaxHealth()
     {
-        maxHealth = startingMaxHealth + (10 * (SkillsMngr.CurrentSkills.vitality - 1));
+        float newHealth = startingMaxHealth + (10 * (SkillsMngr.CurrentSkills.vitality - 1));
+        maxHealth = newHealth;
         OnHealthChange(health, maxHealth);
     }
 }

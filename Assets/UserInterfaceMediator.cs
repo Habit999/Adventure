@@ -25,5 +25,7 @@ public class UserInterfaceMediator : MonoBehaviour
         playerController.OnDeath += userInterfaceController.Died;
         playerController.OnHealthChange += userInterfaceController.SetHealthBar;
         playerController.SkillsMngr.OnExperienceChange += userInterfaceController.SetExperienceBar;
+        skillsUI.OnStatChange += playerController.UpdateMaxHealth;
+        skillsUI.OnStatChange += playerController.InventoryMngr.UpdateInventoryStats;
     }
 }

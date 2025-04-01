@@ -25,7 +25,6 @@ public class InventoryManager : MonoBehaviour
 	
 	void OnDisable()
 	{
-		Controller.SkillsMngr.OnStatShange -= UpdateInventoryStats;
 		OnHotbarChange = null;
         OnInventoryChange = null;
     }
@@ -33,8 +32,6 @@ public class InventoryManager : MonoBehaviour
 	void Start()
 	{
 		Controller = GetComponent<PlayerController>();
-
-        Controller.SkillsMngr.OnStatShange += UpdateInventoryStats;
 
         SelectedInvSlot = -1;
 
@@ -155,22 +152,22 @@ public class InventoryManager : MonoBehaviour
 		return null;
 	}
 	
-	void UpdateInventoryStats()
+	public void UpdateInventoryStats()
 	{
 		// Adjust inventory slots to player level
-		if(Controller.SkillsMngr.CurrentSkills.strength == 1)
+		if(Controller.SkillsMngr.CurrentSkills.strength >= 1)
 		{
 			AvailableItemSlots = 4;
 		}
-		else if(Controller.SkillsMngr.CurrentSkills.strength == 3)
+		else if(Controller.SkillsMngr.CurrentSkills.strength >= 3)
 		{
 			AvailableItemSlots = 8;
 		}
-		else if(Controller.SkillsMngr.CurrentSkills.strength == 5)
+		else if(Controller.SkillsMngr.CurrentSkills.strength >= 5)
 		{
 			AvailableItemSlots = 12;
 		}
-		else if(Controller.SkillsMngr.CurrentSkills.strength == 7)
+		else if(Controller.SkillsMngr.CurrentSkills.strength >= 7)
 		{
 			AvailableItemSlots = 16;
 		}
