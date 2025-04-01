@@ -52,7 +52,7 @@ public class Enemy_MimicDemon : Enemy
     {
         base.TakeDamage(damage);
 
-        SwitchState(EnemyState.Fleeing);
+        if(!isDead) SwitchState(EnemyState.Fleeing);
     }
 
     protected override void EnemyBehaviour()
