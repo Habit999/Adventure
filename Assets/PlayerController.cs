@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
     [Space(5)]
 
     [SerializeField] private float maxHealth;
+    private float startingMaxHealth;
     private float health;
 
     private float mouseX;
@@ -77,6 +78,8 @@ public class PlayerController : MonoBehaviour
         else Destroy(gameObject);
 
         rb = GetComponent<Rigidbody>();
+
+        startingMaxHealth = maxHealth;
     }
 
     private void OnDisable()
@@ -94,6 +97,8 @@ public class PlayerController : MonoBehaviour
 
         InputControls = GameManager.Instance.Controls;
         mouseX = transform.eulerAngles.y;
+
+        SkillsMngr.OnStatShange += UpdateMaxHealth;
 
         CheckBodyState();
     }
@@ -294,5 +299,11 @@ public class PlayerController : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    private void UpdateMaxHealth()
+    {
+        maxHealth = startingMaxHealth + (10 * (SkillsMngr.CurrentSkills.vitality - 1));
+        OnHealthChange(health, maxHealth);
     }
 }

@@ -7,8 +7,7 @@ public class SkillsManager : MonoBehaviour
 {
 	public PlayerController Controller { get { return gameObject.GetComponent<PlayerController>(); } }
 	
-	public delegate void PlayerLevelUp();
-	public event PlayerLevelUp LevelUp;
+	public event Action OnStatShange;
 
     public event Action<float, float> OnExperienceChange;
 
@@ -101,9 +100,11 @@ public class SkillsManager : MonoBehaviour
 		
 		CurrentSkills.vitality = TempSkills.vitality;
 		CurrentSkills.strength = TempSkills.strength;
-	}
-	
-	private IEnumerator UpdatePlayerLevel()
+
+        OnStatShange();
+    }
+
+    private IEnumerator UpdatePlayerLevel()
 	{
 		// Experience required for next level
 		NextLevelExperience = firstLevelExperience + ((firstLevelExperience * levelIntervalMultiplier) * PlayerLevel);
@@ -118,7 +119,6 @@ public class SkillsManager : MonoBehaviour
 			ExperienceGained -= NextLevelExperience;
 			
 			// Call level up event
-			LevelUp();
 		}
 		else skillsCheckComplete = true;
 

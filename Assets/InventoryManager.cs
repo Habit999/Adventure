@@ -25,7 +25,7 @@ public class InventoryManager : MonoBehaviour
 	
 	void OnDisable()
 	{
-		Controller.SkillsMngr.LevelUp -= UpdateInventoryStats;
+		Controller.SkillsMngr.OnStatShange -= UpdateInventoryStats;
 		OnHotbarChange = null;
         OnInventoryChange = null;
     }
@@ -34,7 +34,7 @@ public class InventoryManager : MonoBehaviour
 	{
 		Controller = GetComponent<PlayerController>();
 
-        Controller.SkillsMngr.LevelUp += UpdateInventoryStats;
+        Controller.SkillsMngr.OnStatShange += UpdateInventoryStats;
 
         SelectedInvSlot = -1;
 
