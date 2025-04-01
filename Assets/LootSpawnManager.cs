@@ -41,11 +41,11 @@ public class LootSpawnManager : MonoBehaviour
 
     private void Update()
     {
-		if (Input.GetKeyDown(KeyCode.Alpha1))
-		{
+        if (Input.GetKeyDown(KeyCode.T))
+        {
 			PlayerController.Instance.InventoryMngr.AddItem(Instantiate(LootItems[2].gameObject, Vector3.zero, Quaternion.identity), 1);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Y))
         {
             PlayerController.Instance.InventoryMngr.AddItem(Instantiate(LootItems[0].gameObject, Vector3.zero, Quaternion.identity), 1);
         }

@@ -106,7 +106,7 @@ public class Enemy_ThiefDemon : Enemy
         }
 
         // Is player looking this way?
-        if(Vector3.Dot(playerTarget.transform.forward, (transform.position - playerTarget.transform.position).normalized) > playerCanSeeRange)
+        if(Vector3.Dot(playerTarget.transform.forward, (transform.position - playerTarget.transform.position).normalized) < playerCanSeeRange)
         {
             SwitchState(EnemyState.Fleeing);
         }

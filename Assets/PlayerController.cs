@@ -140,7 +140,7 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator HealPlayer(Item item, float healing)
     {
-        yield return new WaitWhile(() => CombatMngr.IsAnimating);
+        yield return new WaitWhile(() => CombatMngr.AnimationTimer > 0);
 
         health = Mathf.Clamp(health + healing, 0, maxHealth);
         OnHealthChange(health, maxHealth);

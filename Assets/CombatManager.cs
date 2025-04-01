@@ -14,7 +14,7 @@ public class CombatManager : MonoBehaviour
 	
 	private BoxCollider damageAreaColldier;
 
-	private float animationTimer;
+	public float AnimationTimer;
 	
 	[HideInInspector] public bool IsAnimating;
 	
@@ -22,18 +22,22 @@ public class CombatManager : MonoBehaviour
 	{
 		damageAreaColldier = GetComponent<BoxCollider>();
 		damageAreaColldier.enabled = false;
-	}
+
+        IsAnimating = false;
+    }
 
     private void Update()
     {
-        if(animationTimer > 0) animationTimer -= Time.deltaTime;
+        if(AnimationTimer > 0 && IsAnimating) AnimationTimer -= Time.deltaTime;
 		else IsAnimating = false;
     }
 
     public void SwingWeapon()
 	{
+		print(1);
 		if(!IsAnimating)
 		{
+			print(2);
 			IsAnimating = true;
 			StartCoroutine(AttackTiming());
 		}
@@ -43,7 +47,7 @@ public class CombatManager : MonoBehaviour
 	{
         IsAnimating = true;
 		RightHandAnimator.SetTrigger(triggerName);
-        animationTimer = RightHandAnimator.GetCurrentAnimatorStateInfo(0).length;
+        AnimationTimer = RightHandAnimator.GetCurrentAnimatorStateInfo(0).length;
     }
 	
 	IEnumerator AttackTiming()
@@ -63,6 +67,7 @@ public class CombatManager : MonoBehaviour
 			{
 				// Damage enemy
 				float calculatedDamage = Controller.InventoryMngr.EquippedItem.GetComponent<Item>().Damage * (1 + (Controller.SkillsMngr.CurrentSkills.strength / 100));
+				print("damage");
                 col.gameObject.GetComponent<Enemy>().TakeDamage(calculatedDamage);
             }
 			if(col.gameObject.tag == "Chest")
