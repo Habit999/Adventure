@@ -57,7 +57,7 @@ MonoBehaviour:
   validPositionAttempts: 10
   destinationStopDistance: 2
   isStuckTime: 5
-  gravityForce: 10
+  gravityForce: 4
   minDistanceToDimLight: 5
   maxDistanceToDimLight: 20
   LevelMngr: {fileID: 0}
@@ -125,7 +125,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 5
+  m_Radius: 6
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6959625726538005116
 GameObject:
