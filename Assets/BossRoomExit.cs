@@ -13,7 +13,7 @@ public class BossRoomExit : MonoBehaviour
     {
         endingAnimator.SetTrigger("Start");
         yield return new WaitForSeconds(endingClip.length);
-        SceneManager.LoadScene(0);
+        GameManager.Instance.ReturnToMenu();
     }
 
     private void OnTriggerEnter(Collider enterTrigger)
