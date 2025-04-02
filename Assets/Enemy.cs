@@ -79,14 +79,11 @@ public class Enemy : MonoBehaviour
         isDead = true;
         OnDead?.Invoke(this);
         gameObject.SetActive(false);
-        print("EnemyDead");
     }
 
     public virtual void TakeDamage(float damage)
     {
         health -= damage;
-        Debug.Log("Enemy hit for " + damage);
-        Debug.Log("Remaining health " + health);
         if (health <= 0) KillEnemy();
     }
 

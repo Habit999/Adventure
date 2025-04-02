@@ -65,7 +65,6 @@ public class CombatManager : MonoBehaviour
 			{
 				// Damage enemy
 				float calculatedDamage = Controller.InventoryMngr.EquippedItem.GetComponent<Item>().Damage * (1 + (Controller.SkillsMngr.CurrentSkills.strength / 100));
-				print("damage");
                 col.gameObject.GetComponent<Enemy>().TakeDamage(calculatedDamage);
             }
 			if(col.gameObject.tag == "Chest")

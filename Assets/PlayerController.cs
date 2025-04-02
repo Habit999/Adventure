@@ -127,7 +127,6 @@ public class PlayerController : MonoBehaviour
 
     public void VanishPlayer()
     {
-        print("Vanishing Player");
         SwitchPlayerState(PLAYERSTATE.Dead);
         OnVanish();
     }

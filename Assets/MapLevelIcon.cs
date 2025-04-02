@@ -16,11 +16,11 @@ public class MapLevelIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     [SerializeField] private GameObject lockedMessage;
     [SerializeField] private bool isLocked;
 
-    void Start()
+    private void Start()
 	{
 		lockedMessage.SetActive(false);
         levelText.SetText(levelName);
-		if(PlayerController.Instance.SkillsMngr.PlayerLevel >= 3) isLocked = false;
+        if (PlayerController.Instance.SkillsMngr.PlayerLevel >= 3) isLocked = false;
     }
 
     public void OnPointerEnter(PointerEventData enterEventData)
