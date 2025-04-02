@@ -39,8 +39,7 @@ public class GameManager : MonoBehaviour
 			return;
         }
 
-        if (File.Exists(GameSaveDataPath))
-            LoadGame();
+        LoadGame();
 		
         Controls.LoadDefaults();
 
