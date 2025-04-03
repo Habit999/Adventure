@@ -28,6 +28,14 @@ public class MimicComponent : MonoBehaviour
         IsMimic = false;
     }
 
+    private void OnDisable()
+    {
+        foreach (var particle in spawnedParticles)
+        {
+            Destroy(particle);
+        }
+    }
+
     private void Update()
     {
         if (IsMimic)

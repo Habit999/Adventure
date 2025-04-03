@@ -28,39 +28,41 @@ public class InteractionManager : MonoBehaviour
         OnSwitchHotbar = null;
     }
 
-    public void Interact()
-	{
-		if(Input.GetKeyDown(controller.InputControls.Interact) && ObjectPresent)
-		{
-			if(ObjectInView.tag == "Map")
-			{
-				controller.FreezePlayer(true, true);
-				ObjectInView.GetComponent<LevelMap>().OpenMap(controller);
-			}
-			else if(ObjectInView.tag == "Chest")
-			{
-				ObjectInView.GetComponent<TreasureChest>().OpenChest(controller);
-			}
-			else if(ObjectInView.tag == "Exit")
-			{
-				ObjectInView.GetComponent<DungeonExit>().Exit();
-			}
-		}
-	}
-	
 	void Update()
 	{
 		ObjectPresent = Physics.Raycast(controller.Camera.position, controller.Camera.forward, out playerCamHit, InteractionDistance);
-		if(ObjectPresent) ObjectInView = playerCamHit.collider.gameObject;
+		if (ObjectPresent) ObjectInView = playerCamHit.collider.gameObject;
 
-		Interact();
-		
-		HotBarInteraction();
+        Interact();
+
+        HotBarInteraction();
 		
 		ItemUsage();
-	}
-	
-	void ItemUsage()
+    }
+
+    private void Interact()
+    {
+        if (Input.GetKeyDown(controller.InputControls.Interact) && ObjectPresent)
+        {
+            if (ObjectInView.tag == "Map")
+            {
+                controller.FreezePlayer(true, true);
+                ObjectInView.GetComponent<LevelMap>().OpenMap(controller);
+            }
+
+            if (ObjectInView.tag == "Chest")
+            {
+                ObjectInView.GetComponent<TreasureChest>().OpenChest(controller);
+            }
+
+            if (ObjectInView.tag == "Exit")
+            {
+                ObjectInView.GetComponent<DungeonExit>().Exit();
+            }
+        }
+    }
+
+    private void ItemUsage()
 	{
 		if(controller.PlayerState == PlayerController.PLAYERSTATE.FreeLook && !controller.MouseToggled)
 		{
@@ -72,7 +74,7 @@ public class InteractionManager : MonoBehaviour
         }
 	}
 	
-	void HotBarInteraction()
+	private void HotBarInteraction()
 	{
 		if(Input.GetKeyDown(controller.InputControls.HotBar1))
 		{
@@ -112,7 +114,7 @@ public class InteractionManager : MonoBehaviour
 	}
 	
 	#if UNITY_EDITOR
-	void OnDrawGizmos()
+	private void OnDrawGizmos()
 	{
 		if(controller != null)
 		{

@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
 		pauseMenu.SetActive(true);
     }
 
-	public void ReturnToMenu()
+    public void ReturnToMenu()
 	{
 		CurrentGameState = GameStates.MainMenu;
         Time.timeScale = 1;
