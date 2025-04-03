@@ -1,8 +1,8 @@
 To-Do:
 
-- Level 2 doesnt have an exit
-
 - non assigned hotbar 1 equips if item is placed in it
+
+- inventory bugges sometimes when assigning items
 
 - dungeon exit msg needs to be changed
 

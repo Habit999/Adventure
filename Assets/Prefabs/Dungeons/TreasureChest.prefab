@@ -416,8 +416,9 @@ GameObject:
   - component: {fileID: 6310503784131315365}
   - component: {fileID: 4193312460317396228}
   - component: {fileID: 4903178772230324837}
-  - component: {fileID: 2349760945873368807}
   - component: {fileID: 5885580465010456986}
+  - component: {fileID: 2349760945873368807}
+  - component: {fileID: 62324212940751360}
   m_Layer: 0
   m_Name: TreasureChest
   m_TagString: Chest
@@ -459,7 +460,9 @@ MonoBehaviour:
   LootMngr: {fileID: 0}
   ItemInChest: {fileID: 0}
   itemSpawnLocation: {fileID: 196166559563865167}
+  MimicHideout: {fileID: 0}
   IsOpen: 0
+  interactMessage: {fileID: 7570626697400117754}
   noSpaceMessage: {fileID: 1839811415404693031}
   noSpaceMessageDuration: 5
 --- !u!114 &4903178772230324837
@@ -480,6 +483,23 @@ MonoBehaviour:
   spawnRadius: 1
   floatUpSpeed: 1
   IsMimic: 0
+  TargettingMimic: {fileID: 0}
+--- !u!111 &5885580465010456986
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5211964168041447258}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: bbb492ef938e1a54a92a55861c0fef5a, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: bbb492ef938e1a54a92a55861c0fef5a, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!65 &2349760945873368807
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -501,22 +521,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1.15, z: 2}
   m_Center: {x: 0, y: 0.2, z: 0}
---- !u!111 &5885580465010456986
-Animation:
+--- !u!135 &62324212940751360
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5211964168041447258}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: bbb492ef938e1a54a92a55861c0fef5a, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: bbb492ef938e1a54a92a55861c0fef5a, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 0
-  m_AnimatePhysics: 0
-  m_CullingType: 0
+  m_Radius: 3
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7570626697400117754
 GameObject:
   m_ObjectHideFlags: 0

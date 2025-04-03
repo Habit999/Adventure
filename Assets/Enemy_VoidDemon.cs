@@ -86,14 +86,11 @@ public class Enemy_VoidDemon : Enemy
     {
         foreach(var light in LevelMngr.Torches)
         {
-            if (CheckObstacles(light.gameObject))
+            float distance = Vector3.Distance(transform.position, light.transform.position);
+            if (distance < maxDistanceToDimLight)
             {
-                float distance = Vector3.Distance(transform.position, light.transform.position);
-                if (distance < maxDistanceToDimLight)
-                {
-                    float percentage = (distance - minDistanceToDimLight) / (maxDistanceToDimLight - minDistanceToDimLight);
-                    light.AdjustLightIntensity(percentage);
-                }
+                float percentage = (distance - minDistanceToDimLight) / (maxDistanceToDimLight - minDistanceToDimLight);
+                light.AdjustLightIntensity(percentage);
             }
         }
     }
