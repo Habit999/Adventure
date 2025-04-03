@@ -21,7 +21,9 @@ public class TreasureChest : MonoBehaviour
 
 	[Space(5)]
 
-	[SerializeField] private GameObject noSpaceMessage;
+    [SerializeField] private GameObject interactMessage;
+
+    [SerializeField] private GameObject noSpaceMessage;
 	[SerializeField] private float noSpaceMessageDuration;
 	private float noSpaceMessageTimer;
 
@@ -32,12 +34,14 @@ public class TreasureChest : MonoBehaviour
 
         IsOpen = false;
 
-		noSpaceMessageTimer = 0;
+        noSpaceMessageTimer = 0;
     }
 
     private void Start()
     {
 		OnGiveLoot += PlayerController.Instance.InventoryMngr.AddItem;
+
+        interactMessage.SetActive(false);
     }
 
     private void Update()
@@ -86,13 +90,24 @@ public class TreasureChest : MonoBehaviour
 		}
 	}
 
-
     private IEnumerator OpenRoutine()
 	{
 		animator.Play();
 		yield return new WaitForSeconds(animator.clip.length);
         itemSpawnLocation.gameObject.SetActive(false);
 		OnGiveLoot?.Invoke(ItemInChest.gameObject, 1);
+    }
+
+    private void OnTriggerEnter(Collider enterTrigger)
+    {
+        if(enterTrigger.gameObject.tag == "Player")
+			interactMessage.SetActive(true);
+    }
+
+    private void OnTriggerExit(Collider exitTrigger)
+    {
+        if (exitTrigger.gameObject.tag == "Player")
+            interactMessage.SetActive(false);
     }
 
     /*public bool WillSpawn;
