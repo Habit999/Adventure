@@ -62,6 +62,8 @@ public class TreasureChest : MonoBehaviour
 	{
 		if (!IsOpen)
 		{
+			interactMessage.SetActive(false);
+
             if (MimicHideout != null && MimicHideout.IsMimic)
 			{
 				MimicHideout.TriggerMimic(player);
@@ -100,7 +102,7 @@ public class TreasureChest : MonoBehaviour
 
     private void OnTriggerEnter(Collider enterTrigger)
     {
-        if(enterTrigger.gameObject.tag == "Player")
+        if(enterTrigger.gameObject.tag == "Player" && !IsOpen)
 			interactMessage.SetActive(true);
     }
 
