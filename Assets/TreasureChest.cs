@@ -86,7 +86,7 @@ public class TreasureChest : MonoBehaviour
 
 	public void HitChest()
 	{
-		if (MimicHideout != null)
+		if (MimicHideout != null && MimicHideout.IsMimic)
 		{
 			MimicHideout.DeactivateComponent();
 		}

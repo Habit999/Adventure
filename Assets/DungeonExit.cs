@@ -8,16 +8,16 @@ public class DungeonExit : MonoBehaviour
 	
 	[Space(5)]
 	
-	[SerializeField] Transform exitCam;
-	[SerializeField] Transform camTarget;
-	[SerializeField] GameObject exitMsg;
-	[SerializeField] float camTransitionSpeed;
-	
-	Vector3 startPoint;
-	
-	Vector3 transitionDirection;
-	
-	bool isLeaving;
+	[SerializeField] private Transform exitCam;
+	[SerializeField] private Transform camTarget;
+	[SerializeField] private GameObject exitMsg;
+	[SerializeField] private float camTransitionSpeed;
+
+    private Vector3 startPoint;
+
+    private Vector3 transitionDirection;
+
+    private bool isLeaving;
 	
 	void Awake()
 	{
@@ -29,8 +29,8 @@ public class DungeonExit : MonoBehaviour
 		
 		isLeaving = false;
 	}
-	
-	void Update()
+
+    private void Update()
 	{
 		if(isLeaving) TransitionCam();
 		
