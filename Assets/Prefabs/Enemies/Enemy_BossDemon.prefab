@@ -26,12 +26,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 350161945256113915}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7201914, y: 0.3083107, z: -0.0418423, w: 0.62009525}
-  m_LocalPosition: {x: 0.446, y: 2.643, z: -0.378}
-  m_LocalScale: {x: 0.23999998, y: 0.23999998, z: 0.23999998}
+  m_LocalRotation: {x: 0.7201914, y: 0.30831072, z: -0.041842278, w: 0.62009525}
+  m_LocalPosition: {x: 0.36260173, y: 0.45772317, z: -0.30731717}
+  m_LocalScale: {x: 0.19512193, y: 0.19512191, z: 0.19512193}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1659586209265230006}
+  m_Father: {fileID: 6515772337088552141}
   m_LocalEulerAnglesHint: {x: 66.777, y: 125.23, z: 95.947}
 --- !u!33 &2256993469785006309
 MeshFilter:
@@ -442,11 +442,11 @@ Transform:
   m_GameObject: {fileID: 2321843019534400025}
   serializedVersion: 2
   m_LocalRotation: {x: 0.6167845, y: -0.03817394, z: 0.37695855, w: 0.6899435}
-  m_LocalPosition: {x: 0.446, y: 2.645, z: 0.42}
-  m_LocalScale: {x: 0.23999998, y: 0.23999998, z: 0.23999998}
+  m_LocalPosition: {x: 0.36260173, y: 0.45934945, z: 0.3414635}
+  m_LocalScale: {x: 0.19512193, y: 0.19512194, z: 0.19512193}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1659586209265230006}
+  m_Father: {fileID: 6515772337088552141}
   m_LocalEulerAnglesHint: {x: 61.627, y: 60.19, z: 95.439}
 --- !u!33 &48829417569687974
 MeshFilter:
@@ -611,7 +611,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 2.0800002, z: 0}
   m_LocalScale: {x: 1.23, y: 1.23, z: 1.23}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 7437273546663679626}
+  - {fileID: 4777090438041038304}
   m_Father: {fileID: 1659586209265230006}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7711640325620864513
@@ -882,8 +884,6 @@ Transform:
   - {fileID: 567965493853890335}
   - {fileID: 812131623454248159}
   - {fileID: 6515772337088552141}
-  - {fileID: 7437273546663679626}
-  - {fileID: 4777090438041038304}
   m_Father: {fileID: 2202093793598034509}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &5225991771541554939
