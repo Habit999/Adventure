@@ -114,6 +114,13 @@ public class PlayerController : MonoBehaviour
 
     #region Publics
 
+    public bool CheckInView(Transform target, float viewRange)
+    {
+        float product = Vector3.Dot(Body.forward, (target.position - Body.position).normalized);
+        if (product > viewRange) return true;
+        else return false;
+    }
+
     public void ApplyExternalForce(Vector3 appliedForce)
     {
         moveDirection += appliedForce;

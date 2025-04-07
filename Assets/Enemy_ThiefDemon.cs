@@ -106,7 +106,7 @@ public class Enemy_ThiefDemon : Enemy
         }
 
         // Is player looking this way?
-        if(Vector3.Dot(playerTarget.transform.forward, (transform.position - playerTarget.transform.position).normalized) < playerCanSeeRange)
+        if(playerTarget.CheckInView(transform, playerCanSeeRange))
         {
             SwitchState(EnemyState.Fleeing);
         }
@@ -162,7 +162,7 @@ public class Enemy_ThiefDemon : Enemy
     private void CheckPlayerInView()
     {
         Vector3 playerDirection = (playerTarget.transform.position - transform.position).normalized;
-        if(Vector3.Dot(transform.forward, playerDirection) >= fieldOfViewRange)
+        if(Vector3.Dot(transform.TransformDirection(transform.forward), playerDirection) >= fieldOfViewRange)
         {
             if (Physics.Raycast(transform.position, playerDirection, out RaycastHit hit, sphereCollider.radius))
             {
