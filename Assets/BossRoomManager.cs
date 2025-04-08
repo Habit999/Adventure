@@ -12,6 +12,11 @@ public class BossRoomManager : MonoBehaviour
         bossDemon.RoomManager = this;
     }
 
+    private void Start()
+    {
+        GameManager.Instance.GivePlayerData();
+    }
+
     public void OpenExitGate(Enemy boss)
     {
         if(boss == null) return;

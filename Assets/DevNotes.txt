@@ -8,6 +8,12 @@ To-Do:
 
 - dungeon exit msg needs to be changed
 
+- increase void strength and range
+
+- maybe change stuck to distance instead of one spot
+
+- no xp in dungeon 2
+
 - Check all scripts for unessaccery code
 
 - Get rid of any .GetChildren / .parent unreliable code
