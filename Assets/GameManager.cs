@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
     public void ClearGameData()
 	{
 		if(File.Exists(GameSaveDataPath)) File.Delete(GameSaveDataPath);
-		GameData = null;
+		LoadGame();
 	}
 
 	public void ResumeGame()
