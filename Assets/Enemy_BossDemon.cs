@@ -63,6 +63,13 @@ public class Enemy_BossDemon : Enemy
         }
     }
 
+    public override void TakeDamage(float damage)
+    {
+        base.TakeDamage(damage);
+
+        SwitchState(EnemyState.Targeting);
+    }
+
     protected override void Roaming()
     {
         if(isMoving)
