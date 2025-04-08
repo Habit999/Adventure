@@ -16,37 +16,42 @@ public class CombatManager : MonoBehaviour
 
 	public float AnimationTimer;
 	
-	private bool isAnimating;
+	public bool IsAnimating;
 	
 	private void Start()
 	{
 		damageAreaColldier = GetComponent<BoxCollider>();
 		damageAreaColldier.enabled = false;
 
-        isAnimating = false;
+        IsAnimating = false;
     }
 
     private void Update()
     {
-        if(AnimationTimer > 0 && isAnimating) AnimationTimer -= Time.deltaTime;
-		else isAnimating = false;
+        if(AnimationTimer > 0 && IsAnimating) AnimationTimer -= Time.deltaTime;
+		else IsAnimating = false;
     }
 
     public void SwingWeapon()
 	{
-		if(!isAnimating)
+		if(!IsAnimating)
 		{
-			isAnimating = true;
+			IsAnimating = true;
 			StartCoroutine(AttackTiming());
 		}
 	}
 
 	public void TriggerAnimator(string triggerName)
 	{
-        isAnimating = true;
+        IsAnimating = true;
 		RightHandAnimator.SetTrigger(triggerName);
         AnimationTimer = RightHandAnimator.GetCurrentAnimatorStateInfo(0).length;
     }
+
+	public void AnimationFinished()
+	{
+		IsAnimating = false;
+	}
 	
 	IEnumerator AttackTiming()
 	{
@@ -54,7 +59,7 @@ public class CombatManager : MonoBehaviour
 		yield return new WaitForSeconds(swingTime);
 		damageAreaColldier.enabled = false;
 		yield return new WaitForSeconds(RightHandAnimator.GetCurrentAnimatorStateInfo(0).length);
-		isAnimating = false;
+		IsAnimating = false;
 	}
 	
 	void OnTriggerEnter(Collider col)

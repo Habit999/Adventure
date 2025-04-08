@@ -66,7 +66,7 @@ public class InteractionManager : MonoBehaviour
 	{
 		if(controller.PlayerState == PlayerController.PLAYERSTATE.FreeLook && !controller.MouseToggled)
 		{
-			if(Input.GetMouseButtonDown(controller.InputControls.MousePrimary) && controller.InventoryMngr.EquippedItem != null)
+			if(Input.GetMouseButtonDown(controller.InputControls.MousePrimary) && controller.InventoryMngr.EquippedItem != null && !controller.CombatMngr.IsAnimating)
 			{
                 controller.InventoryMngr.EquippedItem.GetComponent<Item>().UseItem();
                 controller.CombatMngr.TriggerAnimator(controller.InventoryMngr.EquippedItem.GetComponent<Item>().AnimatorTriggerName);
