@@ -4,15 +4,13 @@ To-Do:
 
 - inventory bugges sometimes when assigning items
 
-- healing items used right away
+- bandage items used right away
 
 - dungeon exit msg needs to be changed
 
 - increase void strength and range
 
 - maybe change stuck to distance instead of one spot
-
-- no xp in dungeon 2
 
 - Check all scripts for unessaccery code
 
