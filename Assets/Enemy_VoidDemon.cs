@@ -31,15 +31,15 @@ public class Enemy_VoidDemon : Enemy
 
     private void OnTriggerStay(Collider trigger)
     {
-        if (trigger.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (trigger.gameObject.CompareTag("Player"))
         {
             playerController = trigger.gameObject.GetComponent<PlayerController>();
-            if (CheckObstacles(trigger.gameObject))
+            if (playerController != null && CheckObstacles(trigger.gameObject))
             {
                 // Checks if players within the threshold
                 if (Vector3.Distance(trigger.transform.position, transform.position) <= sphereCollider.radius)
                 {
-                    ApplyGravity(trigger.gameObject);
+                    ApplyGravity(trigger.transform);
                 }
             }
         }
@@ -67,10 +67,10 @@ public class Enemy_VoidDemon : Enemy
         else return false;
     }
 
-    private void ApplyGravity(GameObject player)
+    private void ApplyGravity(Transform player)
     {
-        float force = CalculateForce(player.transform);
-        Vector3 directionalForce = (transform.position - player.transform.position).normalized * force;
+        float force = CalculateForce(player);
+        Vector3 directionalForce = (transform.position - player.position).normalized * force;
         playerController.ApplyExternalForce(directionalForce);
     }
 
