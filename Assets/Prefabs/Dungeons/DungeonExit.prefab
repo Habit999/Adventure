@@ -278,7 +278,7 @@ MonoBehaviour:
   exitCam: {fileID: 1656687587517237818}
   camTarget: {fileID: 5815495552069357011}
   exitMsg: {fileID: 9026839462794590007}
-  camTransitionSpeed: 1.5
+  camTransitionSpeed: 0.03
 --- !u!65 &4677596424541606313
 BoxCollider:
   m_ObjectHideFlags: 0

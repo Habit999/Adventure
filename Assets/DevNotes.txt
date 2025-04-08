@@ -2,11 +2,9 @@ To-Do:
 
 - non assigned hotbar 1 equips if item is placed in it
 
-- boss hornes need adding to attack animation
-
-- ui buttons not working in boss room
-
 - inventory bugges sometimes when assigning items
+
+- healing items used right away
 
 - dungeon exit msg needs to be changed
 

@@ -25,7 +25,7 @@ public class DungeonExit : MonoBehaviour
 		
 		startPoint = exitCam.position;
 		
-		transitionDirection = (camTarget.position - startPoint).normalized * camTransitionSpeed * Time.deltaTime;
+		transitionDirection = (camTarget.position - startPoint).normalized * camTransitionSpeed;
 		
 		isLeaving = false;
 	}
