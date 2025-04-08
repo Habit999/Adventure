@@ -88,6 +88,10 @@ public class GameManager : MonoBehaviour
 		CurrentGameState = GameStates.MainMenu;
         Time.timeScale = 1;
 		pauseMenu.SetActive(false);
+		Cursor.lockState = CursorLockMode.Confined;
+		Cursor.visible = true;
+		Time.timeScale = 1;
+
         SceneManager.LoadScene(0);
     }
 
