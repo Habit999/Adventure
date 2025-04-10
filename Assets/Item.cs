@@ -52,11 +52,13 @@ public class Item : MonoBehaviour
 	
 	public bool UseItem()
 	{
-		switch(ItemData.Type)
+        PlayerController.Instance.CombatMngr.TriggerAnimator(AnimatorTriggerName);
+
+        switch (ItemData.Type)
 		{
 			case ItemDataStructure.TYPE.Weapon:
 				PlayerController.Instance.CombatMngr.SwingWeapon();
-				return true;
+                return true;
 				
 			case ItemDataStructure.TYPE.Consumable:
 				StartCoroutine(PlayerController.Instance.HealPlayer(this, HealthRecovery));

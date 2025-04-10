@@ -14,9 +14,11 @@ public class CombatManager : MonoBehaviour
 	
 	private BoxCollider damageAreaColldier;
 
-	public float AnimationTimer;
+	[HideInInspector] public float AnimationTimer;
 	
-	public bool IsAnimating;
+	[HideInInspector] public bool IsAnimating;
+
+	private bool enemyHit;
 	
 	private void Start()
 	{
@@ -24,53 +26,42 @@ public class CombatManager : MonoBehaviour
 		damageAreaColldier.enabled = false;
 
         IsAnimating = false;
+        enemyHit = false;
     }
 
     private void Update()
     {
-        if(AnimationTimer > 0 && IsAnimating) AnimationTimer -= Time.deltaTime;
-		else IsAnimating = false;
+		if (AnimationTimer > 0 && IsAnimating) AnimationTimer -= Time.deltaTime;
+		else if (IsAnimating)
+		{
+			damageAreaColldier.enabled = false;
+			IsAnimating = false;
+            enemyHit = false;
+        }
     }
 
     public void SwingWeapon()
 	{
-		if(!IsAnimating)
-		{
-			IsAnimating = true;
-			StartCoroutine(AttackTiming());
-		}
-	}
+        damageAreaColldier.enabled = true;
+    }
 
-	public void TriggerAnimator(string triggerName)
+    public void TriggerAnimator(string triggerName)
 	{
         IsAnimating = true;
 		RightHandAnimator.SetTrigger(triggerName);
         AnimationTimer = RightHandAnimator.GetCurrentAnimatorStateInfo(0).length;
     }
-
-	public void AnimationFinished()
-	{
-		IsAnimating = false;
-	}
-	
-	IEnumerator AttackTiming()
-	{
-		damageAreaColldier.enabled = true;
-		yield return new WaitForSeconds(swingTime);
-		damageAreaColldier.enabled = false;
-		yield return new WaitForSeconds(RightHandAnimator.GetCurrentAnimatorStateInfo(0).length);
-		IsAnimating = false;
-	}
 	
 	void OnTriggerEnter(Collider col)
 	{
 		if(damageAreaColldier.enabled)
 		{
-			if(col.gameObject.tag == "Enemy")
+			if(col.gameObject.tag == "Enemy" && !enemyHit)
 			{
 				// Damage enemy
 				float calculatedDamage = Controller.InventoryMngr.EquippedItem.GetComponent<Item>().Damage * (1 + (Controller.SkillsMngr.CurrentSkills.strength / 100));
                 col.gameObject.GetComponent<Enemy>().TakeDamage(calculatedDamage);
+                enemyHit = true;
             }
 			if(col.gameObject.tag == "Chest")
             {

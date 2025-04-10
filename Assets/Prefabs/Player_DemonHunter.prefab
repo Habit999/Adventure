@@ -32,7 +32,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5020995149499430937}
-  - {fileID: 3651268312562622015}
   m_Father: {fileID: 444083623181405205}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3031254092024409808
@@ -473,7 +472,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerState: 0
-  CombatMngr: {fileID: 6466162278814814200}
+  CombatMngr: {fileID: 1357273338576651126}
   InputControls: {fileID: 0}
   IsInDungeon: 1
   Camera: {fileID: 2624188408872534697}
@@ -589,76 +588,6 @@ CapsuleCollider:
   m_Height: 2.4
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &7515552356548293980
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3651268312562622015}
-  - component: {fileID: 6466162278814814200}
-  - component: {fileID: 7841219533132549411}
-  m_Layer: 3
-  m_Name: DamageArea
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3651268312562622015
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7515552356548293980}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0.785}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6984754148921075596}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6466162278814814200
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7515552356548293980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80418d65fb500a34e935219d3d96f5e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RightHandAnimator: {fileID: 6641613512814332458}
-  swingTime: 0.3
-  AnimationTimer: 0
-  IsAnimating: 0
---- !u!65 &7841219533132549411
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7515552356548293980}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1.6, z: 0.8}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8296867682919458513
 GameObject:
   m_ObjectHideFlags: 0
@@ -701,7 +630,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5020995149499430937}
+  - component: {fileID: 1357273338576651126}
   - component: {fileID: 6641613512814332458}
+  - component: {fileID: 7126997599853404046}
   m_Layer: 3
   m_Name: RightHandItemSlot
   m_TagString: Untagged
@@ -725,6 +656,22 @@ Transform:
   - {fileID: 5996809422563159675}
   m_Father: {fileID: 6984754148921075596}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1357273338576651126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8461996257840927776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80418d65fb500a34e935219d3d96f5e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RightHandAnimator: {fileID: 6641613512814332458}
+  swingTime: 0.3
+  AnimationTimer: 0
+  IsAnimating: 0
 --- !u!95 &6641613512814332458
 Animator:
   serializedVersion: 5
@@ -746,3 +693,24 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!65 &7126997599853404046
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8461996257840927776}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.6, z: 1.0518413}
+  m_Center: {x: -0.5, y: -0.15000005, z: 0.12592053}

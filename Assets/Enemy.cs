@@ -85,6 +85,7 @@ public class Enemy : MonoBehaviour
     {
         health -= damage;
         if (health <= 0) KillEnemy();
+        Debug.Log("Enemy damaged, health reamining: " + health);
     }
 
     protected virtual void EnemyBehaviour()

@@ -27,5 +27,3 @@ To-Do:
 - can push poss
 
 - up boss damage area
-
-- cant die in boss room
