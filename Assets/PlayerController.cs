@@ -148,6 +148,8 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitWhile(() => CombatMngr.AnimationTimer > 0);
 
+        print("Item used");
+
         health = Mathf.Clamp(health + healing, 0, maxHealth);
         OnHealthChange(health, maxHealth);
 

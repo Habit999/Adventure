@@ -4,8 +4,6 @@ To-Do:
 
 - inventory bugges sometimes when assigning items
 
-- bandage items used right away
-
 - dungeon exit msg needs to be changed
 
 - increase void strength and range
