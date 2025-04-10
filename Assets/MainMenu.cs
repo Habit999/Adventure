@@ -11,8 +11,8 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        if (GameManager.Instance.GameData == null) continueButton.interactable = false;
-		else continueButton.interactable = true;
+        if (GameManager.Instance.LoadGame()) continueButton.interactable = true;
+		else continueButton.interactable = false;
 
 		areYouSurePanel.SetActive(false);
     }
