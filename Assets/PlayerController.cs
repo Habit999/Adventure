@@ -142,6 +142,8 @@ public class PlayerController : MonoBehaviour
     {
         health -= damage;
         OnHealthChange(health, maxHealth);
+
+        if(health <= 0) KillPlayer();
     }
 
     public IEnumerator HealPlayer(Item item, float healing)

@@ -13,3 +13,19 @@ To-Do:
 - Check all scripts for unessaccery code
 
 - Get rid of any .GetChildren / .parent unreliable code
+
+- enemies not taking damage
+
+- slow weapon swing
+
+- cant hit mimic chests
+
+- need to not let player turn back in boss room
+
+- enemy material hit indication
+
+- can push poss
+
+- up boss damage area
+
+- cant die in boss room
