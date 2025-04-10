@@ -100,15 +100,17 @@ public class Enemy : MonoBehaviour
     {
         health -= damage;
         if (health <= 0) KillEnemy();
-
-        if (canBeDamaged)
+        else
         {
-            if (isDamaged)
+            if (canBeDamaged)
             {
-                StopCoroutine(damageRoutine);
-                StartCoroutine(damageRoutine = DamageMaterial());
+                if (isDamaged)
+                {
+                    StopCoroutine(damageRoutine);
+                    StartCoroutine(damageRoutine = DamageMaterial());
+                }
+                else StartCoroutine(damageRoutine = DamageMaterial());
             }
-            else StartCoroutine(damageRoutine = DamageMaterial());
         }
 
         Debug.Log("Enemy damaged, health reamining: " + health);

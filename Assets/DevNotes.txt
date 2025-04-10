@@ -6,8 +6,6 @@ To-Do:
 
 - dungeon exit msg needs to be changed
 
-- increase void strength and range
-
 - maybe change stuck to distance instead of one spot
 
 - Check all scripts for unessaccery code
@@ -15,5 +13,3 @@ To-Do:
 - Get rid of any .GetChildren / .parent unreliable code
 
 - slow weapon swing
-
-- enemy material hit indication
