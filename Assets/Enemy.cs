@@ -11,8 +11,18 @@ public class Enemy : MonoBehaviour
 
     protected event Action<Enemy> OnDead;
 
-    [SerializeField] private float maxHealth = 100;
+    [SerializeField] protected float maxHealth = 100;
     private float health;
+
+    [Space(5)]
+
+    private Dictionary<Renderer, Material> enemyMaterials = new Dictionary<Renderer, Material>();
+    [SerializeField] protected Material damagedMaterial;
+    [SerializeField] protected bool canBeDamaged;
+    private IEnumerator damageRoutine;
+    private bool isDamaged;
+
+    [Space(5)]
 
     [HideInInspector] public EnemySpawnManager SpawnManager;
 
@@ -54,6 +64,11 @@ public class Enemy : MonoBehaviour
 
         stuckTimer = isStuckTime;
         lastLocation = transform.position;
+
+        foreach(var bodyPart in GetComponentsInChildren<Renderer>())
+        {
+            enemyMaterials.Add(bodyPart, bodyPart.material);
+        }
     }
 
     protected virtual void Start()
@@ -85,7 +100,33 @@ public class Enemy : MonoBehaviour
     {
         health -= damage;
         if (health <= 0) KillEnemy();
+
+        if (canBeDamaged)
+        {
+            if (isDamaged)
+            {
+                StopCoroutine(damageRoutine);
+                StartCoroutine(damageRoutine = DamageMaterial());
+            }
+            else StartCoroutine(damageRoutine = DamageMaterial());
+        }
+
         Debug.Log("Enemy damaged, health reamining: " + health);
+    }
+
+    private IEnumerator DamageMaterial()
+    {
+        isDamaged = true;
+        foreach (var bodyPart in enemyMaterials.Keys)
+        {
+            bodyPart.material = damagedMaterial;
+        }
+        yield return new WaitForSeconds(0.3f);
+        foreach (var bodyPart in enemyMaterials.Keys)
+        {
+            bodyPart.material = enemyMaterials[bodyPart];
+        }
+        isDamaged = false;
     }
 
     protected virtual void EnemyBehaviour()

@@ -16,8 +16,4 @@ To-Do:
 
 - slow weapon swing
 
-- need to not let player turn back in boss room
-
 - enemy material hit indication
-
-- can push poss

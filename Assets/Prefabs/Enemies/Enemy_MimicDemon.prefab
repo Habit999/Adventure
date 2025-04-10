@@ -415,7 +415,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentState: 0
-  maxHealth: 100
+  maxHealth: 50
+  damagedMaterial: {fileID: 2100000, guid: 7d939beb57efc894d9700c2f3e465fb2, type: 2}
+  canBeDamaged: 1
   SpawnManager: {fileID: 0}
   roamingSpeed: 3.5
   roamingRotationSpeed: 120
