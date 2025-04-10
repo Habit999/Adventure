@@ -6,10 +6,13 @@ public class BossRoomManager : MonoBehaviour
 {
     [SerializeField] private Enemy_BossDemon bossDemon;
     [SerializeField] private Animator exitGateAnimator;
+    [SerializeField] private BoxCollider blockingWall;
 
     private void Awake()
     {
         bossDemon.RoomManager = this;
+
+        blockingWall.enabled = false;
     }
 
     private void Start()
@@ -21,5 +24,13 @@ public class BossRoomManager : MonoBehaviour
     {
         if(boss == null) return;
         exitGateAnimator.SetTrigger("Open");
+    }
+
+    private void OnTriggerEnter(Collider enterTrigger)
+    {
+        if (enterTrigger.CompareTag("Player"))
+        {
+            blockingWall.enabled = true;
+        }
     }
 }

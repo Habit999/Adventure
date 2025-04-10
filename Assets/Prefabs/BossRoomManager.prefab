@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1126372754741391935}
   - component: {fileID: 1702807435757308258}
+  - component: {fileID: 4634207271414008064}
+  - component: {fileID: 7665857216777434876}
   m_Layer: 0
   m_Name: BossRoomManager
   m_TagString: Untagged
@@ -44,3 +46,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eafe931ce924db041b7559b957bcb22b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bossDemon: {fileID: 0}
+  exitGateAnimator: {fileID: 0}
+  blockingWall: {fileID: 7665857216777434876}
+--- !u!65 &4634207271414008064
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341463396361746246}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 6.18, y: 7.76, z: 1}
+  m_Center: {x: 0, y: 4.68, z: -29.93}
+--- !u!65 &7665857216777434876
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341463396361746246}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 6.18, y: 7.76, z: 1}
+  m_Center: {x: 0, y: 4.68, z: -34.55}
