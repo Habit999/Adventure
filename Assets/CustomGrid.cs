@@ -59,7 +59,7 @@ public class CustomGrid : MonoBehaviour
 	[HideInInspector] public bool GridPreviewToggled;
 	[HideInInspector] public bool CellOccupantsToggled;
 	
-	void Awake()
+	private void Awake()
 	{
 		EnableEditorTools = false;
 		IsGridActive = true;
@@ -68,15 +68,20 @@ public class CustomGrid : MonoBehaviour
 		CellsSpawned = false;
 	}
 	
-	void Start()
+	private void Start()
 	{
 		if(GridPreviewToggled) TogglePreviewGrid();
-		
-		GenerateGrid();
-        LoadGridData();
-		
-		SpawnActiveGrid();
+
+		ResetGrid();
 	}
+
+	public void ResetGrid()
+	{
+        GenerateGrid();
+        LoadGridData();
+
+        SpawnActiveGrid();
+    }
 	
 	#region Grid Control
 	
