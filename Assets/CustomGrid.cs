@@ -31,7 +31,6 @@ public class CustomGrid : MonoBehaviour
 	public GridGenerationData GeneratedData = new GridGenerationData();
 	
 	public GameObject GridCellPrefab;
-	[SerializeField] SO_ItemPrefabs prefabLibrary;
 	
 	[Header("Customise Grid")]
 	public int GridLengthX;
