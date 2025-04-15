@@ -228,8 +228,8 @@ public class CustomGrid : MonoBehaviour
 		if(CellOccupantsToggled)
 		{
 			GeneratedData.CellActiveOccupants = new GameObject[GridLengthX, GridLengthZ];
-			
-			foreach(var cell in GeneratedData.SpawnedCells)
+
+            foreach (var cell in GeneratedData.SpawnedCells)
 			{
                 Vector2 cellIndex = cell.GridIndex;
                 cell.OccupantActiveOnSpawn = GeneratedData.CellOccupantsActiveOnSpawn[(int)cellIndex.x, (int)cellIndex.y];
@@ -243,7 +243,7 @@ public class CustomGrid : MonoBehaviour
         }
 		else
 		{
-			foreach(var cell in GeneratedData.SpawnedCells)
+            foreach (var cell in GeneratedData.SpawnedCells)
 			{
 				if(cell != null && cell.ActiveOccupant != null)
 				{

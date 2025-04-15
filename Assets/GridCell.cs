@@ -22,10 +22,13 @@ public class GridCell : MonoBehaviour
 	[Space(5)]
 
 	public bool OccupantActiveOnSpawn;
+
+	private bool isRunTime;
 	
 	void Awake()
 	{
 		CustomGrid.SpawnCellOccupants += SpawnOccupant;
+		isRunTime = true;
 	}
 	
 	void OnDisable()
@@ -66,7 +69,7 @@ public class GridCell : MonoBehaviour
 			ActiveOccupant.transform.localPosition = OccupantPosition;
 			ActiveOccupant.transform.rotation = Quaternion.Euler(OccupantEulerAngles);
 
-			if(!OccupantActiveOnSpawn) ActiveOccupant.SetActive(false);
+			if(!OccupantActiveOnSpawn && isRunTime) ActiveOccupant.SetActive(false);
         }
 	}
 
