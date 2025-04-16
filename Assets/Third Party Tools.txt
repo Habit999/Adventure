@@ -1,5 +1,17 @@
 Unity Registry Tools:
 
-TextMeshPro
+- TextMeshPro
 
-AI Navigation
+- AI Navigation
+
+Outside Unity Registry:
+
+- ChatGPT
+
+- Visual Studio 2022 Community
+
+- Github copilot
+
+- Github
+
+- Adobe Stock

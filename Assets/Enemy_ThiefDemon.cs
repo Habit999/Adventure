@@ -30,6 +30,8 @@ public class Enemy_ThiefDemon : Enemy
 
     private SphereCollider sphereCollider;
 
+    private AudioSource audioSource;
+
     private GameObject stolenItem;
 
     private float fleeExitTimer;
@@ -42,6 +44,7 @@ public class Enemy_ThiefDemon : Enemy
         base.Awake();
 
         sphereCollider = GetComponent<SphereCollider>();
+        audioSource = GetComponent<AudioSource>();
 
         fleeExitTimer = timeToExitFlee;
 
@@ -147,6 +150,9 @@ public class Enemy_ThiefDemon : Enemy
         {
             int randomItem = Random.Range(0, playerTarget.InventoryMngr.CollectedItems.Count - 1);
             stolenItem = playerTarget.InventoryMngr.RemoveItem(playerTarget.InventoryMngr.CollectedItems.Keys.ElementAt(randomItem), 1);
+
+            audioSource.Play();
+
             return true;
         }
         else return false;

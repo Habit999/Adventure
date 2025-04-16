@@ -19,12 +19,15 @@ public class Enemy_BossDemon : Enemy
     [Space(5)]
     [SerializeField] private float distanceToDamage;
     [SerializeField] private float damage;
+    [SerializeField] private List<AudioClip> gruntSounds;
 
     private float idleTimer;
     private float attackingTimer;
 
     private PlayerController playerTarget;
     private bool playerInRange;
+
+    private AudioSource audioSource;
 
     private bool isAttacking;
     private bool isMoving;
@@ -33,10 +36,13 @@ public class Enemy_BossDemon : Enemy
     {
         base.Awake();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
 
         attackingTimer = attackAnimation.length;
 
         isMoving = true;
+
+        StartCoroutine(IdleSoundRoutine());
     }
 
     protected override void Start()
@@ -47,6 +53,15 @@ public class Enemy_BossDemon : Enemy
     protected override void OnDisable()
     {
         OnDead -= RoomManager.OpenExitGate;
+    }
+
+    private IEnumerator IdleSoundRoutine()
+    {
+        yield return new WaitForSeconds(5);
+        audioSource.clip = gruntSounds[Random.Range(0, gruntSounds.Count)];
+        audioSource.Play();
+        yield return new WaitForSeconds(audioSource.clip.length);
+        StartCoroutine(IdleSoundRoutine());
     }
 
     protected override void EnemyBehaviour()
@@ -66,6 +81,9 @@ public class Enemy_BossDemon : Enemy
     public override void TakeDamage(float damage)
     {
         base.TakeDamage(damage);
+
+        audioSource.clip = gruntSounds[Random.Range(0, gruntSounds.Count)];
+        audioSource.Play();
 
         SwitchState(EnemyState.Targeting);
     }
