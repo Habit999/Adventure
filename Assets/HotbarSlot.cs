@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Contains hotbar functionality
+/// </summary>
+
 public class HotbarSlot : MonoBehaviour
 {
     [SerializeField] private Color activeHotbarColor;

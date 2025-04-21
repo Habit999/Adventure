@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manages essential events in boss room
+/// </summary>
+
 public class BossRoomManager : MonoBehaviour
 {
     [SerializeField] private Enemy_BossDemon bossDemon;

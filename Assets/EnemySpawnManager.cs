@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manages spawning and despawning of enemies
+/// </summary>
+
 public class EnemySpawnManager : MonoBehaviour
 {
     [HideInInspector] public LevelManager LevelMngr;
@@ -29,7 +33,8 @@ public class EnemySpawnManager : MonoBehaviour
 
     private void Update()
     {
-        foreach(var enemy in deadEnemies)
+        // Destroy and remove dead enemies from the list before next frame
+        foreach (var enemy in deadEnemies)
         {
             spawnedEnemies.Remove(enemy);
             Destroy(enemy.gameObject);
@@ -39,6 +44,7 @@ public class EnemySpawnManager : MonoBehaviour
 
     public void SpawnNewEnemy(Enemy enemy, Vector3 position)
     {
+        // Checks if max number of enemby has been hit
         if (enemy is Enemy_VoidDemon && VoidsInLevel >= SpawnData.MaxVoidsInLevel)
             return;
         else if (enemy is Enemy_ThiefDemon && ThievesInLevel >= SpawnData.MaxThievesInLevel)
@@ -46,6 +52,7 @@ public class EnemySpawnManager : MonoBehaviour
         else if (enemy is Enemy_MimicDemon && MimicsInLevel >= SpawnData.MaxMimicsInLevel)
             return;
 
+        // Spawns enemy
         Enemy enemyInstance = Instantiate(enemy, position, Quaternion.identity);
         enemyInstance.SpawnManager = this;
         if (enemyInstance is Enemy_MimicDemon)
@@ -54,6 +61,7 @@ public class EnemySpawnManager : MonoBehaviour
         NewEnemy(enemyInstance);
     }
 
+    // Adds new enemies to the list of spawned enemies
     public void NewEnemy(Enemy newEnemy)
     {
         spawnedEnemies.Add(newEnemy);

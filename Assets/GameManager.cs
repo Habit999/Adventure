@@ -7,6 +7,10 @@ using System.Text;
 using UnityEngine.SceneManagement;
 using TMPro;
 
+/// <summary>
+/// Manages the game state, including saving and loading game data
+/// </summary>
+
 public class GameManager : MonoBehaviour
 {
 	public static GameManager Instance;

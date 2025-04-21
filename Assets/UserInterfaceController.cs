@@ -5,6 +5,10 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Controls the players user interface
+/// </summary>
+
 public class UserInterfaceController : MonoBehaviour
 {
     public static int ActiveHotbarSlot;
@@ -16,7 +20,7 @@ public class UserInterfaceController : MonoBehaviour
 
     private List<HotbarSlot> hotbarSpaces = new List<HotbarSlot>();
 
-    [HideInInspector] public InventoryManager InventoryMngr;
+    [HideInInspector] public PlayerInventory InventoryMngr;
 
     private Animator guiAnimator;
 

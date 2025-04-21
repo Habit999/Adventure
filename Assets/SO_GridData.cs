@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+/// <summary>
+/// ScriptableObject to hold 3D grid data
+/// </summary>
+
 [CreateAssetMenu(fileName = "GridData", menuName = "CustomGrid/GridData")]
 public class SO_GridData : ScriptableObject
 {

@@ -5,6 +5,10 @@ using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
 
+/// <summary>
+/// Class that manages each row of skills in the skills UI window
+/// </summary>
+
 public class SkillRowUI : MonoBehaviour
 {
 	[HideInInspector] public SkillsUI SkillsUIController;
@@ -46,47 +50,4 @@ public class SkillRowUI : MonoBehaviour
         plusButton.interactable = CanIncrease;
         minusButton.interactable = CanDecrease;
     }
-
-    /*private void CheckSkillPoints()
-	{
-		if(SkillsUIController.SkillsMngr.TempValuesActive)
-		{
-			// Enables increase button if a temp skill point is available
-			if(SkillsUIController.SkillsMngr.TempSkillPoints > 0)
-				CanIncrease = true;
-			else CanIncrease = false;
-			
-			// Enables decrease button depending on if the value has been increased or not
-			// also adjusts to the skill type
-			switch(SkillType)
-			{
-				case SkillsManager.SKILLTYPE.Vitality:
-					if(SkillsUIController.SkillsMngr.TempSkills.vitality > SkillsUIController.SkillsMngr.CurrentSkills.vitality)
-						CanDecrease = true;
-					else CanDecrease = false;
-					break;
-					
-				case SkillsManager.SKILLTYPE.Strength:
-					if(SkillsUIController.SkillsMngr.TempSkills.strength > SkillsUIController.SkillsMngr.CurrentSkills.strength)
-						CanDecrease = true;
-					else CanDecrease = false;
-					break;
-					
-				default:
-					break;
-			}
-		}
-		else 
-		{
-			// Enables increase button if an actual skill point is available
-			if(SkillsUIController.SkillsMngr.SkillPoints > 0)
-				CanIncrease = true;
-			else CanIncrease = false;
-			
-			CanDecrease = false;
-		}
-
-        plusButton.interactable = CanIncrease;
-        minusButton.interactable = CanDecrease;
-    }*/
 }

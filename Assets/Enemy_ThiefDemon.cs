@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+/// <summary>
+/// Enemy Thief AI
+/// </summary>
+
 public class Enemy_ThiefDemon : Enemy
 {
     [Space(5)]
@@ -30,8 +34,6 @@ public class Enemy_ThiefDemon : Enemy
 
     private SphereCollider sphereCollider;
 
-    private AudioSource audioSource;
-
     private GameObject stolenItem;
 
     private float fleeExitTimer;
@@ -44,7 +46,6 @@ public class Enemy_ThiefDemon : Enemy
         base.Awake();
 
         sphereCollider = GetComponent<SphereCollider>();
-        audioSource = GetComponent<AudioSource>();
 
         fleeExitTimer = timeToExitFlee;
 
@@ -56,6 +57,7 @@ public class Enemy_ThiefDemon : Enemy
     {
         base.TakeDamage(damage);
         
+        // Gives stolen item back if ones taken
         if (stolenItem != null)
         {
             playerTarget.InventoryMngr.AddItem(stolenItem, 1);
@@ -63,6 +65,7 @@ public class Enemy_ThiefDemon : Enemy
             stolenItem = null;
         }
 
+        // Flees if hit
         if (!isDead)
         {
             SwitchState(EnemyState.Fleeing);
@@ -151,7 +154,9 @@ public class Enemy_ThiefDemon : Enemy
             int randomItem = Random.Range(0, playerTarget.InventoryMngr.CollectedItems.Count - 1);
             stolenItem = playerTarget.InventoryMngr.RemoveItem(playerTarget.InventoryMngr.CollectedItems.Keys.ElementAt(randomItem), 1);
 
-            audioSource.Play();
+            if (audioSource != null && Camera.main != null)
+                if (Vector3.Distance(transform.position, Camera.main.transform.position) < audioCutOffDistance && !audioSource.isPlaying)
+                    audioSource.Play();
 
             return true;
         }

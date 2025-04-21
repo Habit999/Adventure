@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+/// <summary>
+/// 3D Grid System
+/// </summary>
+
 public class CustomGrid : MonoBehaviour
 {
 	public SO_GridData GridData;
@@ -15,6 +19,7 @@ public class CustomGrid : MonoBehaviour
 	
 	protected Vector3 CellScale { get { return GridCellPrefab.transform.localScale; } }
 	
+	// Generated data
 	public struct GridGenerationData
 	{
 		public Vector3[,] CellPositions;
@@ -74,18 +79,19 @@ public class CustomGrid : MonoBehaviour
 		ResetGrid();
 	}
 
-	public void ResetGrid()
-	{
+    #region Grid Control
+
+    public void ResetGrid()
+    {
         GenerateGrid();
         LoadGridData();
 
         SpawnActiveGrid();
     }
-	
-	#region Grid Control
-	
-	public void GenerateGrid()
+
+    public void GenerateGrid()
 	{
+		// Resetting variables
 		GeneratedData.CellPositions = new Vector3[GridLengthX, GridLengthZ];
 		GeneratedData.ActiveCells = new bool[GridLengthX, GridLengthZ];
 		
@@ -137,6 +143,7 @@ public class CustomGrid : MonoBehaviour
 		GenerationComplete = true;
 	}
 	
+	// Spawn entire grid
 	public void SpawnGrid()
 	{
 		GeneratedData.SpawnedCells = new GridCell[GridLengthX, GridLengthZ];
@@ -164,6 +171,7 @@ public class CustomGrid : MonoBehaviour
 		CellsSpawned = true;
 	}
 	
+	// Spawn only active grid cells
 	public void SpawnActiveGrid()
 	{
 		GeneratedData.SpawnedCells = new GridCell[GridLengthX, GridLengthZ];
@@ -198,8 +206,9 @@ public class CustomGrid : MonoBehaviour
 
 		OnGridSpawned?.Invoke();
     }
-	
-	public void TogglePreviewGrid()
+
+    // Editor tool for toggling grid visibility
+    public void TogglePreviewGrid()
 	{
 		if(IsGridActive) return;
 		
@@ -220,8 +229,9 @@ public class CustomGrid : MonoBehaviour
 			}
 		}
 	}
-	
-	public void ToggleCellOccupants()
+
+    // Editor tool for toggling cell occupants
+    public void ToggleCellOccupants()
 	{
 		CellOccupantsToggled = !CellOccupantsToggled;
 		
@@ -255,6 +265,7 @@ public class CustomGrid : MonoBehaviour
 		}
 	}
 	
+	// Checks each cell for changed data
 	public void UpdateGridFromCellData()
 	{
 		for(int x = 0; x < GridLengthX; x++)

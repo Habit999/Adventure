@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Controls regula dungeon exits
+/// </summary>
+
 public class DungeonExit : MonoBehaviour
 {
 	public bool _canExit;

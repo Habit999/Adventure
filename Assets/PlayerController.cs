@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles primary functions of player e.g. movement, health, player state, component mediation
+/// </summary>
+
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
@@ -10,13 +14,13 @@ public class PlayerController : MonoBehaviour
     public enum PLAYERSTATE { FreeLook, InMenu, Frozen, Dead };
     public PLAYERSTATE PlayerState;
 
-    public InteractionManager InteractionMngr { get { return gameObject.GetComponent<InteractionManager>(); } }
+    public PlayerInteraction InteractionMngr { get { return gameObject.GetComponent<PlayerInteraction>(); } }
 
-    public InventoryManager InventoryMngr { get { return gameObject.GetComponent<InventoryManager>(); } }
+    public PlayerInventory InventoryMngr { get { return gameObject.GetComponent<PlayerInventory>(); } }
 
     public SkillsManager SkillsMngr { get { return gameObject.GetComponent<SkillsManager>(); } }
 
-    public CombatManager CombatMngr;
+    public PlayerCombat CombatMngr;
 
     public event Action OnDeath;
     public event Action OnVanish;
@@ -57,7 +61,6 @@ public class PlayerController : MonoBehaviour
     private bool canLook = true;
     private bool canMove = true;
 
-    private bool isMoving;
     private bool isSprinting;
 
     [ContextMenu("Test Health Change")]
@@ -218,7 +221,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(InputControls.Sprint)) isSprinting = true;
         else isSprinting = false;
 
-        isMoving = false;
         if (canMove)
         {
             bool nonStrafeMovement = false;
@@ -227,7 +229,6 @@ public class PlayerController : MonoBehaviour
                 Vector3 newDirection = Body.forward * (isSprinting ? sprintSpeed : walkSpeed) * Time.deltaTime;
                 newDirection.y = 0;
                 moveDirection += newDirection;
-                isMoving = true;
                 nonStrafeMovement = true;
             }
             if (Input.GetKey(InputControls.Backward))
@@ -235,7 +236,6 @@ public class PlayerController : MonoBehaviour
                 Vector3 newDirection = -Body.forward * (isSprinting ? sprintSpeed : walkSpeed) * Time.deltaTime;
                 newDirection.y = 0;
                 moveDirection += newDirection;
-                isMoving = true;
                 nonStrafeMovement = true;
             }
             if (Input.GetKey(InputControls.Right))
@@ -243,14 +243,12 @@ public class PlayerController : MonoBehaviour
                 Vector3 newDirection = Body.right * (isSprinting ? sprintSpeed : walkSpeed) * (nonStrafeMovement ? strafeModifier : 1) * Time.deltaTime;
                 newDirection.y = 0;
                 moveDirection += newDirection;
-                isMoving = true;
             }
             if (Input.GetKey(InputControls.Left))
             {
                 Vector3 newDirection = -Body.right * (isSprinting ? sprintSpeed : walkSpeed) * (nonStrafeMovement ? strafeModifier : 1) * Time.deltaTime;
                 newDirection.y = 0;
                 moveDirection += newDirection;
-                isMoving = true;
             }
         }
 

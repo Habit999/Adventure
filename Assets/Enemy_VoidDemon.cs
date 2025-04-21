@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Enemy Void AI
+/// </summary>
+
 public class Enemy_VoidDemon : Enemy
 {
     [Space(5)]
@@ -20,6 +24,15 @@ public class Enemy_VoidDemon : Enemy
         base.Start();
 
         sphereCollider = GetComponent<SphereCollider>();
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        if (audioSource != null && Camera.main != null)
+            if (!audioSource.isPlaying && Vector3.Distance(transform.position, Camera.main.transform.position) < audioCutOffDistance)
+                audioSource.Play();
     }
 
     protected override void Roaming()
@@ -74,6 +87,7 @@ public class Enemy_VoidDemon : Enemy
         playerController.ApplyExternalForce(directionalForce);
     }
 
+    // Calculate the force to apply based on distance
     private float CalculateForce(Transform target)
     {
         float playerDistance = Vector3.Distance(target.position, transform.position);

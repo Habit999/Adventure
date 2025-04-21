@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Boss Enemy AI
+/// </summary>
+
 public class Enemy_BossDemon : Enemy
 {
     [HideInInspector] public BossRoomManager RoomManager;
@@ -19,6 +23,7 @@ public class Enemy_BossDemon : Enemy
     [Space(5)]
     [SerializeField] private float distanceToDamage;
     [SerializeField] private float damage;
+    [Space(5)]
     [SerializeField] private List<AudioClip> gruntSounds;
 
     private float idleTimer;
@@ -26,8 +31,6 @@ public class Enemy_BossDemon : Enemy
 
     private PlayerController playerTarget;
     private bool playerInRange;
-
-    private AudioSource audioSource;
 
     private bool isAttacking;
     private bool isMoving;
@@ -57,9 +60,14 @@ public class Enemy_BossDemon : Enemy
 
     private IEnumerator IdleSoundRoutine()
     {
+        // Plays randome sound effect every 5 seconds
         yield return new WaitForSeconds(5);
         audioSource.clip = gruntSounds[Random.Range(0, gruntSounds.Count)];
-        audioSource.Play();
+
+        if (audioSource != null && Camera.main != null)
+            if (Vector3.Distance(transform.position, Camera.main.transform.position) < audioCutOffDistance && !audioSource.isPlaying)
+                audioSource.Play();
+
         yield return new WaitForSeconds(audioSource.clip.length);
         StartCoroutine(IdleSoundRoutine());
     }

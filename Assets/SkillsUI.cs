@@ -6,6 +6,10 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+/// <summary>
+/// Oversees the skills UI window
+/// </summary>
+
 public class SkillsUI : MonoBehaviour
 {
     [HideInInspector] public SkillsManager SkillsMngr;

@@ -4,7 +4,11 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-public class InventoryManager : MonoBehaviour
+/// <summary>
+/// Controls the player inventory
+/// </summary>
+
+public class PlayerInventory : MonoBehaviour
 {
 	[HideInInspector] public PlayerController Controller;
 	

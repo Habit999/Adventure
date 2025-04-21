@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// Class for each inventory icon in inventory UI window
+/// </summary>
+
 public class InventoryIcon : MonoBehaviour
 {
 	public enum ICONTYPE { ItemSlot, HotbarButton };

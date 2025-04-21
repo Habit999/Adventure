@@ -4,9 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
+/// <summary>
+/// Oversees inventory UI window functionality
+/// </summary>
+
 public class InventoryUI : MonoBehaviour
 {
-	[HideInInspector] public InventoryManager InventoryMngr;
+	[HideInInspector] public PlayerInventory InventoryMngr;
 
 	[SerializeField] private Transform itemRegion;
 	[SerializeField] private Transform hotbarAssignmentRegion;

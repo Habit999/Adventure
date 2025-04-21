@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manages player skills, experience and leveling up
+/// </summary>
+
 public class SkillsManager : MonoBehaviour
 {
 	public PlayerController Controller { get { return gameObject.GetComponent<PlayerController>(); } }

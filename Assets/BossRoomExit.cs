@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Controls the boss room exit
+/// </summary>
+
 public class BossRoomExit : MonoBehaviour
 {
     [SerializeField] private Animator endingAnimator;

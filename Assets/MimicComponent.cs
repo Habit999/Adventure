@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Component added to mimic objects to allow for mimic interaction
+/// </summary>
+
 public class MimicComponent : MonoBehaviour
 {
     [SerializeField] private GameObject particlePrefab;

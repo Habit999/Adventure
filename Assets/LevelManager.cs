@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manages crutial standard dungeon functionality and holds an important data reference
+/// </summary>
+
 public class LevelManager : MonoBehaviour
 {
 	public static LevelManager Instance;

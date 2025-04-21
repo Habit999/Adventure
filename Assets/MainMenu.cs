@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// Controls the games main menu
+/// </summary>
+
 public class MainMenu : MonoBehaviour
 {
 	[SerializeField] private Button continueButton;

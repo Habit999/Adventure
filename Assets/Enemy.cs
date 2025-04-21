@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// Base class for all enemies, contains basic enemy functionality
+/// </summary>
+
 public class Enemy : MonoBehaviour
 {
     public enum EnemyState { Roaming, Targeting, Fleeing, Hiding };
@@ -21,6 +25,11 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected bool canBeDamaged;
     private IEnumerator damageRoutine;
     private bool isDamaged;
+
+    [Space(5)]
+
+    protected AudioSource audioSource;
+    protected float audioCutOffDistance;
 
     [Space(5)]
 
@@ -53,6 +62,9 @@ public class Enemy : MonoBehaviour
     protected virtual void Awake()
     {
         navAgent = GetComponent<NavMeshAgent>();
+        audioSource = GetComponent<AudioSource>();
+
+        audioCutOffDistance = audioSource.maxDistance;
 
         CheckSpeed();
 
@@ -84,6 +96,15 @@ public class Enemy : MonoBehaviour
     protected virtual void Update()
     {
         EnemyBehaviour();
+
+        CheckAudioRange();
+    }
+
+    private void CheckAudioRange()
+    {
+        if (audioSource != null && Camera.main != null)
+            if (Vector3.Distance(transform.position, Camera.main.transform.position) > audioCutOffDistance && audioSource.isPlaying)
+                audioSource.Stop();
     }
 
 #if UNITY_EDITOR
@@ -184,6 +205,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    // Generates a random location on the NavMesh
 #if UNITY_EDITOR
     [ContextMenu("GeneratePoint")]
 #endif
@@ -208,6 +230,7 @@ public class Enemy : MonoBehaviour
         return hasDestination = true;
     }
 
+    // Checks if the enemy is stuck in one spot for too long
     protected void CheckIfStuck()
     {
         if (lastLocation == transform.position)

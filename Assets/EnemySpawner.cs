@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles spawning enemies and communication with the EnemySpawnManager
+/// </summary>
+
 public class EnemySpawner : MonoBehaviour
 {
     [HideInInspector] public EnemySpawnManager SpawnMngr;

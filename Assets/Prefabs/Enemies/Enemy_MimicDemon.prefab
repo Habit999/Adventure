@@ -427,6 +427,7 @@ MonoBehaviour:
   destinationStopDistance: 3
   isStuckTime: 5
   LootManager: {fileID: 0}
+  PlayerTarget: {fileID: 0}
   targetingSpeed: 5
   targetingRotationSpeed: 200
   fleeingSpeed: 10
@@ -435,7 +436,6 @@ MonoBehaviour:
   damageDistance: 1
   damage: 25
   fieldOfViewRange: 0.2
-  PlayerTarget: {fileID: 0}
 --- !u!136 &4566351968887562376
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -540,7 +540,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: fa92e3bfed4fe614eb392389ac5d9dda, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 1
@@ -552,7 +552,7 @@ AudioSource:
   MinDistance: 0.1
   MaxDistance: 5
   Pan2D: 0
-  rolloffMode: 2
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0

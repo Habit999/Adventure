@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Contains all input controls for the game
+/// </summary>
+
 [CreateAssetMenu(fileName = "Controls", menuName = "Controls")]
 public class SO_Controls : ScriptableObject
 {

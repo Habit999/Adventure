@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using TMPro;
+
+/// <summary>
+/// Icons on the level select map that allow dungeon selection
+/// </summary>
 
 public class MapLevelIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {

@@ -2,7 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CombatManager : MonoBehaviour
+/// <summary>
+/// Controls the combat system of the player
+/// </summary>
+
+public class PlayerCombat : MonoBehaviour
 {
 	protected PlayerController Controller { get { return PlayerController.Instance; } }
 	
@@ -45,6 +49,7 @@ public class CombatManager : MonoBehaviour
         damageAreaColldier.enabled = true;
     }
 
+	// Triggers animation for equipped item
     public void TriggerAnimator(string triggerName)
 	{
         IsAnimating = true;

@@ -721,6 +721,7 @@ MonoBehaviour:
   maxHealth: 300
   damagedMaterial: {fileID: 2100000, guid: 7d939beb57efc894d9700c2f3e465fb2, type: 2}
   canBeDamaged: 1
+  audioCutOffDistance: 50
   SpawnManager: {fileID: 0}
   roamingSpeed: 1.5
   roamingRotationSpeed: 100

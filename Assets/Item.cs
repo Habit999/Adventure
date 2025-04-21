@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles all item data and functionality
+/// </summary>
+
 public class Item : MonoBehaviour
 {
 	[System.Serializable]

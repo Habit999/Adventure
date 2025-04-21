@@ -3,21 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractionManager : MonoBehaviour
+/// <summary>
+/// Handles player interactions
+/// </summary>
+
+public class PlayerInteraction : MonoBehaviour
 {
+	//References
 	private PlayerController controller;
 
 	public event Action<int> OnSwitchHotbar;
-	
-	[HideInInspector] public GameObject ObjectInView = null;
+
+    RaycastHit playerCamHit;
+
+    [HideInInspector] public GameObject ObjectInView = null;
+
+	// Variables
 	[HideInInspector] public bool ObjectPresent;
 	
 	public float InteractionDistance;
 	
-	// Player perspective raycast variables
-	RaycastHit playerCamHit;
-	Ray playerCamRay;
-
     private void Awake()
     {
         controller = gameObject.GetComponent<PlayerController>();
@@ -73,6 +78,7 @@ public class InteractionManager : MonoBehaviour
         }
 	}
 	
+	// Switches between hotbar slots
 	private void HotBarInteraction()
 	{
 		if(Input.GetKeyDown(controller.InputControls.HotBar1))

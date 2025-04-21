@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Mediates interaction between UI and game elements, also handle reverse dependancies
+/// </summary>
+
 public class UserInterfaceMediator : MonoBehaviour
 {
     [SerializeField] private PlayerController playerController;

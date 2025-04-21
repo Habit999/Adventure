@@ -4,10 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// Mimic Demon Enemy AI
+/// </summary>
+
 public class Enemy_MimicDemon : Enemy
 {
+    // References
     [HideInInspector] public LootSpawnManager LootManager;
 
+    [HideInInspector] public PlayerController PlayerTarget;
+    private TreasureChest chestTarget;
+
+    private SphereCollider sphereCollider;
+
+    // Variables
     [Space(5)]
     [SerializeField] private float targetingSpeed;
     [SerializeField] private float targetingRotationSpeed;
@@ -26,11 +37,6 @@ public class Enemy_MimicDemon : Enemy
     [Space(5)]
     [SerializeField][Range(-1, 1)] private float fieldOfViewRange;
 
-    [HideInInspector] public PlayerController PlayerTarget;
-    private TreasureChest chestTarget;
-
-    private SphereCollider sphereCollider;
-
     private float fleeExitTimer;
 
     private bool isInRange;
@@ -48,10 +54,20 @@ public class Enemy_MimicDemon : Enemy
         isInView = false;
     }
 
+    protected override void Update()
+    {
+        base.Update();
+
+        if (audioSource != null && Camera.main != null)
+            if (!audioSource.isPlaying && Vector3.Distance(transform.position, Camera.main.transform.position) < audioCutOffDistance)
+                audioSource.Play();
+    }
+
     public override void TakeDamage(float damage)
     {
         base.TakeDamage(damage);
 
+        // Makes them flee when hit
         if(!isDead) SwitchState(EnemyState.Fleeing);
     }
 
@@ -78,6 +94,7 @@ public class Enemy_MimicDemon : Enemy
 
     protected override void Roaming()
     {
+        // Finds closest mimic object
         if (!hasDestination)
         {
             if (FindClosestMimicObject())
@@ -85,12 +102,14 @@ public class Enemy_MimicDemon : Enemy
                 hasDestination = true;
             }
         }
+        // Default roam if no mimic object is found
         if(chestTarget == null)
         {
             base.Roaming();
             return;
         }
 
+        // Change target if mimic object is no longer available
         if (chestTarget.IsOpen || chestTarget.MimicHideout.IsMimic || chestTarget.MimicHideout.TargettingMimic != this)
         {
             FindClosestMimicObject();
@@ -99,7 +118,8 @@ public class Enemy_MimicDemon : Enemy
 
         navAgent.SetDestination(movePoint);
 
-        if(Vector3.Distance(transform.position, chestTarget.transform.position) <= destinationStopDistance)
+        // Hide in mimic object when at destination
+        if (Vector3.Distance(transform.position, chestTarget.transform.position) <= destinationStopDistance)
         {
             chestTarget.GetComponent<MimicComponent>().ActivateComponent(this);
             chestTarget = null;
@@ -114,7 +134,8 @@ public class Enemy_MimicDemon : Enemy
     {
         navAgent.SetDestination(PlayerTarget.transform.position);
 
-        if(Vector3.Distance(transform.position, PlayerTarget.transform.position) <= damageDistance)
+        // Damage player if in range
+        if (Vector3.Distance(transform.position, PlayerTarget.transform.position) <= damageDistance)
         {
             PlayerTarget.DamagePlayer(damage);
             SwitchState(EnemyState.Fleeing);
@@ -125,6 +146,7 @@ public class Enemy_MimicDemon : Enemy
     {
         if (!hasDestination)
         {
+            // Sets randome flee point and timer
             if (GenerateRandomNavLocation())
             {
                 fleeExitTimer = timeToExitFlee;
@@ -132,6 +154,7 @@ public class Enemy_MimicDemon : Enemy
             }
             else return;
         }
+        // Resets flee state if it can see player
         if (isInView)
         {
             fleeExitTimer = timeToExitFlee;
@@ -179,6 +202,7 @@ public class Enemy_MimicDemon : Enemy
         }
     }
 
+    // Finds the closest available mimic object
     private bool FindClosestMimicObject()
     {
         if (LootManager.MimicObjects.Count > 0)

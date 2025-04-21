@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Controls a grid cell from the 3D grid system
+/// </summary>
+
 public class GridCell : MonoBehaviour
 {
 	public CustomGrid ConnectedGrid;

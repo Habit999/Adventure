@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Map for selecting dungeons
+/// </summary>
+
 public class LevelMap : MonoBehaviour
 {
 	[SerializeField] private GameObject mapCamera;

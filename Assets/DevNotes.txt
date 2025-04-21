@@ -2,14 +2,4 @@ To-Do:
 
 - non assigned hotbar 1 equips if item is placed in it
 
-- inventory bugges sometimes when assigning items
-
-- dungeon exit msg needs to be changed
-
 - maybe change stuck to distance instead of one spot
-
-- Check all scripts for unessaccery code
-
-- Get rid of any .GetChildren / .parent unreliable code
-
-- slow weapon swing
